@@ -8,7 +8,7 @@ using OrdersCore = OpsCenterSample.Core.OrdersPage;
 
 namespace OpsCenterSample.UI.Pages.Orders;
 
-public partial class OrdersPageProjection : ObservableObject
+public partial class OrdersPageProjection : ObservableObject, IProjection<OrdersCore.Model, OrdersCore.Msg>
 {
     private Action<OrdersCore.Msg> _dispatch = _ => { };
 
@@ -34,27 +34,11 @@ public partial class OrdersPageProjection : ObservableObject
             models: view.Orders,
             modelKey: order => order.Id,
             vmKey: vm => vm.Id,
-            create: order => CreateRow(order),
-            update: (vm, order) => vm.Update(order));
+            create: _ => new OrderRowProjection(),
+            dispatch: _dispatch);
     }
 
-    public void SetDispatch(Action<OrdersCore.Msg> dispatch)
-    {
-        _dispatch = dispatch;
-
-        foreach (var row in Orders)
-        {
-            row.SetDispatch(dispatch);
-        }
-    }
-
-    private OrderRowProjection CreateRow(OrdersCore.OrderView order)
-    {
-        var row = new OrderRowProjection();
-        row.SetDispatch(_dispatch);
-        row.Update(order);
-        return row;
-    }
+    public void SetDispatch(Action<OrdersCore.Msg> dispatch) => _dispatch = dispatch;
 
     [RelayCommand]
     private void ToggleActiveOnly() => _dispatch(OrdersCore.Msg.ToggleActiveOnly);

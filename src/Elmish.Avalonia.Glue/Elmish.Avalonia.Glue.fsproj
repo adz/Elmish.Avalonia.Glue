@@ -19,6 +19,7 @@
   <ItemGroup>
     <Compile Include="ElmishHost.fs" />
     <Compile Include="ObservableCollectionExtensions.fs" />
+    <Compile Include="Projections.fs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" Link="README.md" />

@@ -8,7 +8,7 @@ using TeamCore = OpsCenterSample.Core.TeamPage;
 
 namespace OpsCenterSample.UI.Pages.Team;
 
-public partial class TeamPageProjection : ObservableObject
+public partial class TeamPageProjection : ObservableObject, IProjection<TeamCore.Model, TeamCore.Msg>
 {
     private Action<TeamCore.Msg> _dispatch = _ => { };
 
@@ -26,31 +26,10 @@ public partial class TeamPageProjection : ObservableObject
             create: ProjectionFactory.MetricCard,
             update: (vm, card) => vm.Update(card));
 
-        Members.SyncWith(
-            models: view.Members,
-            modelKey: member => member.Id,
-            vmKey: vm => vm.Id,
-            create: member => CreateMember(member),
-            update: (vm, member) => vm.Update(member));
+        Members.SyncWith(view.Members, m => m.Id, vm => vm.Id, _ => new TeamMemberProjection(), _dispatch);
     }
 
-    public void SetDispatch(Action<TeamCore.Msg> dispatch)
-    {
-        _dispatch = dispatch;
-
-        foreach (var member in Members)
-        {
-            member.SetDispatch(dispatch);
-        }
-    }
-
-    private TeamMemberProjection CreateMember(TeamCore.MemberView member)
-    {
-        var projection = new TeamMemberProjection();
-        projection.SetDispatch(_dispatch);
-        projection.Update(member);
-        return projection;
-    }
+    public void SetDispatch(Action<TeamCore.Msg> dispatch) => _dispatch = dispatch;
 
     [RelayCommand]
     private void RotateOnCall() => _dispatch(TeamCore.Msg.RotateOnCall);

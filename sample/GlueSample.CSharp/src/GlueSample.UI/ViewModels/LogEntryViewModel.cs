@@ -1,10 +1,11 @@
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Elmish.Avalonia.Glue;
 using GlueSample.Core;
 
 namespace GlueSample.UI.ViewModels;
 
-public partial class LogEntryViewModel : ObservableObject
+public partial class LogEntryViewModel : ObservableObject, IProjection<CounterPage.LogEntry, object>
 {
     public Guid Id { get; }
 
@@ -22,4 +23,6 @@ public partial class LogEntryViewModel : ObservableObject
         Message = e.Message;
         Time = e.Time.ToString("HH:mm:ss");
     }
+
+    public void SetDispatch(Action<object> dispatch) { }
 }

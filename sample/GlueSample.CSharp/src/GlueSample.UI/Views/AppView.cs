@@ -1,4 +1,3 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
@@ -20,88 +19,96 @@ public partial class AppView : Window
 
     private static Control Build()
     {
-        var root = new Grid { Margin = new Thickness(24) };
-
-        var stack = new StackPanel { Spacing = 16 };
-        root.Children.Add(stack);
-
-        stack.Children.Add(new TextBlock
+        var items = new ItemsControl
         {
-            Text = "Glue Sample",
-            FontSize = 20,
-            FontWeight = FontWeight.SemiBold
-        });
-
-        var count = new TextBlock
-        {
-            FontSize = 48,
-            FontWeight = FontWeight.Bold,
-            HorizontalAlignment = HorizontalAlignment.Center
+            ItemTemplate = new FuncDataTemplate<LogEntryViewModel>((_, _) => BuildLogRow()),
+            [!ItemsControl.ItemsSourceProperty] = new Binding(nameof(CounterViewModel.Log))
         };
-        count.Bind(TextBlock.TextProperty, new Binding(nameof(CounterViewModel.Count)));
-        stack.Children.Add(count);
 
-        var actions = new StackPanel
+        return new Grid
         {
-            Orientation = Orientation.Horizontal,
-            Spacing = 8,
-            HorizontalAlignment = HorizontalAlignment.Center
-        };
-        actions.Children.Add(BuildButton("-", nameof(CounterViewModel.DecrementCommand), 44));
-        actions.Children.Add(BuildButton("Reset", nameof(CounterViewModel.ResetCommand)));
-        actions.Children.Add(BuildButton("+", nameof(CounterViewModel.IncrementCommand), 44));
-        stack.Children.Add(actions);
-
-        stack.Children.Add(new Separator());
-        stack.Children.Add(new TextBlock
-        {
-            Text = "Log",
-            FontSize = 13,
-            FontWeight = FontWeight.SemiBold
-        });
-
-        var items = new ItemsControl();
-        items.Bind(ItemsControl.ItemsSourceProperty, new Binding(nameof(CounterViewModel.Log)));
-        items.ItemTemplate = new FuncDataTemplate<LogEntryViewModel>(
-            (entry, _) =>
+            Margin = new Thickness(24),
+            Children =
             {
-                var row = new StackPanel
+                new StackPanel
                 {
-                    Orientation = Orientation.Horizontal,
-                    Spacing = 12,
-                    Margin = new Thickness(0, 3)
-                };
-
-                var time = new TextBlock
-                {
-                    FontFamily = FontFamily.Parse("Monospace"),
-                    FontSize = 11,
-                    Foreground = Brushes.Gray,
-                    VerticalAlignment = VerticalAlignment.Center
-                };
-                time.Bind(TextBlock.TextProperty, new Binding(nameof(LogEntryViewModel.Time)));
-                row.Children.Add(time);
-
-                var message = new TextBlock
-                {
-                    FontSize = 13,
-                    VerticalAlignment = VerticalAlignment.Center
-                };
-                message.Bind(TextBlock.TextProperty, new Binding(nameof(LogEntryViewModel.Message)));
-                row.Children.Add(message);
-
-                return row;
-            });
-
-        stack.Children.Add(new ScrollViewer { Content = items });
-        return root;
+                    Spacing = 16,
+                    Children =
+                    {
+                        new TextBlock
+                        {
+                            Text = "Glue Sample",
+                            FontSize = 20,
+                            FontWeight = FontWeight.SemiBold
+                        },
+                        new TextBlock
+                        {
+                            FontSize = 48,
+                            FontWeight = FontWeight.Bold,
+                            HorizontalAlignment = HorizontalAlignment.Center,
+                            [!TextBlock.TextProperty] = new Binding(nameof(CounterViewModel.Count))
+                        },
+                        new StackPanel
+                        {
+                            Orientation = Orientation.Horizontal,
+                            Spacing = 8,
+                            HorizontalAlignment = HorizontalAlignment.Center,
+                            Children =
+                            {
+                                BuildButton("-", nameof(CounterViewModel.DecrementCommand), 44),
+                                BuildButton("Reset", nameof(CounterViewModel.ResetCommand)),
+                                BuildButton("+", nameof(CounterViewModel.IncrementCommand), 44)
+                            }
+                        },
+                        new Separator(),
+                        new TextBlock
+                        {
+                            Text = "Log",
+                            FontSize = 13,
+                            FontWeight = FontWeight.SemiBold
+                        },
+                        new ScrollViewer { Content = items }
+                    }
+                }
+            }
+        };
     }
 
     private static Button BuildButton(string content, string commandPath, double? width = null)
     {
-        var button = new Button { Content = content };
+        var button = new Button
+        {
+            Content = content,
+            [!Button.CommandProperty] = new Binding(commandPath)
+        };
         if (width is { } w) button.Width = w;
-        button.Bind(Button.CommandProperty, new Binding(commandPath));
         return button;
+    }
+
+    private static Control BuildLogRow()
+    {
+        return new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Spacing = 12,
+            Margin = new Thickness(0, 3),
+            Children =
+            {
+                new TextBlock
+                {
+                    FontFamily = FontFamily.Parse("Monospace"),
+                    FontSize = 11,
+                    Foreground = Brushes.Gray,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    [!TextBlock.TextProperty] = new Binding(nameof(LogEntryViewModel.Time))
+                },
+                new TextBlock
+                {
+                    FontSize = 13,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    [!TextBlock.TextProperty] = new Binding(nameof(LogEntryViewModel.Message))
+                }
+            }
+        };
     }
 }

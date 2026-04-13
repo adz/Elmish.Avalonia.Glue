@@ -1,11 +1,12 @@
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Elmish.Avalonia.Glue;
 using SettingsCore = OpsCenterSample.Core.SettingsPage;
 
 namespace OpsCenterSample.UI.Pages.Settings;
 
-public partial class SettingsPageProjection : ObservableObject
+public partial class SettingsPageProjection : ObservableObject, IProjection<SettingsCore.Model, SettingsCore.Msg>
 {
     private Action<SettingsCore.Msg> _dispatch = _ => { };
 

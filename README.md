@@ -16,8 +16,13 @@ Two things:
 
 ## What it is not
 
-A framework. There is no base class to inherit, no interface to implement,
-no opinion on your ViewModel beyond "it has an Update method".
+A framework. There is no required base class and no required command system.
+For plain host wiring, the library only assumes your ViewModel has an
+`Update` method and a way to receive dispatch.
+
+If you want the projection helpers for child forwarding and collection sync,
+implement `IProjection<'Model, 'Msg>` or the smaller `IProjection<'Model>` /
+`IDispatchTarget<'Msg>` contracts.
 
 Your F# model owns all state. Your ViewModel is a pure projection of that
 state. Avalonia compiled bindings verify the projection at build time.
@@ -45,24 +50,42 @@ Your ViewModel receives every model update on the UI thread:
         // ...
     }
 
-For lists, use SyncWith to keep ObservableCollection instances stable:
+For lists, use `SyncWith` to keep `ObservableCollection<T>` instances stable:
 
     Log.SyncWith(
-        models:   model.Log,
-        modelKey: e => e.Id,
-        vmKey:    vm => vm.Id,
-        create:   e => new LogEntryViewModel(e),
-        update:   (vm, e) => vm.Update(e));
+        model.Log,
+        e => e.Id,
+        vm => vm.Id,
+        e => new LogEntryViewModel(e));
+
+For child projections that inherit something else, such as
+`CommunityToolkit.Mvvm.ComponentModel.ObservableObject`, implement
+`IProjection<TModel, TMsg>` directly:
+
+    public partial class CounterViewModel : ObservableObject, IProjection<CounterPage.Model, CounterPage.Msg>
+    {
+        private Action<CounterPage.Msg> _dispatch = _ => { };
+
+        public void Update(CounterPage.Model model)
+        {
+            Count = model.Count;
+            Log.SyncWith(model.Log, e => e.Id, vm => vm.Id, e => new LogEntryViewModel(e));
+        }
+
+        public void SetDispatch(Action<CounterPage.Msg> dispatch) => _dispatch = dispatch;
+    }
 
 `SyncWith` requires keys to be unique in both the source models and the target
-collection. It now fails fast when duplicates are present instead of silently
-producing a mismatched collection.
+collection. Duplicate keys fail fast instead of producing a mismatched
+collection.
 
 See the `sample/` directory for working examples:
 
 - `GlueSample` keeps the shape deliberately minimal.
 - `OpsCenterSample` shows the same approach once the app grows into multiple
   pages, shared components, feature folders, and grouped projections.
+- `GlueSample.CSharp` and `OpsCenterSample.CSharp` show the same projection
+  pattern in code-only Avalonia views, without `.axaml` files.
 
 ## Why
 

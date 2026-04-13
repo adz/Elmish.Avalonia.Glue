@@ -1,11 +1,12 @@
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Elmish.Avalonia.Glue;
 using OrdersCore = OpsCenterSample.Core.OrdersPage;
 
 namespace OpsCenterSample.UI.Pages.Orders;
 
-public partial class OrderRowProjection : ObservableObject
+public partial class OrderRowProjection : ObservableObject, IProjection<OrdersCore.OrderView, OrdersCore.Msg>
 {
     private Action<OrdersCore.Msg> _dispatch = _ => { };
 

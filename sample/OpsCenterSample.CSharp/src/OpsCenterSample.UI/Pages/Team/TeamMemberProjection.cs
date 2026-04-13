@@ -1,11 +1,12 @@
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Elmish.Avalonia.Glue;
 using TeamCore = OpsCenterSample.Core.TeamPage;
 
 namespace OpsCenterSample.UI.Pages.Team;
 
-public partial class TeamMemberProjection : ObservableObject
+public partial class TeamMemberProjection : ObservableObject, IProjection<TeamCore.MemberView, TeamCore.Msg>
 {
     private Action<TeamCore.Msg> _dispatch = _ => { };
 

@@ -7,7 +7,7 @@ using GlueSample.Core;
 
 namespace GlueSample.UI.ViewModels;
 
-public partial class CounterViewModel : ObservableObject
+public partial class CounterViewModel : ObservableObject, IProjection<CounterPage.Model, CounterPage.Msg>
 {
     private Action<CounterPage.Msg> _dispatch = _ => { };
 
@@ -18,17 +18,13 @@ public partial class CounterViewModel : ObservableObject
     public void Update(CounterPage.Model model)
     {
         Count = model.Count;
-        Log.SyncWith(
-            models:   model.Log,
-            modelKey: e => e.Id,
-            vmKey:    vm => vm.Id,
-            create:   e => new LogEntryViewModel(e),
-            update:   (vm, e) => vm.Update(e));
+        Log.SyncWith(model.Log, e => e.Id, vm => vm.Id, e => new LogEntryViewModel(e));
     }
 
     public void SetDispatch(Action<CounterPage.Msg> dispatch) => _dispatch = dispatch;
 
     private void Dispatch(CounterPage.Msg msg) => _dispatch(msg);
+
 
     [RelayCommand]
     private void Increment() => Dispatch(CounterPage.Msg.Increment);

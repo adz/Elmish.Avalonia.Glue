@@ -8,7 +8,7 @@ using OverviewCore = OpsCenterSample.Core.OverviewPage;
 
 namespace OpsCenterSample.UI.Pages.Overview;
 
-public partial class OverviewPageProjection : ObservableObject
+public partial class OverviewPageProjection : ObservableObject, IProjection<OverviewCore.Model, OverviewCore.Msg>
 {
     private Action<OverviewCore.Msg> _dispatch = _ => { };
 
@@ -30,18 +30,11 @@ public partial class OverviewPageProjection : ObservableObject
             models: view.Activity,
             modelKey: item => item.Id,
             vmKey: vm => vm.Id,
-            create: item => CreateActivity(item),
-            update: (vm, item) => vm.Update(item));
+            create: _ => new ActivityItemProjection(),
+            dispatch: _dispatch);
     }
 
     public void SetDispatch(Action<OverviewCore.Msg> dispatch) => _dispatch = dispatch;
-
-    private static ActivityItemProjection CreateActivity(OverviewCore.ActivityView item)
-    {
-        var projection = new ActivityItemProjection();
-        projection.Update(item);
-        return projection;
-    }
 
     [RelayCommand]
     private void RefreshSnapshot() => _dispatch(OverviewCore.Msg.RefreshSnapshot);

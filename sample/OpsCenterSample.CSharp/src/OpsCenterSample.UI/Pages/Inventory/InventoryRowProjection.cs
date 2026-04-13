@@ -1,11 +1,12 @@
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Elmish.Avalonia.Glue;
 using InventoryCore = OpsCenterSample.Core.InventoryPage;
 
 namespace OpsCenterSample.UI.Pages.Inventory;
 
-public partial class InventoryRowProjection : ObservableObject
+public partial class InventoryRowProjection : ObservableObject, IProjection<InventoryCore.ItemView, InventoryCore.Msg>
 {
     private Action<InventoryCore.Msg> _dispatch = _ => { };
 

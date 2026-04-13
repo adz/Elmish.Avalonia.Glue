@@ -8,7 +8,7 @@ using InventoryCore = OpsCenterSample.Core.InventoryPage;
 
 namespace OpsCenterSample.UI.Pages.Inventory;
 
-public partial class InventoryPageProjection : ObservableObject
+public partial class InventoryPageProjection : ObservableObject, IProjection<InventoryCore.Model, InventoryCore.Msg>
 {
     private Action<InventoryCore.Msg> _dispatch = _ => { };
 
@@ -34,27 +34,11 @@ public partial class InventoryPageProjection : ObservableObject
             models: view.Items,
             modelKey: item => item.Id,
             vmKey: vm => vm.Id,
-            create: item => CreateRow(item),
-            update: (vm, item) => vm.Update(item));
+            create: _ => new InventoryRowProjection(),
+            dispatch: _dispatch);
     }
 
-    public void SetDispatch(Action<InventoryCore.Msg> dispatch)
-    {
-        _dispatch = dispatch;
-
-        foreach (var row in Items)
-        {
-            row.SetDispatch(dispatch);
-        }
-    }
-
-    private InventoryRowProjection CreateRow(InventoryCore.ItemView item)
-    {
-        var row = new InventoryRowProjection();
-        row.SetDispatch(_dispatch);
-        row.Update(item);
-        return row;
-    }
+    public void SetDispatch(Action<InventoryCore.Msg> dispatch) => _dispatch = dispatch;
 
     [RelayCommand]
     private void ToggleLowOnly() => _dispatch(InventoryCore.Msg.ToggleLowOnly);

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Elmish.Avalonia.Glue;
 using OpsCenterSample.UI.Pages.Inventory;
 using OpsCenterSample.UI.Pages.Orders;
 using OpsCenterSample.UI.Pages.Overview;
@@ -10,7 +11,7 @@ using OpsApp = OpsCenterSample.Core.App;
 
 namespace OpsCenterSample.UI.Pages.Shell;
 
-public partial class AppProjection : ObservableObject
+public partial class AppProjection : ObservableObject, IProjection<OpsApp.Model, OpsApp.Msg>
 {
     public AppProjection()
     {
@@ -79,10 +80,10 @@ public partial class AppProjection : ObservableObject
             item.SetNavigate(page => dispatch(OpsApp.Msg.NewNavigate(page)));
         }
 
-        Overview.SetDispatch(msg => dispatch(OpsApp.Msg.NewOverviewMsg(msg)));
-        Orders.SetDispatch(msg => dispatch(OpsApp.Msg.NewOrdersMsg(msg)));
-        Inventory.SetDispatch(msg => dispatch(OpsApp.Msg.NewInventoryMsg(msg)));
-        Team.SetDispatch(msg => dispatch(OpsApp.Msg.NewTeamMsg(msg)));
-        Settings.SetDispatch(msg => dispatch(OpsApp.Msg.NewSettingsMsg(msg)));
+        Overview.ForwardTo(dispatch, OpsApp.Msg.NewOverviewMsg);
+        Orders.ForwardTo(dispatch, OpsApp.Msg.NewOrdersMsg);
+        Inventory.ForwardTo(dispatch, OpsApp.Msg.NewInventoryMsg);
+        Team.ForwardTo(dispatch, OpsApp.Msg.NewTeamMsg);
+        Settings.ForwardTo(dispatch, OpsApp.Msg.NewSettingsMsg);
     }
 }

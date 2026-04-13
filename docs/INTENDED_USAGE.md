@@ -3,7 +3,8 @@
 ## Positioning
 
 `Elmish.Avalonia.Glue` is meant for projects that want all application state to
-live in Elmish while still using ordinary Avalonia ViewModels and AXAML.
+live in Elmish while still using ordinary Avalonia ViewModels, whether the view
+layer is AXAML-based or code-only.
 
 It is intentionally narrow. The library is not trying to provide a new MVVM
 base class, a reactive abstraction layer, or an alternate view DSL.
@@ -79,6 +80,16 @@ A child ViewModel will typically:
 
 The library does not require a specific base type or command abstraction.
 
+When a projection wants to use the helper extensions for child dispatch
+forwarding or collection synchronization, the intended shape is:
+
+- `IProjection<'Model>` for update-only projections
+- `IDispatchTarget<'Msg>` for dispatch-only projections
+- `IProjection<'Model, 'Msg>` when the same object does both
+
+That split exists so C# projections can inherit another concrete base type such
+as `ObservableObject` while still participating in the helper APIs cleanly.
+
 ## Collection Synchronization
 
 `ObservableCollectionExtensions.SyncWith` is intended for model lists with
@@ -97,7 +108,15 @@ Callers are expected to provide:
 - a model key selector
 - a ViewModel key selector
 - a factory for new ViewModel instances
-- an update function for existing ViewModel instances
+
+If the target item type implements `IProjection<'Model>`, the helper overloads
+can call `Update` automatically.
+
+If the target item type also implements `IDispatchTarget<'Msg>`, the helper
+overloads can wire the child dispatcher automatically, either:
+
+- directly with `SyncWith(..., dispatch)`
+- or through a parent message map with `SyncWith(..., parentDispatch, map)`
 
 ## Key Requirements
 
@@ -106,8 +125,7 @@ Callers are expected to provide:
 - every model item must have a unique key
 - every existing ViewModel in the target collection must have a unique key
 
-Duplicate keys are treated as invalid input and now fail fast.
-
+Duplicate keys are treated as invalid input and fail fast.
 That behavior is intentional. Silent recovery would hide projection bugs and
 make the resulting UI state hard to reason about.
 
@@ -116,7 +134,8 @@ make the resulting UI state hard to reason about.
 This library is a good fit when:
 
 - Elmish already owns application behavior
-- the UI team wants to keep AXAML and compiled bindings
+- the UI team wants to keep AXAML and compiled bindings, or wants code-only
+  views without introducing another UI abstraction
 - the project wants minimal dependencies and explicit wiring
 - ViewModels are used as projections rather than state machines
 
