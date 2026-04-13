@@ -11,11 +11,14 @@ Restructure the solution around two explicit UI authoring approaches that share 
 
 The goal is not to pick a winner upfront. The goal is to compare authored experience, reviewability, tooling compatibility, runtime behavior, and LLM ergonomics across both approaches using the same sample set.
 
+The generic architectural center of gravity should move toward a framework-neutral core package, tentatively `Elmish.Glue.Core`, while the active implementation and sample focus remains Avalonia-first.
+
 ## Core Constraints
 
 ### Primary product goal
 
 Keep Avalonia completely normal while moving as much authored UI state and shaping logic as possible into Elm-style F#.
+Generic runtime ideas should be extracted only when they are truly framework-neutral and do not compromise the Avalonia design-time and tooling story.
 
 ### Tooling constraints
 
@@ -65,6 +68,12 @@ Create a common low-level library used by both top-level approaches. This shared
 - any common bindable-node or host infrastructure that is genuinely reusable
 
 This layer is implementation infrastructure, not the primary authoring surface.
+
+This shared layer should be designed so it can become a framework-neutral `Elmish.Glue.Core` foundation over time:
+
+- standard .NET collection and notification patterns belong here when they are not Avalonia-specific
+- framework-specific binding, design-time, and host integration should remain in the higher layers
+- Avalonia stays the reference implementation and immediate delivery target while the generic seams are clarified
 
 ### `Projection` family
 
@@ -186,6 +195,7 @@ The next detailed plans should specify:
 ## Assumptions and Defaults
 
 - Use a shared core plus two top-level packages/libraries.
+- Keep moving the core toward framework-neutral naming and responsibilities where that does not dilute the Avalonia-first product direction.
 - Keep both classic and snapshot-host styles inside `Projection`.
 - Treat `ElmView` as the main closest-to-Elm research direction.
 - Keep AXAML and Avalonia tooling compatibility as a non-negotiable constraint.
