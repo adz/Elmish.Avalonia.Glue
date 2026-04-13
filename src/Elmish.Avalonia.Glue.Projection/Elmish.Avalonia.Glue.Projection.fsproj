@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>Elmish.Avalonia.Glue.Projection</AssemblyName>
+    <RootNamespace>Elmish.Avalonia.Glue.Projection</RootNamespace>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Elmish.Avalonia.Glue.Projection</PackageId>
+    <Version>1.0.0</Version>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Authors>Your Name</Authors>
+    <Description>
+      Projection-oriented Elmish + Avalonia helpers, including classic projections
+      via the shared core and snapshot-host building blocks for shallow viewmodels.
+    </Description>
+    <PackageTags>fsharp elmish avalonia mvvm projection snapshot-host</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="SnapshotHosts.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" Link="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Elmish.Avalonia.Glue.Core\Elmish.Avalonia.Glue.Core.fsproj" />
+  </ItemGroup>
+</Project>
