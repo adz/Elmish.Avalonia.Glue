@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>Elmish.Avalonia.Glue.Core</AssemblyName>
+    <RootNamespace>Elmish.Avalonia.Glue</RootNamespace>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="ElmishHost.fs" />
+    <Compile Include="ObservableCollectionExtensions.fs" />
+    <Compile Include="Projections.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.2.0" />
+    <PackageReference Include="Elmish" Version="4.2.0" />
+  </ItemGroup>
+</Project>

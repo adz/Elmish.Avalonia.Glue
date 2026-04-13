@@ -5,36 +5,8 @@ open System.Collections.Generic
 open System.Collections.ObjectModel
 open System.Runtime.CompilerServices
 
-/// Extension methods for keeping Avalonia-facing observable collections in sync
-/// with Elmish model lists.
 [<Extension>]
 type ObservableCollectionExtensions =
-    /// Synchronizes an <see cref="ObservableCollection{T}" /> with a keyed model
-    /// list while preserving existing ViewModel instances where keys match.
-    ///
-    /// The method updates existing items, removes items whose keys are no longer
-    /// present, inserts new items, and reorders the target collection to match
-    /// the source sequence.
-    ///
-    /// This is intended for UI projection layers that want to keep an
-    /// `ObservableCollection` instance stable for bindings, selection, and
-    /// scroll position.
-    ///
-    /// Both the model list and the target collection must contain unique keys.
-    /// Duplicate keys are treated as invalid input and fail fast.
-    ///
-    /// <param name="collection">The target collection to update in place.</param>
-    /// <param name="models">The source model list in the desired final order.</param>
-    /// <param name="modelKey">Extracts the stable identity key from a model item.</param>
-    /// <param name="vmKey">Extracts the stable identity key from a ViewModel item.</param>
-    /// <param name="create">Creates a new ViewModel for a model item that does not already exist in the target collection.</param>
-    /// <param name="update">Updates an existing ViewModel from the latest model item.</param>
-    /// <exception cref="System.ArgumentException">
-    /// Thrown when the source model list contains duplicate keys.
-    /// </exception>
-    /// <exception cref="System.InvalidOperationException">
-    /// Thrown when the target collection contains duplicate ViewModel keys.
-    /// </exception>
     [<Extension>]
     static member SyncWith<'ViewModel, 'Model, 'Key when 'Key: equality and 'Key: not null>
         (

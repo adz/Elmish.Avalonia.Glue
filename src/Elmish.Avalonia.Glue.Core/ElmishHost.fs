@@ -61,27 +61,6 @@ module ElmishHost =
                  | Stop -> true),
                 onTerminate)
 
-    /// Starts an Elmish program and returns a disposable host connection.
-    ///
-    /// The host wraps the supplied program so that:
-    /// - model updates are posted to Avalonia's UI thread
-    /// - subscriptions are preserved
-    /// - disposing the returned connection terminates the hosted loop
-    ///
-    /// `program` should be built with `Program.mkProgram` or `Program.mkSimple`
-    /// and use `unit` as its init argument.
-    ///
-    /// `onUpdate` is called on Avalonia's UI thread after each model update.
-    /// It typically forwards the latest model into a root ViewModel's
-    /// `Update` method.
-    ///
-    /// Returns a disposable host connection. Dispose it when the owning view
-    /// or application shuts down so Elmish subscriptions can be terminated.
-    ///
-    /// <exception cref="System.ObjectDisposedException">
-    /// Not thrown directly, but callers should treat the returned dispatch
-    /// action as inactive after the connection has been disposed.
-    /// </exception>
     let start
         (program : Program<unit, 'Model, 'Msg, unit>)
         (onUpdate : Action<'Model>)
@@ -110,17 +89,6 @@ module ElmishHost =
 
         new ElmishHostConnection<'Msg>(dispatchUser, dispose)
 
-    /// Starts an Elmish program and immediately hands its dispatcher to a consumer.
-    ///
-    /// This is a convenience wrapper over <see cref="start" /> for C#-style
-    /// wiring where a ViewModel exposes a setter or binder for the dispatch
-    /// action.
-    ///
-    /// `setDispatch` is invoked synchronously after the host has been started
-    /// and before the host connection is returned to the caller.
-    ///
-    /// Returns the same disposable host connection that <see cref="start" />
-    /// would return, so the caller still owns host lifetime explicitly.
     let startAndBind
         (program : Program<unit, 'Model, 'Msg, unit>)
         (onUpdate : Action<'Model>)

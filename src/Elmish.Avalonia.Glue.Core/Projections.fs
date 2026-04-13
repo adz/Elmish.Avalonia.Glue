@@ -5,24 +5,18 @@ open System.Collections.Generic
 open System.Collections.ObjectModel
 open System.Runtime.CompilerServices
 
-/// Interface for ViewModels that project Elmish model state.
 type IProjection<'Model> =
-    /// Updates the projection with the latest state from the Elmish model.
     abstract member Update : 'Model -> unit
 
-/// Interface for projections that receive an Elmish dispatcher.
 type IDispatchTarget<'Msg> =
-    /// Sets the dispatcher used to send messages back to the Elmish loop.
     abstract member SetDispatch : Action<'Msg> -> unit
 
-/// Interface for ViewModels that act as projections of an Elmish model.
 type IProjection<'Model, 'Msg> =
     inherit IProjection<'Model>
     inherit IDispatchTarget<'Msg>
 
 [<Extension>]
 type ProjectionExtensions =
-    /// Wires a child projection's dispatcher to a parent's dispatcher with a message map.
     [<Extension>]
     static member ForwardTo<'Msg, 'ParentMsg>
         (
@@ -32,8 +26,6 @@ type ProjectionExtensions =
         ) : unit =
         projection.SetDispatch(Action<'Msg>(fun msg -> dispatch.Invoke(map.Invoke(msg))))
 
-    /// Synchronizes a collection of projections with a list of models.
-    /// Automatically updates existing projections if they implement IProjection.
     [<Extension>]
     static member SyncWith<'ViewModel, 'Model, 'Key when 'ViewModel :> IProjection<'Model> and 'Key : equality and 'Key : not null>
         (
@@ -51,9 +43,6 @@ type ProjectionExtensions =
             create,
             Action<'ViewModel, 'Model>(fun vm m -> vm.Update(m)))
 
-    /// Synchronizes a collection of projections with a list of models and
-    /// wires a parent dispatcher directly when the child and parent message
-    /// types are the same.
     [<Extension>]
     static member SyncWith<'ViewModel, 'Model, 'Key, 'Msg when 'ViewModel :> IProjection<'Model> and 'ViewModel :> IDispatchTarget<'Msg> and 'Key : equality and 'Key : not null>
         (
@@ -77,8 +66,6 @@ type ProjectionExtensions =
                 vm),
             Action<'ViewModel, 'Model>(fun vm m -> vm.Update(m)))
 
-    /// Synchronizes a collection of projections AND wires their dispatchers.
-    /// This eliminates manual loops in SetDispatch for collection items.
     [<Extension>]
     static member SyncWith<'ViewModel, 'Model, 'Key, 'Msg, 'ParentMsg when 'ViewModel :> IProjection<'Model> and 'ViewModel :> IDispatchTarget<'Msg> and 'Key : equality and 'Key : not null>
         (
@@ -90,9 +77,9 @@ type ProjectionExtensions =
             parentDispatch: Action<'ParentMsg>,
             map: Func<'Msg, 'ParentMsg>
         ) : unit =
-        
+
         let childDispatch = Action<'Msg>(fun msg -> parentDispatch.Invoke(map.Invoke(msg)))
-        
+
         ObservableCollectionExtensions.SyncWith(
             collection,
             models,
@@ -105,8 +92,6 @@ type ProjectionExtensions =
                 vm),
             Action<'ViewModel, 'Model>(fun vm m -> vm.Update(m)))
 
-/// Minimal base class for projections that handles dispatch.
-/// Primarily intended for F# ViewModels where multiple inheritance isn't an issue.
 [<AbstractClass>]
 type FSharpProjectionBase<'Model, 'Msg>() =
     let mutable _dispatch : Action<'Msg> = Action<_>(ignore)
@@ -118,7 +103,6 @@ type FSharpProjectionBase<'Model, 'Msg>() =
         member _.SetDispatch(dispatch) = _dispatch <- dispatch
     interface IProjection<'Model, 'Msg>
 
-/// Helper for C# ViewModels to hold a dispatcher without manual field/method boilerplate.
 type Dispatcher<'Msg>() =
     let mutable _dispatch : Action<'Msg> = Action<_>(ignore)
     member _.Connect(dispatch) = _dispatch <- dispatch
