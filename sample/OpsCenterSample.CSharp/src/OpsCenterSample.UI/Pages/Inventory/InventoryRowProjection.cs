@@ -2,6 +2,7 @@ using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Elmish.Avalonia.Glue;
+using Elmish.Glue.Core;
 using InventoryCore = OpsCenterSample.Core.InventoryPage;
 
 namespace OpsCenterSample.UI.Pages.Inventory;

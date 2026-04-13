@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>Elmish.Glue.Core</AssemblyName>
+    <RootNamespace>Elmish.Glue.Core</RootNamespace>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Elmish.Glue.Core</PackageId>
+    <Version>1.0.0</Version>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Authors>Your Name</Authors>
+    <Description>
+      Framework-neutral Elmish host, projection, and keyed collection primitives
+      that higher-level UI integrations can build on.
+    </Description>
+    <PackageTags>fsharp elmish mvvm core projection collections</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="ElmishHost.fs" />
+    <Compile Include="ObservableCollectionExtensions.fs" />
+    <Compile Include="Projections.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Elmish" Version="4.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" Link="README.md" />
+  </ItemGroup>
+</Project>

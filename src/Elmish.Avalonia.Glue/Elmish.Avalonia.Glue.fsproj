@@ -17,12 +17,17 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Compatibility.fs" />
+    <Compile Include="AvaloniaHost.fs" />
     <Compile Include="Package.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.0.0" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" Link="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Elmish.Avalonia.Glue.Core\Elmish.Avalonia.Glue.Core.fsproj" />
+    <ProjectReference Include="..\Elmish.Glue.Core\Elmish.Glue.Core.fsproj" />
   </ItemGroup>
 </Project>

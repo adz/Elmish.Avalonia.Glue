@@ -45,7 +45,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpsCenterSample.UI", "sampl
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OpsCenterSample.Core", "sample\OpsCenterSample.CSharp\src\OpsCenterSample.Core\OpsCenterSample.Core.fsproj", "{57C69656-754C-4139-9D13-0C7552267DB5}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Elmish.Avalonia.Glue.Core", "src\Elmish.Avalonia.Glue.Core\Elmish.Avalonia.Glue.Core.fsproj", "{5C894F8D-DA68-4A57-9BE4-C56C8E2B6021}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Elmish.Glue.Core", "src\Elmish.Glue.Core\Elmish.Glue.Core.fsproj", "{5C894F8D-DA68-4A57-9BE4-C56C8E2B6021}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Elmish.Avalonia.Glue.Projection", "src\Elmish.Avalonia.Glue.Projection\Elmish.Avalonia.Glue.Projection.fsproj", "{1ADCC97A-1BEA-4754-A537-665876655F50}"
 EndProject

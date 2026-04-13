@@ -9,6 +9,12 @@ layer is AXAML-based or code-only.
 It is intentionally narrow. The library is not trying to provide a new MVVM
 base class, a reactive abstraction layer, or an alternate view DSL.
 
+The framework-neutral substrate now lives in `Elmish.Glue.Core`. That core
+holds the host lifetime primitives, projection contracts, and keyed collection
+patching helpers. `Elmish.Avalonia.Glue` stays responsible for Avalonia-specific
+thread dispatch and for keeping the current Avalonia samples on a normal,
+ordinary binding path.
+
 ## Ownership Model
 
 The F# Elmish program owns the real state.

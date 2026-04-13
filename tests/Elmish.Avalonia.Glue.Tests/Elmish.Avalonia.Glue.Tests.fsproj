@@ -8,6 +8,7 @@
     <Compile Include="ElmishHostTests.fs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Elmish.Glue.Core\Elmish.Glue.Core.fsproj" />
     <ProjectReference Include="..\..\src\Elmish.Avalonia.Glue\Elmish.Avalonia.Glue.fsproj" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="xunit" Version="2.9.3" />

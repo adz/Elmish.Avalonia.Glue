@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Elmish.Avalonia.Glue;
+using Elmish.Glue.Core;
 using OpsCenterSample.UI.Pages.Inventory;
 using OpsCenterSample.UI.Pages.Orders;
 using OpsCenterSample.UI.Pages.Overview;

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Elmish.Avalonia.Glue;
+using Elmish.Glue.Core;
 using OpsCenterSample.UI.Components;
 using OrdersCore = OpsCenterSample.Core.OrdersPage;
 

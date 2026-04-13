@@ -1,4 +1,4 @@
-namespace Elmish.Avalonia.Glue
+namespace Elmish.Glue.Core
 
 open System
 open System.Collections.Generic

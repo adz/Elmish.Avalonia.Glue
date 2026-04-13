@@ -2,7 +2,7 @@ namespace Elmish.Avalonia.Glue.Tests
 
 open System
 open System.Collections.ObjectModel
-open Elmish.Avalonia.Glue
+open Elmish.Glue.Core
 open Xunit
 
 type private TestVm(id : int, value : string) =

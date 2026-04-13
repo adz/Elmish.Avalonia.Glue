@@ -23,6 +23,6 @@
     <None Include="..\..\README.md" Pack="true" PackagePath="\" Link="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Elmish.Avalonia.Glue.Core\Elmish.Avalonia.Glue.Core.fsproj" />
+    <ProjectReference Include="..\Elmish.Glue.Core\Elmish.Glue.Core.fsproj" />
   </ItemGroup>
 </Project>

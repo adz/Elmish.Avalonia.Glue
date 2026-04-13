@@ -3,6 +3,11 @@
 Minimal glue between an [Elmish](https://elmish.github.io/elmish/) program
 and an Avalonia ViewModel. No Rx. No DynamicData. No new abstractions.
 
+The repo now keeps the framework-neutral host/projection substrate in
+`Elmish.Glue.Core`, while `Elmish.Avalonia.Glue` remains the Avalonia-facing
+package that posts model updates onto Avalonia's UI thread and preserves the
+existing surface for current samples.
+
 ## What it is
 
 Two things:
@@ -30,6 +35,9 @@ state. Avalonia compiled bindings verify the projection at build time.
 ## Install
 
     dotnet add package Elmish.Avalonia.Glue
+
+If you only need the framework-neutral host/projection primitives without the
+Avalonia dispatcher integration, use `Elmish.Glue.Core`.
 
 ## Usage
 

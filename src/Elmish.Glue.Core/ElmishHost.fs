@@ -1,9 +1,8 @@
-namespace Elmish.Avalonia.Glue
+namespace Elmish.Glue.Core
 
 open System
 open System.Threading
 open Elmish
-open Avalonia.Threading
 
 /// Owns a running Elmish program and exposes a stable dispatch surface.
 ///
@@ -22,13 +21,11 @@ type ElmishHostConnection<'Msg> internal (dispatch : Action<'Msg>, dispose : Act
     interface IDisposable with
         member _.Dispose() = dispose.Invoke()
 
-/// Starts an Elmish program and connects it to a ViewModel.
+/// Starts an Elmish program and connects it to a host-controlled update sink.
 ///
-/// After every model update the onUpdate callback is posted to the Avalonia
-/// UI thread. Typically onUpdate calls vm.Update(model).
-///
-/// Use this module when an Avalonia application wants to keep Elmish as the
-/// source of truth while projecting state into ordinary ViewModels.
+/// After every model update the provided callback is invoked through the
+/// supplied posting function. Higher-level UI packages can use this to route
+/// updates through a framework-specific UI thread or synchronization context.
 module ElmishHost =
 
     type private HostMsg<'Msg> =
@@ -61,7 +58,8 @@ module ElmishHost =
                  | Stop -> true),
                 onTerminate)
 
-    let start
+    let startWithPost
+        (post : Action<Action>)
         (program : Program<unit, 'Model, 'Msg, unit>)
         (onUpdate : Action<'Model>)
         : ElmishHostConnection<'Msg> =
@@ -84,10 +82,27 @@ module ElmishHost =
         |> Program.withSetState (fun model d ->
             dispatch <- Action<HostMsg<'Msg>>(fun msg -> d msg)
             if Volatile.Read(&disposed) = 0 then
-                Dispatcher.UIThread.Post(fun () -> onUpdate.Invoke(model)))
+                post.Invoke(Action(fun () -> onUpdate.Invoke(model))))
         |> Program.run
 
         new ElmishHostConnection<'Msg>(dispatchUser, dispose)
+
+    let start
+        (program : Program<unit, 'Model, 'Msg, unit>)
+        (onUpdate : Action<'Model>)
+        : ElmishHostConnection<'Msg> =
+        startWithPost (Action<Action>(fun action -> action.Invoke())) program onUpdate
+
+    let startAndBindWithPost
+        (post : Action<Action>)
+        (program : Program<unit, 'Model, 'Msg, unit>)
+        (onUpdate : Action<'Model>)
+        (setDispatch : Action<Action<'Msg>>)
+        : ElmishHostConnection<'Msg> =
+
+        let host = startWithPost post program onUpdate
+        setDispatch.Invoke(host.Dispatch)
+        host
 
     let startAndBind
         (program : Program<unit, 'Model, 'Msg, unit>)
@@ -95,6 +110,4 @@ module ElmishHost =
         (setDispatch : Action<Action<'Msg>>)
         : ElmishHostConnection<'Msg> =
 
-        let host = start program onUpdate
-        setDispatch.Invoke(host.Dispatch)
-        host
+        startAndBindWithPost (Action<Action>(fun action -> action.Invoke())) program onUpdate setDispatch

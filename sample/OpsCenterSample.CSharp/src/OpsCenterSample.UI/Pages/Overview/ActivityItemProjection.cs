@@ -1,6 +1,7 @@
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Elmish.Avalonia.Glue;
+using Elmish.Glue.Core;
 using OverviewCore = OpsCenterSample.Core.OverviewPage;
 
 namespace OpsCenterSample.UI.Pages.Overview;

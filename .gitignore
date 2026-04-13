@@ -4,4 +4,6 @@ artifacts/
 .vs/
 .idea/
 TestResults/
+.codex
 .codex/
+scripts/ralph-loop-tasks.sh

@@ -2,6 +2,7 @@ using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Elmish.Avalonia.Glue;
+using Elmish.Glue.Core;
 using SettingsCore = OpsCenterSample.Core.SettingsPage;
 
 namespace OpsCenterSample.UI.Pages.Settings;

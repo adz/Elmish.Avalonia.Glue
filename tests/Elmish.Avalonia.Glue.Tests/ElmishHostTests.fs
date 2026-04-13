@@ -3,7 +3,7 @@ namespace Elmish.Avalonia.Glue.Tests
 open System
 open System.Threading
 open Elmish
-open Elmish.Avalonia.Glue
+open Elmish.Glue.Core
 open Xunit
 
 module ElmishHostTests =
@@ -26,7 +26,11 @@ module ElmishHostTests =
                       { new IDisposable with
                           member _.Dispose() = disposed.Set() } ])
 
-        let host = ElmishHost.start program (Action<int>(ignore))
+        let host =
+            ElmishHost.startWithPost
+                (Action<Action>(fun action -> action.Invoke()))
+                program
+                (Action<int>(ignore))
 
         (host :> IDisposable).Dispose()
 
