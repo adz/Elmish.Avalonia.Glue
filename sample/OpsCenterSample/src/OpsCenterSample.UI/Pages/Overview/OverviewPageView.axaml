@@ -1,0 +1,52 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="using:OpsCenterSample.UI.Components"
+    xmlns:overview="using:OpsCenterSample.UI.Pages.Overview"
+    x:Class="OpsCenterSample.UI.Pages.Overview.OverviewPageView"
+    x:DataType="overview:OverviewPageProjection"
+    x:CompileBindings="True">
+    <Grid RowDefinitions="Auto,*">
+        <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Text="Morning snapshot" FontSize="20" FontWeight="SemiBold"/>
+            <Button Grid.Column="1" Margin="16,0,0,0" Content="Refresh snapshot" Command="{Binding RefreshSnapshotCommand}"/>
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="0,24,0,0" RowDefinitions="Auto,*">
+            <ItemsControl ItemsSource="{Binding Highlights}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="4"/>
+                </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="components:MetricCardProjection">
+                        <components:MetricCardView/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Border Grid.Row="1" Margin="0,24,0,0" Background="#F7F4EF" BorderBrush="#E6DED3" BorderThickness="1" CornerRadius="16" Padding="18">
+                <Grid RowDefinitions="Auto,*">
+                    <TextBlock Text="Recent activity" FontSize="16" FontWeight="SemiBold"/>
+                    <ItemsControl Grid.Row="1" Margin="0,14,0,0" ItemsSource="{Binding Activity}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="overview:ActivityItemProjection">
+                                <Grid ColumnDefinitions="64,*" Margin="0,0,0,12">
+                                    <TextBlock Text="{Binding Time}"
+                                               FontFamily="Monospace"
+                                               Foreground="#2E6C53"
+                                               VerticalAlignment="Top"/>
+                                    <StackPanel Grid.Column="1" Spacing="2">
+                                        <TextBlock Text="{Binding Title}" FontWeight="SemiBold"/>
+                                        <TextBlock Text="{Binding Detail}" Foreground="#6B6A67"/>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

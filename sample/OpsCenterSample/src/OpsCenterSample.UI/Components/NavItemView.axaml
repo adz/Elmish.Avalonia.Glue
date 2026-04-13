@@ -1,0 +1,20 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:shell="using:OpsCenterSample.UI.Pages.Shell"
+    x:Class="OpsCenterSample.UI.Components.NavItemView"
+    x:DataType="shell:NavigationItemProjection"
+    x:CompileBindings="True">
+    <Button Command="{Binding SelectCommand}"
+            Padding="14,12"
+            HorizontalContentAlignment="Stretch"
+            Background="Transparent"
+            BorderBrush="{x:Null}">
+        <Border CornerRadius="14" Padding="12,10" Background="{Binding CardBackground}">
+            <StackPanel Spacing="2">
+                <TextBlock Text="{Binding Title}" FontSize="15" FontWeight="SemiBold" Foreground="#F8F3EA"/>
+                <TextBlock Text="{Binding Caption}" FontSize="12" Foreground="#C5D2CA"/>
+            </StackPanel>
+        </Border>
+    </Button>
+</UserControl>

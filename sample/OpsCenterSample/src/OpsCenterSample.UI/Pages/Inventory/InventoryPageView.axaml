@@ -1,0 +1,44 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="using:OpsCenterSample.UI.Components"
+    xmlns:inventory="using:OpsCenterSample.UI.Pages.Inventory"
+    x:Class="OpsCenterSample.UI.Pages.Inventory.InventoryPageView"
+    x:DataType="inventory:InventoryPageProjection"
+    x:CompileBindings="True">
+    <Grid RowDefinitions="Auto,Auto,*">
+        <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Text="Consumables" FontSize="20" FontWeight="SemiBold"/>
+            <Button Grid.Column="1" Margin="12,0,0,0" Content="Toggle low stock only" Command="{Binding ToggleLowOnlyCommand}"/>
+        </Grid>
+
+        <ItemsControl Grid.Row="1" Margin="0,20,0,0" ItemsSource="{Binding Summary}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="3"/>
+            </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="components:MetricCardProjection">
+                    <components:MetricCardView/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Border Grid.Row="2" Margin="0,20,0,0" Background="#F7F4EF" BorderBrush="#E6DED3" BorderThickness="1" CornerRadius="16" Padding="18">
+            <ItemsControl ItemsSource="{Binding Items}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="inventory:InventoryRowProjection">
+                        <Grid ColumnDefinitions="2*,Auto,*,Auto,Auto" Margin="0,0,0,12">
+                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Margin="12,0,0,0" Text="{Binding Stock}" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Margin="12,0,0,0" Text="{Binding Gap}" Foreground="#6B6A67" VerticalAlignment="Center"/>
+                            <Button Grid.Column="3" Margin="12,0,0,0" Content="Pick one" Command="{Binding PickOneCommand}"/>
+                            <Button Grid.Column="4" Margin="12,0,0,0" Content="Restock" Command="{Binding RestockCommand}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
+    </Grid>
+</UserControl>

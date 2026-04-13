@@ -1,0 +1,15 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="using:OpsCenterSample.UI.Components"
+    x:Class="OpsCenterSample.UI.Components.MetricCardView"
+    x:DataType="components:MetricCardProjection"
+    x:CompileBindings="True">
+    <Border Background="#F6F3EE" BorderBrush="#E6DED3" BorderThickness="1" CornerRadius="16" Padding="16">
+        <StackPanel Spacing="8">
+            <TextBlock Text="{Binding Label}" FontSize="13" Foreground="#6F6B64"/>
+            <TextBlock Text="{Binding Value}" FontSize="28" FontWeight="SemiBold"/>
+            <TextBlock Text="{Binding Hint}" FontSize="12" Foreground="#2E6C53"/>
+        </StackPanel>
+    </Border>
+</UserControl>

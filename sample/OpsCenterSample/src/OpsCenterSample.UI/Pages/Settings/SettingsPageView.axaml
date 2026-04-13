@@ -1,0 +1,40 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:settings="using:OpsCenterSample.UI.Pages.Settings"
+    x:Class="OpsCenterSample.UI.Pages.Settings.SettingsPageView"
+    x:DataType="settings:SettingsPageProjection"
+    x:CompileBindings="True">
+    <Grid RowDefinitions="Auto,Auto,*">
+        <TextBlock Text="Operator preferences" FontSize="20" FontWeight="SemiBold"/>
+
+        <Grid Grid.Row="1" Margin="0,20,0,0" ColumnDefinitions="*,*">
+            <Border Background="#F7F4EF" BorderBrush="#E6DED3" BorderThickness="1" CornerRadius="16" Padding="18">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Notifications" FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding NotificationsEnabled, StringFormat='Enabled: {0}'}" Foreground="#6B6A67"/>
+                    <Button Content="Toggle notifications" Command="{Binding ToggleNotificationsCommand}"/>
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="1" Margin="18,0,0,0" Background="#F7F4EF" BorderBrush="#E6DED3" BorderThickness="1" CornerRadius="16" Padding="18">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="List density" FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding CompactLists, StringFormat='Compact lists: {0}'}" Foreground="#6B6A67"/>
+                    <Button Content="Toggle compact lists" Command="{Binding ToggleCompactListsCommand}"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <Border Grid.Row="2" Margin="0,20,0,0" Background="#F7F4EF" BorderBrush="#E6DED3" BorderThickness="1" CornerRadius="16" Padding="18">
+            <StackPanel Spacing="14">
+                <TextBlock Text="Accent palette" FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding Accent, StringFormat='Current accent: {0}'}" Foreground="#6B6A67"/>
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Button Content="Moss" Command="{Binding UseMossCommand}"/>
+                    <Button Content="Ember" Command="{Binding UseEmberCommand}"/>
+                    <Button Content="Harbor" Command="{Binding UseHarborCommand}"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

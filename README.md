@@ -58,7 +58,11 @@ For lists, use SyncWith to keep ObservableCollection instances stable:
 collection. It now fails fast when duplicates are present instead of silently
 producing a mismatched collection.
 
-See the `sample/` directory for a complete working example.
+See the `sample/` directory for working examples:
+
+- `GlueSample` keeps the shape deliberately minimal.
+- `OpsCenterSample` shows the same approach once the app grows into multiple
+  pages, shared components, feature folders, and grouped projections.
 
 ## Why
 

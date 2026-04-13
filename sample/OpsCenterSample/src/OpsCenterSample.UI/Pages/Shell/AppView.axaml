@@ -1,0 +1,78 @@
+<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="using:OpsCenterSample.UI.Components"
+    xmlns:overviewViews="using:OpsCenterSample.UI.Pages.Overview"
+    xmlns:ordersViews="using:OpsCenterSample.UI.Pages.Orders"
+    xmlns:inventoryViews="using:OpsCenterSample.UI.Pages.Inventory"
+    xmlns:teamViews="using:OpsCenterSample.UI.Pages.Team"
+    xmlns:settingsViews="using:OpsCenterSample.UI.Pages.Settings"
+    x:Class="OpsCenterSample.UI.Pages.Shell.AppView"
+    x:DataType="local:AppProjection"
+    x:CompileBindings="True"
+    Title="Ops Center Sample"
+    Width="1120"
+    Height="760"
+    MinWidth="960"
+    MinHeight="640"
+    xmlns:local="using:OpsCenterSample.UI.Pages.Shell">
+    <Grid ColumnDefinitions="220,*" Background="#F4F1EA">
+        <Border Background="#163227" Padding="18,22">
+            <Grid RowDefinitions="Auto,Auto,*">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="Ops Center" FontSize="22" FontWeight="SemiBold" Foreground="#F8F3EA"/>
+                    <TextBlock Text="Feature-folder sample with explicit projections."
+                               TextWrapping="Wrap"
+                               Foreground="#C5D2CA"/>
+                </StackPanel>
+
+                <Border Grid.Row="1" Margin="0,22,0,18" Height="1" Background="#2D5144"/>
+
+                <ItemsControl Grid.Row="2" ItemsSource="{Binding NavigationItems}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="local:NavigationItemProjection">
+                            <components:NavItemView/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,*" Margin="24">
+            <Border CornerRadius="18" Background="#FFFDF9" Padding="24,20" BoxShadow="0 8 32 0 #16000000">
+                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto">
+                    <TextBlock Text="{Binding CurrentPageTitle}" FontSize="28" FontWeight="SemiBold"/>
+                    <Border Grid.Column="1" Padding="10,6" Background="#E5F0E9" CornerRadius="999">
+                        <TextBlock Text="{Binding CurrentPageKey}" Foreground="#23543E" FontWeight="SemiBold"/>
+                    </Border>
+                    <TextBlock Grid.Row="1"
+                               Margin="0,8,0,0"
+                               Text="{Binding CurrentPageSubtitle}"
+                               Foreground="#6B6A67"/>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="1" Margin="0,18,0,0" CornerRadius="18" Background="#FFFDF9" Padding="24" BoxShadow="0 8 32 0 #16000000">
+                <ContentControl Content="{Binding CurrentPage}">
+                    <ContentControl.DataTemplates>
+                        <DataTemplate DataType="overviewViews:OverviewPageProjection">
+                            <overviewViews:OverviewPageView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="ordersViews:OrdersPageProjection">
+                            <ordersViews:OrdersPageView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="inventoryViews:InventoryPageProjection">
+                            <inventoryViews:InventoryPageView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="teamViews:TeamPageProjection">
+                            <teamViews:TeamPageView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="settingsViews:SettingsPageProjection">
+                            <settingsViews:SettingsPageView/>
+                        </DataTemplate>
+                    </ContentControl.DataTemplates>
+                </ContentControl>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

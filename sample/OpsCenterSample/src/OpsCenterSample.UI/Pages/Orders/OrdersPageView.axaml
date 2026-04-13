@@ -1,0 +1,52 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="using:OpsCenterSample.UI.Components"
+    xmlns:orders="using:OpsCenterSample.UI.Pages.Orders"
+    x:Class="OpsCenterSample.UI.Pages.Orders.OrdersPageView"
+    x:DataType="orders:OrdersPageProjection"
+    x:CompileBindings="True">
+    <Grid RowDefinitions="Auto,Auto,*">
+        <Grid ColumnDefinitions="*,Auto,Auto">
+            <TextBlock Text="Dispatch queue" FontSize="20" FontWeight="SemiBold"/>
+            <Button Grid.Column="1" Margin="12,0,0,0" Content="Toggle active only" Command="{Binding ToggleActiveOnlyCommand}"/>
+            <Button Grid.Column="2" Margin="12,0,0,0" Content="Add rush order" Command="{Binding AddRushOrderCommand}"/>
+        </Grid>
+
+        <ItemsControl Grid.Row="1" Margin="0,20,0,0" ItemsSource="{Binding Summary}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="3"/>
+            </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="components:MetricCardProjection">
+                    <components:MetricCardView/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Border Grid.Row="2" Margin="0,20,0,0" Background="#F7F4EF" BorderBrush="#E6DED3" BorderThickness="1" CornerRadius="16" Padding="18">
+            <Grid RowDefinitions="Auto,*">
+                <TextBlock Text="{Binding ShowActiveOnly, StringFormat='Active only: {0}'}" Foreground="#6B6A67"/>
+                <ItemsControl Grid.Row="1" Margin="0,12,0,0" ItemsSource="{Binding Orders}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="orders:OrderRowProjection">
+                            <Grid ColumnDefinitions="2*,*,Auto,Auto" Margin="0,0,0,12">
+                                <StackPanel Spacing="2">
+                                    <TextBlock Text="{Binding Customer}" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding Route}" Foreground="#6B6A67"/>
+                                </StackPanel>
+                                <TextBlock Grid.Column="1" Margin="12,0,0,0" Text="{Binding Total}" VerticalAlignment="Center"/>
+                                <Border Grid.Column="2" Margin="12,0,0,0" Padding="10,6" Background="#E5F0E9" CornerRadius="999">
+                                    <TextBlock Text="{Binding Status}" Foreground="#23543E"/>
+                                </Border>
+                                <Button Grid.Column="3" Margin="12,0,0,0" Content="{Binding AdvanceLabel}" Command="{Binding AdvanceCommand}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
