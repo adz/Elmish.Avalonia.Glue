@@ -49,6 +49,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Elmish.Avalonia.Glue.Core",
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Elmish.Avalonia.Glue.Projection", "src\Elmish.Avalonia.Glue.Projection\Elmish.Avalonia.Glue.Projection.fsproj", "{1ADCC97A-1BEA-4754-A537-665876655F50}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Elmish.Avalonia.Glue.ElmView", "src\Elmish.Avalonia.Glue.ElmView\Elmish.Avalonia.Glue.ElmView.fsproj", "{372B0D92-3DCA-4027-ADB3-C91EC8AC2931}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -203,6 +205,18 @@ Global
 		{1ADCC97A-1BEA-4754-A537-665876655F50}.Release|x64.Build.0 = Release|Any CPU
 		{1ADCC97A-1BEA-4754-A537-665876655F50}.Release|x86.ActiveCfg = Release|Any CPU
 		{1ADCC97A-1BEA-4754-A537-665876655F50}.Release|x86.Build.0 = Release|Any CPU
+		{372B0D92-3DCA-4027-ADB3-C91EC8AC2931}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{372B0D92-3DCA-4027-ADB3-C91EC8AC2931}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{372B0D92-3DCA-4027-ADB3-C91EC8AC2931}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{372B0D92-3DCA-4027-ADB3-C91EC8AC2931}.Debug|x64.Build.0 = Debug|Any CPU
+		{372B0D92-3DCA-4027-ADB3-C91EC8AC2931}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{372B0D92-3DCA-4027-ADB3-C91EC8AC2931}.Debug|x86.Build.0 = Debug|Any CPU
+		{372B0D92-3DCA-4027-ADB3-C91EC8AC2931}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{372B0D92-3DCA-4027-ADB3-C91EC8AC2931}.Release|Any CPU.Build.0 = Release|Any CPU
+		{372B0D92-3DCA-4027-ADB3-C91EC8AC2931}.Release|x64.ActiveCfg = Release|Any CPU
+		{372B0D92-3DCA-4027-ADB3-C91EC8AC2931}.Release|x64.Build.0 = Release|Any CPU
+		{372B0D92-3DCA-4027-ADB3-C91EC8AC2931}.Release|x86.ActiveCfg = Release|Any CPU
+		{372B0D92-3DCA-4027-ADB3-C91EC8AC2931}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -228,5 +242,6 @@ Global
 		{57C69656-754C-4139-9D13-0C7552267DB5} = {F26C1049-E031-9C29-6859-E3E27828B020}
 		{5C894F8D-DA68-4A57-9BE4-C56C8E2B6021} = {08408895-09B5-4B90-AF07-4B6CD7123E00}
 		{1ADCC97A-1BEA-4754-A537-665876655F50} = {08408895-09B5-4B90-AF07-4B6CD7123E00}
+		{372B0D92-3DCA-4027-ADB3-C91EC8AC2931} = {08408895-09B5-4B90-AF07-4B6CD7123E00}
 	EndGlobalSection
 EndGlobal

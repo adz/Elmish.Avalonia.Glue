@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>Elmish.Avalonia.Glue.ElmView</AssemblyName>
+    <RootNamespace>Elmish.Avalonia.Glue.ElmView</RootNamespace>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Elmish.Avalonia.Glue.ElmView</PackageId>
+    <Version>1.0.0</Version>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Authors>Your Name</Authors>
+    <Description>
+      F#-first Elm-style Avalonia binding helpers centered on immutable view snapshots
+      and design-time-friendly bindable hosts.
+    </Description>
+    <PackageTags>fsharp elmish avalonia elm axaml design-time</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="ElmViewHosts.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" Link="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Elmish.Avalonia.Glue.Core\Elmish.Avalonia.Glue.Core.fsproj" />
+  </ItemGroup>
+</Project>
