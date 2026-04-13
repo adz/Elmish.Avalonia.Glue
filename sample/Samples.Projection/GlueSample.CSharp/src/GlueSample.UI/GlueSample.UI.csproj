@@ -14,7 +14,7 @@
     <PackageReference Include="Tmds.DBus.Protocol" Version="0.92.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\src\Elmish.Avalonia.Glue\Elmish.Avalonia.Glue.fsproj" />
+    <ProjectReference Include="..\..\..\..\..\src\Elmish.Avalonia.Glue\Elmish.Avalonia.Glue.fsproj" />
     <ProjectReference Include="..\GlueSample.Core\GlueSample.Core.fsproj" />
   </ItemGroup>
 </Project>

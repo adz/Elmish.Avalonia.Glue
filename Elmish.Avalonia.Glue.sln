@@ -17,33 +17,33 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GlueSample", "GlueSample", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5B4D0114-E90D-70CB-005D-13D3964B42E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlueSample.UI", "sample\GlueSample\src\GlueSample.UI\GlueSample.UI.csproj", "{79942908-A6E6-4834-ABE9-DE51FB831FDC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlueSample.UI", "sample\Samples.Projection\GlueSample\src\GlueSample.UI\GlueSample.UI.csproj", "{79942908-A6E6-4834-ABE9-DE51FB831FDC}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GlueSample.Core", "sample\GlueSample\src\GlueSample.Core\GlueSample.Core.fsproj", "{191CF7DE-24B9-4A75-A6A9-934DC7C07C4D}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GlueSample.Core", "sample\Samples.Projection\GlueSample\src\GlueSample.Core\GlueSample.Core.fsproj", "{191CF7DE-24B9-4A75-A6A9-934DC7C07C4D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GlueSample.CSharp", "GlueSample.CSharp", "{3CD8E5F8-500D-57E4-BE74-FCCE9D619A38}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A961A4F0-7BBB-33BA-A3F3-DE192031E14E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlueSample.UI", "sample\GlueSample.CSharp\src\GlueSample.UI\GlueSample.UI.csproj", "{159441EA-A48D-4670-8C80-12E6519ADF93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlueSample.UI", "sample\Samples.Projection\GlueSample.CSharp\src\GlueSample.UI\GlueSample.UI.csproj", "{159441EA-A48D-4670-8C80-12E6519ADF93}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GlueSample.Core", "sample\GlueSample.CSharp\src\GlueSample.Core\GlueSample.Core.fsproj", "{4676C323-6D8F-4E26-91CA-0FE8873116B5}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GlueSample.Core", "sample\Samples.Projection\GlueSample.CSharp\src\GlueSample.Core\GlueSample.Core.fsproj", "{4676C323-6D8F-4E26-91CA-0FE8873116B5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OpsCenterSample", "OpsCenterSample", "{117598D0-20F0-4CFA-8773-9F3E8FED43CB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C03582B8-5430-E824-9071-158314FBC243}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpsCenterSample.UI", "sample\OpsCenterSample\src\OpsCenterSample.UI\OpsCenterSample.UI.csproj", "{C98A09D6-6426-48AD-B274-261BC4D92052}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpsCenterSample.UI", "sample\Samples.Projection\OpsCenterSample\src\OpsCenterSample.UI\OpsCenterSample.UI.csproj", "{C98A09D6-6426-48AD-B274-261BC4D92052}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OpsCenterSample.Core", "sample\OpsCenterSample\src\OpsCenterSample.Core\OpsCenterSample.Core.fsproj", "{68829EAD-98D6-411B-851B-4BF477315ECA}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OpsCenterSample.Core", "sample\Samples.Projection\OpsCenterSample\src\OpsCenterSample.Core\OpsCenterSample.Core.fsproj", "{68829EAD-98D6-411B-851B-4BF477315ECA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OpsCenterSample.CSharp", "OpsCenterSample.CSharp", "{EDA1EC30-5423-A71F-44B8-F897363F9451}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F26C1049-E031-9C29-6859-E3E27828B020}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpsCenterSample.UI", "sample\OpsCenterSample.CSharp\src\OpsCenterSample.UI\OpsCenterSample.UI.csproj", "{C1FF57AB-B44B-40C6-B4ED-81B23027487D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpsCenterSample.UI", "sample\Samples.Projection\OpsCenterSample.CSharp\src\OpsCenterSample.UI\OpsCenterSample.UI.csproj", "{C1FF57AB-B44B-40C6-B4ED-81B23027487D}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OpsCenterSample.Core", "sample\OpsCenterSample.CSharp\src\OpsCenterSample.Core\OpsCenterSample.Core.fsproj", "{57C69656-754C-4139-9D13-0C7552267DB5}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OpsCenterSample.Core", "sample\Samples.Projection\OpsCenterSample.CSharp\src\OpsCenterSample.Core\OpsCenterSample.Core.fsproj", "{57C69656-754C-4139-9D13-0C7552267DB5}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Elmish.Glue.Core", "src\Elmish.Glue.Core\Elmish.Glue.Core.fsproj", "{5C894F8D-DA68-4A57-9BE4-C56C8E2B6021}"
 EndProject

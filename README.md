@@ -89,11 +89,15 @@ collection.
 
 See the `sample/` directory for working examples:
 
-- `GlueSample` keeps the shape deliberately minimal.
-- `OpsCenterSample` shows the same approach once the app grows into multiple
-  pages, shared components, feature folders, and grouped projections.
-- `GlueSample.CSharp` and `OpsCenterSample.CSharp` show the same projection
-  pattern in code-only Avalonia views, without `.axaml` files.
+- `Samples.Projection` is the current populated suite.
+- `Samples.Projection/GlueSample` keeps the shape deliberately minimal.
+- `Samples.Projection/OpsCenterSample` shows the same approach once the app
+  grows into multiple pages, shared components, feature folders, and grouped
+  projections.
+- `Samples.Projection/GlueSample.CSharp` and
+  `Samples.Projection/OpsCenterSample.CSharp` show the same projection pattern
+  in code-only Avalonia views, without `.axaml` files.
+- `Samples.ElmView` is reserved for the parallel ElmView sample suite.
 
 ## Why
 
