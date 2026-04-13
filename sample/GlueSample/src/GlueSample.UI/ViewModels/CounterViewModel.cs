@@ -11,7 +11,7 @@ public partial class CounterViewModel : ObservableObject
 {
     private Action<CounterPage.Msg> _dispatch = _ => { };
 
-    [ObservableProperty] private int count;
+    [ObservableProperty] public partial int Count { get; set; }
 
     public ObservableCollection<LogEntryViewModel> Log { get; } = new();
 
@@ -38,19 +38,4 @@ public partial class CounterViewModel : ObservableObject
 
     [RelayCommand]
     private void Reset() => Dispatch(CounterPage.Msg.Reset);
-}
-
-public partial class LogEntryViewModel : ObservableObject
-{
-    public Guid Id { get; }
-    [ObservableProperty] private string message = "";
-    [ObservableProperty] private string time = "";
-
-    public LogEntryViewModel(CounterPage.LogEntry e) { Id = e.Id; Update(e); }
-
-    public void Update(CounterPage.LogEntry e)
-    {
-        Message = e.Message;
-        Time    = e.Time.ToString("HH:mm:ss");
-    }
 }

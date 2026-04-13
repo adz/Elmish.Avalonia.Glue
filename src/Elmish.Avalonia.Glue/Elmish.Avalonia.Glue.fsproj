@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <AssemblyName>Elmish.Avalonia.Glue</AssemblyName>
     <RootNamespace>Elmish.Avalonia.Glue</RootNamespace>
     <Nullable>enable</Nullable>
