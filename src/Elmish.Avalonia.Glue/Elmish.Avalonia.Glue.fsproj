@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <AssemblyName>Elmish.Avalonia.Glue</AssemblyName>
+    <RootNamespace>Elmish.Avalonia.Glue</RootNamespace>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Elmish.Avalonia.Glue</PackageId>
+    <Version>1.0.0</Version>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Authors>Your Name</Authors>
+    <Description>
+      Minimal glue between an Elmish program and an Avalonia ViewModel.
+      No Rx. No DynamicData. Just the wiring.
+    </Description>
+    <PackageTags>fsharp elmish avalonia mvvm</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="ElmishHost.fs" />
+    <Compile Include="ObservableCollectionExtensions.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" Link="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.2.0" />
+    <PackageReference Include="Elmish" Version="4.2.0" />
+  </ItemGroup>
+</Project>
