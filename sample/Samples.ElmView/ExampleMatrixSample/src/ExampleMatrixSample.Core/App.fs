@@ -144,6 +144,7 @@ type SvgView =
     {
         ThemeIndex: int
         ThemeCount: int
+        ThemeNames: string list
         Theme: SvgThemeView
     }
 
@@ -185,10 +186,10 @@ type Msg =
     | HttpLoaded of string * string * DateTimeOffset
     | HttpFailed of string
     | ClockTick of DateTimeOffset
-    | ToggleClockFormat
+    | SetClockUse24Hour of bool
     | FileOpened of SelectedFileView
     | ClearFileSelection
-    | NextSvgTheme
+    | SetSvgThemeIndex of int
 
 type private ExampleInfo =
     {
@@ -438,7 +439,7 @@ module private ClockPage =
             ZoneText = zoneText
             TickCount = tickCount
             Use24Hour = use24Hour
-            FormatLabel = if use24Hour then "Switch to 12-hour" else "Switch to 24-hour"
+            FormatLabel = if use24Hour then "24-hour format active" else "12-hour format active"
         }
 
     let design =
@@ -529,12 +530,18 @@ module private SvgPage =
         {
             ThemeIndex = index
             ThemeCount = themes.Length
+            ThemeNames = themes |> Array.map _.Name |> Array.toList
             Theme = themes[index]
         }
 
     let design = render 1
     let init = render 0
-    let next (view: SvgView) = render ((view.ThemeIndex + 1) % themes.Length)
+
+    let select index (view: SvgView) =
+        if index < 0 || index >= themes.Length then
+            view
+        else
+            render index
 
 module App =
     let private withDerived (app: AppView) =
@@ -661,16 +668,16 @@ module App =
             { model with Http = HttpPage.failed error model.Http } |> withDerived, Cmd.none
         | ClockTick now ->
             { model with Clock = ClockPage.render now model.Clock.Use24Hour (model.Clock.TickCount + 1) } |> withDerived, Cmd.none
-        | ToggleClockFormat ->
-            { model with Clock = ClockPage.render DateTimeOffset.Now (not model.Clock.Use24Hour) model.Clock.TickCount }
+        | SetClockUse24Hour value ->
+            { model with Clock = ClockPage.render DateTimeOffset.Now value model.Clock.TickCount }
             |> withDerived,
             Cmd.none
         | FileOpened file ->
             { model with Files = FilesPage.opened file } |> withDerived, Cmd.none
         | ClearFileSelection ->
             { model with Files = FilesPage.cleared } |> withDerived, Cmd.none
-        | NextSvgTheme ->
-            { model with Svg = SvgPage.next model.Svg } |> withDerived, Cmd.none
+        | SetSvgThemeIndex index ->
+            { model with Svg = SvgPage.select index model.Svg } |> withDerived, Cmd.none
 
     let private subscriptions _ =
         [

@@ -39,8 +39,6 @@ public partial class AppView : Window
 
     private void OnRefreshHttpClick(object? sender, RoutedEventArgs e) => Host.RefreshHttp();
 
-    private void OnToggleClockFormatClick(object? sender, RoutedEventArgs e) => Host.ToggleClockFormat();
-
     private async void OnOpenFileClick(object? sender, RoutedEventArgs e)
     {
         var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
@@ -77,6 +75,4 @@ public partial class AppView : Window
     }
 
     private void OnClearFileClick(object? sender, RoutedEventArgs e) => Host.ClearFileSelection();
-
-    private void OnNextThemeClick(object? sender, RoutedEventArgs e) => Host.NextSvgTheme();
 }
