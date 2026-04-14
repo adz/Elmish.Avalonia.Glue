@@ -2,155 +2,208 @@
 
 ## Positioning
 
-`Elmish.Avalonia.Glue` is meant for projects that want all application state to
-live in Elmish while still using ordinary Avalonia ViewModels, whether the view
-layer is AXAML-based or code-only.
+This repository now documents two Avalonia-first authoring families built on a
+shared substrate:
 
-It is intentionally narrow. The library is not trying to provide a new MVVM
-base class, a reactive abstraction layer, or an alternate view DSL.
+- `Projection` for explicit CLR-facing viewmodels
+- `ElmView` for immutable F# view records as the authored UI schema
 
-The framework-neutral substrate now lives in `Elmish.Glue.Core`. That core
-holds the host lifetime primitives, projection contracts, and keyed collection
-patching helpers. `Elmish.Avalonia.Glue` stays responsible for Avalonia-specific
-thread dispatch and for keeping the current Avalonia samples on a normal,
-ordinary binding path.
+Both paths assume Elmish owns application state and behavior. Both paths keep
+Avalonia normal: ordinary `.axaml`, ordinary bindings, normal design-time
+preview, and standard DevTools workflows.
 
-## Ownership Model
+## Shared Substrate
 
-The F# Elmish program owns the real state.
+`Elmish.Glue.Core` is the common infrastructure layer.
 
-The C# or F# ViewModel layer is a projection over that state:
+Use it for:
 
-- scalar properties mirror model values
-- child ViewModels mirror nested model records
-- observable collections mirror keyed model lists
+- `ElmishHost.start`, `startWithPost`, `startAndBind`, and `startAndBindWithPost`
+- `ElmishHostConnection<'Msg>` lifetime ownership
+- projection contracts:
+  `IProjection<'Model>`, `IDispatchTarget<'Msg>`, `IProjection<'Model,'Msg>`
+- keyed collection patching through
+  `ObservableCollectionExtensions.SyncWith`
 
-The ViewModel layer may hold UI-only mechanics such as:
+This layer is intentionally mechanical. It should hold only concepts that are
+framework-neutral and based on standard .NET primitives.
 
-- stable `ObservableCollection<T>` instances
-- imperative button handlers or command forwarding
-- cached child ViewModel objects that correspond to stable model identities
+`Elmish.Avalonia.Glue` remains the Avalonia-facing package that routes host
+updates onto Avalonia's UI thread.
 
-It should not become a second source of truth for domain state.
+## Projection Family
 
-## Starting The Host
+The `Projection` family is the explicit viewmodel path.
 
-The intended lifetime is:
+Use it when you want:
 
-1. Build the Elmish program in the core layer.
-2. Construct the root ViewModel in the UI layer.
-3. Start the host from the app, window, or view owner.
-4. Hold onto the returned `ElmishHostConnection<'Msg>`.
-5. Dispose that connection when the owner shuts down.
+- named CLR-facing viewmodels as the primary AXAML surface
+- compiled bindings directly against those projection types
+- explicit command properties, setter-based interactions, and familiar MVVM
+  organization
+- stable mutable shells around immutable Elmish-owned state
 
-The host is responsible for:
+The intended ownership split is:
 
-- running the Elmish loop
-- forwarding model updates onto Avalonia's UI thread
-- exposing a stable dispatcher for the ViewModel layer
-- terminating Elmish subscriptions when disposed
+- Elmish model: real application state
+- projection objects: bindable surface, stable collections, event forwarding,
+  and other UI mechanics
 
-`ElmishHost.start` is the low-level API when the caller wants to wire the
-dispatcher manually.
+Projection code should stay shallow and patterned. It should not become a
+second domain model.
 
-`ElmishHost.startAndBind` is the convenience API when the caller wants a single
-call that both starts the loop and hands the dispatcher to a consumer.
+### Projection-specific helpers
+
+`Elmish.Avalonia.Glue.Projection` adds helpers for the projection family:
+
+- `SnapshotHost<'T>` for a single immutable snapshot exposed through a bindable
+  shell
+- `KeyedSnapshotCollection<'T,'Key>` for identity-aware snapshot list updates
+  without rebuilding the entire collection
+
+These helpers are useful when a feature wants explicit CLR-facing hosts but the
+underlying data should remain immutable and identity-aware.
+
+## ElmView Family
+
+The `ElmView` family is the F#-first path.
+
+Use it when you want:
+
+- immutable F# records to be the authored UI schema
+- most UI shaping logic to live in F# view data and AXAML
+- a single bindable host rather than a handwritten projection tree
+- runtime and design-time to share the same view shape as directly as possible
+
+The host layer stays deliberately small. It usually owns:
+
+- the current `View` snapshot exposed to AXAML
+- imperative methods that forward Avalonia events to Elmish messages
+
+The host should not become a second projection tree.
+
+### ElmView-specific helpers
+
+`Elmish.Avalonia.Glue.ElmView` provides:
+
+- `BindableViewHost<'View>`
+- `RuntimeViewHost<'View>`
+- `DesignViewHost<'View>`
+- `ElmView.runtime`
+- `ElmView.design`
+
+These types keep the bindable surface consistent between runtime and preview
+snapshots.
+
+## Design-Time Workflow
+
+Design-time support is required in both families. The intended workflow is:
+
+1. Define UI-shaped F# types for the feature.
+2. Create a realistic design snapshot in F#.
+3. Wrap that snapshot in the bindable shape the AXAML view expects.
+4. Bind AXAML against that normal CLR surface with compiled bindings.
+5. Start the real Elmish host at runtime and swap live updates into the same or
+   nearly identical shape.
+
+### Projection design-time flow
+
+In the projection samples:
+
+1. F# defines a design model, for example `Core.App.getDesignModel()`.
+2. The view constructs the root projection.
+3. The constructor immediately calls `Projection.Update(designModel)`.
+4. AXAML binds to the populated projection with normal compiled bindings.
+5. At runtime, `ElmishHost.startAndBind` keeps updating that same projection.
+
+This keeps design-time preview useful without booting the full application.
+
+### ElmView design-time flow
+
+In the ElmView samples:
+
+1. F# defines a design view, for example `Core.App.getDesignView()`.
+2. The root host inherits `RuntimeViewHost<'View>`.
+3. The host starts life with the design view snapshot.
+4. AXAML binds through `View.*` to that immutable record shape.
+5. At runtime, `ElmishHost.startAndBind` calls `Host.Update` with live view
+   snapshots.
+
+That pattern keeps preview and runtime extremely close while still allowing a
+tiny imperative seam for Avalonia events such as clicks, file picking, or
+selection changes.
+
+## Host Lifetime
+
+The intended runtime lifetime is the same in both families:
+
+1. Build the Elmish program in F#.
+2. Construct the root Avalonia bindable surface.
+3. Start the host from the app, window, or owning view.
+4. Hold the returned `ElmishHostConnection<'Msg>` or `IDisposable`.
+5. Dispose it when the owner shuts down so subscriptions terminate cleanly.
 
 ## Dispatch Flow
 
-The intended direction of flow is:
+The intended flow remains:
 
-1. user interacts with the view
-2. view or ViewModel invokes a dispatch-facing method
-3. that method emits an Elmish message
-4. Elmish updates the model
-5. the host posts the new model to the UI thread
-6. the ViewModel updates its projection
+1. the user interacts with Avalonia controls
+2. the view or host emits an Elmish message
+3. Elmish updates immutable state
+4. the host posts the update to Avalonia's UI thread
+5. the bindable surface refreshes
 
-This keeps mutation localized to the projection layer and leaves behavior and
-state transitions in Elmish.
-
-## ViewModel Shape
-
-The library assumes a plain ViewModel style. A typical root ViewModel will:
-
-- expose child ViewModels as properties
-- expose an `Update(model)` method
-- expose a way to receive the dispatch action
-
-A child ViewModel will typically:
-
-- update scalar properties from a child model
-- forward user actions as parent messages
-- own its own stable `ObservableCollection<T>` instances where needed
-
-The library does not require a specific base type or command abstraction.
-
-When a projection wants to use the helper extensions for child dispatch
-forwarding or collection synchronization, the intended shape is:
-
-- `IProjection<'Model>` for update-only projections
-- `IDispatchTarget<'Msg>` for dispatch-only projections
-- `IProjection<'Model, 'Msg>` when the same object does both
-
-That split exists so C# projections can inherit another concrete base type such
-as `ObservableObject` while still participating in the helper APIs cleanly.
+The difference between the families is not where behavior lives. Behavior stays
+in Elmish in both. The difference is which bindable shape AXAML sees.
 
 ## Collection Synchronization
 
-`ObservableCollectionExtensions.SyncWith` is intended for model lists with
-stable keys.
+`ObservableCollectionExtensions.SyncWith` is the default keyed collection
+patching tool for projection-style bindable collections.
 
 Use it when you need to:
 
-- preserve existing ViewModel instances
+- preserve existing viewmodel instances
 - preserve selection, scroll position, and container reuse
 - update, insert, remove, and reorder items without replacing the collection
 
-Callers are expected to provide:
+`SyncWith` requires unique keys on both the model side and the target
+collection side. Duplicate keys fail fast intentionally.
 
-- the target `ObservableCollection<TViewModel>`
-- the source model list
-- a model key selector
-- a ViewModel key selector
-- a factory for new ViewModel instances
+Use projection collections when Avalonia materially benefits from stable
+mutable identity. Prefer immutable snapshots when a feature does not need that
+extra mutable shell.
 
-If the target item type implements `IProjection<'Model>`, the helper overloads
-can call `Update` automatically.
+## Choosing A Path
 
-If the target item type also implements `IDispatchTarget<'Msg>`, the helper
-overloads can wire the child dispatcher automatically, either:
+Choose `Projection` when:
 
-- directly with `SyncWith(..., dispatch)`
-- or through a parent message map with `SyncWith(..., parentDispatch, map)`
+- the team wants explicit CLR-facing viewmodels
+- many view interactions map naturally to command properties or viewmodel
+  methods
+- the codebase already organizes features around projection/viewmodel types
+- a screen benefits from stable mutable collection identity or snapshot hosts
 
-## Key Requirements
+Choose `ElmView` when:
 
-`SyncWith` assumes keys are unique on both sides:
+- the team wants most authored UI shaping logic in F#
+- the review surface should primarily be immutable view records plus AXAML
+- reducing handwritten projection code is a priority
+- runtime and design-time should share one bindable view shape with minimal
+  translation
 
-- every model item must have a unique key
-- every existing ViewModel in the target collection must have a unique key
+If a feature needs a lot of mutable, control-specific mechanics, prefer
+`Projection`. If a feature mostly wants immutable view snapshots and a thinner
+host, prefer `ElmView`.
 
-Duplicate keys are treated as invalid input and fail fast.
-That behavior is intentional. Silent recovery would hide projection bugs and
-make the resulting UI state hard to reason about.
+## What These Libraries Are Not
 
-## When This Library Fits
+They are not:
 
-This library is a good fit when:
+- a custom Avalonia view DSL
+- a nonstandard binding model
+- a second application state system beside Elmish
+- a reactive collection framework
 
-- Elmish already owns application behavior
-- the UI team wants to keep AXAML and compiled bindings, or wants code-only
-  views without introducing another UI abstraction
-- the project wants minimal dependencies and explicit wiring
-- ViewModels are used as projections rather than state machines
-
-## When It Does Not Fit
-
-This library is probably the wrong fit when:
-
-- the UI layer is expected to own substantial independent state
-- the project wants a reactive collection framework
-- the project wants a higher-level Avalonia + Elmish integration with more
-  built-in conventions
-- the team does not want to manage host lifetime explicitly
+The goal is to keep Avalonia ordinary while making Elmish-owned, F#-shaped UI
+authoring more practical.
