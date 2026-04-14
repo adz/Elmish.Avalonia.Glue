@@ -1,0 +1,12 @@
+{
+  "solution": {
+    "path": "Elmish.Avalonia.Glue.sln",
+    "projects": [
+      "src\\Elmish.Glue.Core\\Elmish.Glue.Core.fsproj",
+      "src\\Elmish.Avalonia.Glue\\Elmish.Avalonia.Glue.fsproj",
+      "src\\Elmish.Avalonia.Glue.Projection\\Elmish.Avalonia.Glue.Projection.fsproj",
+      "src\\Elmish.Avalonia.Glue.ElmView\\Elmish.Avalonia.Glue.ElmView.fsproj",
+      "tests\\Elmish.Avalonia.Glue.Tests\\Elmish.Avalonia.Glue.Tests.fsproj"
+    ]
+  }
+}

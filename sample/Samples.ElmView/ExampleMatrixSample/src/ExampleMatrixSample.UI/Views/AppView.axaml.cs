@@ -18,6 +18,7 @@ public partial class AppView : Window
     {
         InitializeComponent();
         DataContext = Host;
+        Host.Update(Core.App.getDesignView());
     }
 
     private void OnNavigateClick(object? sender, RoutedEventArgs e)

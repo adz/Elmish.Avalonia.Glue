@@ -32,6 +32,10 @@ The split is now:
 - `sample/Samples.ElmView`
   sample suite for the ElmView family, implementing the same example matrix.
 
+The root solution, `Elmish.Avalonia.Glue.sln`, includes both sample suites so
+they stay visible in the IDE and can be formatted together. For core-only CLI
+builds that should exclude the samples, use `Elmish.Avalonia.Glue.Build.slnf`.
+
 ## Shared Substrate
 
 `Elmish.Glue.Core` is the common substrate used by both architecture families.

@@ -1,6 +1,7 @@
 using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Diagnostics;
 using Avalonia.Markup.Xaml;
 using Elmish.Avalonia.Glue;
 using ExampleMatrixSample.ElmView.Core;
@@ -12,7 +13,14 @@ public class App : Application
 {
     private IDisposable? _host;
 
-    public override void Initialize() => AvaloniaXamlLoader.Load(this);
+    public override void Initialize()
+    {
+        AvaloniaXamlLoader.Load(this);
+
+#if DEBUG
+        this.AttachDeveloperTools();
+#endif
+    }
 
     public override void OnFrameworkInitializationCompleted()
     {
