@@ -1,8 +1,6 @@
 using System.IO;
 using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
@@ -32,82 +30,6 @@ public partial class AppView : Window
         if (sender is Button { DataContext: NavigationItemView item })
         {
             Host.Navigate(item.Example);
-        }
-    }
-
-    private void OnNameChanged(object? sender, RoutedEventArgs e)
-    {
-        if (sender is TextBox textBox)
-        {
-            var next = textBox.Text ?? "";
-
-            if (next != Host.View.UserInput.Name)
-            {
-                Host.SetName(next);
-            }
-        }
-    }
-
-    private void OnEmailChanged(object? sender, RoutedEventArgs e)
-    {
-        if (sender is TextBox textBox)
-        {
-            var next = textBox.Text ?? "";
-
-            if (next != Host.View.UserInput.Email)
-            {
-                Host.SetEmail(next);
-            }
-        }
-    }
-
-    private void OnNewsletterClick(object? sender, RoutedEventArgs e)
-    {
-        if (sender is CheckBox checkBox)
-        {
-            var next = checkBox.IsChecked ?? false;
-
-            if (next != Host.View.UserInput.Newsletter)
-            {
-                Host.SetNewsletter(next);
-            }
-        }
-    }
-
-    private void OnFavoriteLanguageChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        if (sender is ComboBox comboBox && comboBox.SelectedItem is string language)
-        {
-            if (language != Host.View.UserInput.FavoriteLanguage)
-            {
-                Host.SetFavoriteLanguage(language);
-            }
-        }
-    }
-
-    private void OnExperienceChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
-    {
-        if (sender is Slider slider && e.Property.Name == nameof(RangeBase.Value))
-        {
-            var next = (int)slider.Value;
-
-            if (next != Host.View.UserInput.Experience)
-            {
-                Host.SetExperience(next);
-            }
-        }
-    }
-
-    private void OnNotesChanged(object? sender, RoutedEventArgs e)
-    {
-        if (sender is TextBox textBox)
-        {
-            var next = textBox.Text ?? "";
-
-            if (next != Host.View.UserInput.Notes)
-            {
-                Host.SetNotes(next);
-            }
         }
     }
 

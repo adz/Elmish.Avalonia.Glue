@@ -146,8 +146,7 @@
 
                                 <StackPanel Spacing="6">
                                     <TextBlock Text="Name" FontWeight="SemiBold"/>
-                                    <TextBox Text="{Binding View.UserInput.Name, Mode=OneWay}"
-                                             TextChanged="OnNameChanged"
+                                    <TextBox Text="{Binding UserInput.Name, Mode=TwoWay}"
                                              Background="#FFFDF9"
                                              Foreground="#2F312D"
                                              BorderBrush="#D8D2C8"
@@ -156,8 +155,7 @@
 
                                 <StackPanel Spacing="6">
                                     <TextBlock Text="Email" FontWeight="SemiBold"/>
-                                    <TextBox Text="{Binding View.UserInput.Email, Mode=OneWay}"
-                                             TextChanged="OnEmailChanged"
+                                    <TextBox Text="{Binding UserInput.Email, Mode=TwoWay}"
                                              Background="#FFFDF9"
                                              Foreground="#2F312D"
                                              BorderBrush="#D8D2C8"
@@ -165,33 +163,30 @@
                                 </StackPanel>
 
                                 <CheckBox Content="Subscribe to follow-up notes"
-                                          IsChecked="{Binding View.UserInput.Newsletter, Mode=OneWay}"
-                                          Foreground="#2F312D"
-                                          Click="OnNewsletterClick"/>
+                                          IsChecked="{Binding UserInput.Newsletter, Mode=TwoWay}"
+                                          Foreground="#2F312D"/>
 
                                 <StackPanel Spacing="6">
                                     <TextBlock Text="Favorite language" FontWeight="SemiBold"/>
-                                    <ComboBox ItemsSource="{Binding View.UserInput.Languages}"
-                                              SelectedItem="{Binding View.UserInput.FavoriteLanguage, Mode=OneWay}"
+                                    <ComboBox ItemsSource="{Binding UserInput.Languages}"
+                                              SelectedItem="{Binding UserInput.FavoriteLanguage, Mode=TwoWay}"
                                               Background="#FFFDF9"
                                               Foreground="#2F312D"
-                                              BorderBrush="#D8D2C8"
-                                              SelectionChanged="OnFavoriteLanguageChanged"/>
+                                              BorderBrush="#D8D2C8"/>
                                 </StackPanel>
 
                                 <StackPanel Spacing="6">
                                     <DockPanel>
                                         <TextBlock Text="Experience" FontWeight="SemiBold"/>
                                         <TextBlock DockPanel.Dock="Right"
-                                                   Text="{Binding View.UserInput.Experience}"
+                                                   Text="{Binding UserInput.Experience}"
                                                    Foreground="#6B6A67"/>
                                     </DockPanel>
                                     <Slider Minimum="0"
                                             Maximum="10"
                                             TickFrequency="1"
                                             IsSnapToTickEnabled="True"
-                                            Value="{Binding View.UserInput.Experience, Mode=OneWay}"
-                                            PropertyChanged="OnExperienceChanged"/>
+                                            Value="{Binding UserInput.Experience, Mode=TwoWay}"/>
                                 </StackPanel>
 
                                 <StackPanel Spacing="6">
@@ -199,12 +194,11 @@
                                     <TextBox Height="120"
                                              AcceptsReturn="True"
                                              TextWrapping="Wrap"
-                                             Text="{Binding View.UserInput.Notes, Mode=OneWay}"
+                                             Text="{Binding UserInput.Notes, Mode=TwoWay}"
                                              Background="#FFFDF9"
                                              Foreground="#2F312D"
                                              BorderBrush="#D8D2C8"
-                                             CaretBrush="#214F40"
-                                             TextChanged="OnNotesChanged"/>
+                                             CaretBrush="#214F40"/>
                                 </StackPanel>
 
                                 <Button Content="Submit"
@@ -216,22 +210,22 @@
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" Spacing="14">
-                                <Border IsVisible="{Binding View.UserInput.HasValidation}"
+                                <Border IsVisible="{Binding UserInput.HasValidation}"
                                         Padding="16"
                                         Background="#FFF1EC"
                                         BorderBrush="#E6B7A5"
                                         BorderThickness="1"
                                         CornerRadius="16">
-                                    <TextBlock Text="{Binding View.UserInput.ValidationText}" Foreground="#9C3D21" TextWrapping="Wrap"/>
+                                    <TextBlock Text="{Binding UserInput.ValidationText}" Foreground="#9C3D21" TextWrapping="Wrap"/>
                                 </Border>
 
-                                <Border IsVisible="{Binding View.UserInput.HasSummary}"
+                                <Border IsVisible="{Binding UserInput.HasSummary}"
                                         Padding="18"
                                         CornerRadius="16"
                                         Background="#EEF6F1">
                                     <StackPanel Spacing="8">
                                         <TextBlock Text="Submitted snapshot" FontSize="18" FontWeight="SemiBold"/>
-                                        <TextBlock Text="{Binding View.UserInput.SummaryText}" TextWrapping="Wrap" Foreground="#30433A"/>
+                                        <TextBlock Text="{Binding UserInput.SummaryText}" TextWrapping="Wrap" Foreground="#30433A"/>
                                     </StackPanel>
                                 </Border>
                             </StackPanel>

@@ -31,12 +31,6 @@ public sealed class AppHost : RuntimeGeneratedViewHost<CoreAppView, Msg>
     public UserInputNode UserInput => _userInput;
 
     public void Navigate(Example example) => Dispatch(Msg.NewNavigate(example));
-    public void SetName(string value) => TryDispatchWriteBack("UserInput.Name", value);
-    public void SetEmail(string value) => TryDispatchWriteBack("UserInput.Email", value);
-    public void SetNewsletter(bool value) => TryDispatchWriteBack("UserInput.Newsletter", value);
-    public void SetFavoriteLanguage(string value) => TryDispatchWriteBack("UserInput.FavoriteLanguage", value);
-    public void SetExperience(int value) => TryDispatchWriteBack("UserInput.Experience", value);
-    public void SetNotes(string value) => TryDispatchWriteBack("UserInput.Notes", value);
     public void SubmitForm() => Dispatch(Msg.SubmitForm);
     public void RollDice() => Dispatch(Msg.RollDice);
     public void RefreshHttp() => Dispatch(Msg.RefreshHttp);
