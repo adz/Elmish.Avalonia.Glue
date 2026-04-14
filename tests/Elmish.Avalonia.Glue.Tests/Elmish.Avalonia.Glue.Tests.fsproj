@@ -6,6 +6,7 @@
   <ItemGroup>
     <Compile Include="ObservableCollectionExtensionsTests.fs" />
     <Compile Include="ElmishHostTests.fs" />
+    <Compile Include="SnapshotSubstrateTests.fs" />
     <Compile Include="ElmViewGeneratedHostTests.fs" />
   </ItemGroup>
   <ItemGroup>

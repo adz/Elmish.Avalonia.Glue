@@ -19,6 +19,7 @@
   <ItemGroup>
     <Compile Include="ElmishHost.fs" />
     <Compile Include="ObservableCollectionExtensions.fs" />
+    <Compile Include="SnapshotSubstrate.fs" />
     <Compile Include="Projections.fs" />
   </ItemGroup>
   <ItemGroup>

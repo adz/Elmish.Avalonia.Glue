@@ -2,9 +2,9 @@ namespace Elmish.Avalonia.Glue.ElmView
 
 open System
 open System.Collections.Generic
-open System.ComponentModel
 open System.Linq.Expressions
 open System.Collections
+open Elmish.Glue.Core
 
 module private WriteBackPath =
     let rec private collectSegments segments (expression: Expression | null) =
@@ -87,33 +87,17 @@ type WriteBackBindings<'View, 'Msg>() as this =
 
 [<AbstractClass>]
 type BindableViewHost<'View when 'View : not struct>(initialView: 'View) =
-    let propertyChanged = Event<PropertyChangedEventHandler, PropertyChangedEventArgs>()
-    let mutable currentView = initialView
+    inherit BindableSnapshotHost<'View>(initialView, "View")
 
-    [<CLIEvent>]
-    member _.PropertyChanged = propertyChanged.Publish
-
-    member _.View = currentView
-
-    member this.NotifyPropertyChanged(propertyName: string) =
-        propertyChanged.Trigger(this, PropertyChangedEventArgs(propertyName))
+    member this.View = this.Snapshot
 
     abstract member OnViewUpdated: previousView: 'View * nextView: 'View -> unit
     default _.OnViewUpdated(_, _) = ()
 
-    member this.Update(nextView: 'View) =
-        if not (obj.ReferenceEquals(currentView, nextView)) then
-            let previousView = currentView
-            currentView <- nextView
-            this.NotifyPropertyChanged(nameof this.View)
-            this.OnViewUpdated(previousView, nextView)
+    override this.OnSnapshotUpdated(previousView, nextView) =
+        this.OnViewUpdated(previousView, nextView)
 
-    interface INotifyPropertyChanged with
-        [<CLIEvent>]
-        member _.PropertyChanged = propertyChanged.Publish
-
-type IGeneratedViewNode =
-    abstract RefreshSubtree: unit -> unit
+type IGeneratedViewNode = IBindableSnapshotNode
 
 [<AbstractClass>]
 type GeneratedViewHost<'View, 'Msg when 'View : not struct>
@@ -169,12 +153,12 @@ type GeneratedViewNode<'RootView, 'NodeView, 'Msg when 'RootView : not struct>
         registerWithParent: IGeneratedViewNode -> unit,
         getNodeView: 'RootView -> 'NodeView,
         propertyNames: seq<string>
-    ) as this =
-    let propertyChanged = Event<PropertyChangedEventHandler, PropertyChangedEventArgs>()
-    let children = ResizeArray<IGeneratedViewNode>()
-    let propertyNames = propertyNames |> Seq.toArray
-
-    do registerWithParent (this :> IGeneratedViewNode)
+    ) =
+    inherit BindableSnapshotNode<'RootView, 'NodeView>(
+        getRootView,
+        registerWithParent,
+        getNodeView,
+        propertyNames)
 
     new
         (
@@ -191,37 +175,8 @@ type GeneratedViewNode<'RootView, 'NodeView, 'Msg when 'RootView : not struct>
             getNodeView.Invoke,
             propertyNames |> Seq.cast<string>)
 
-    member _.Snapshot = getNodeView (getRootView())
-
     member _.Dispatch(message: 'Msg) =
         dispatch message
-
-    member _.RegisterChildNode(child: IGeneratedViewNode) =
-        children.Add(child)
-
-    member this.NotifyPropertyChanged(propertyName: string) =
-        propertyChanged.Trigger(this, PropertyChangedEventArgs(propertyName))
-
-    member private this.RefreshSelf() =
-        for propertyName in propertyNames do
-            this.NotifyPropertyChanged(propertyName)
-
-    member private this.RefreshSubtreeCore() =
-        this.RefreshSelf()
-
-        for child in children do
-            child.RefreshSubtree()
-
-    [<CLIEvent>]
-    member _.PropertyChanged = propertyChanged.Publish
-
-    interface IGeneratedViewNode with
-        member this.RefreshSubtree() =
-            this.RefreshSubtreeCore()
-
-    interface INotifyPropertyChanged with
-        [<CLIEvent>]
-        member _.PropertyChanged = propertyChanged.Publish
 
 type RuntimeViewHost<'View when 'View : not struct>(initialView: 'View) =
     inherit BindableViewHost<'View>(initialView)
