@@ -101,6 +101,46 @@ Characteristics:
 
 This family is the closest-to-Elm path and the primary experimental avenue.
 
+#### ElmView V2 direction
+
+The next ElmView iteration should preserve the same core goal while making
+interaction-heavy views feel substantially more like normal Avalonia authoring.
+
+The intended direction is:
+
+- F# view records remain plain immutable authored UI schema
+- AXAML should stay as close as possible to standard Avalonia AXAML so human
+  and LLM editing remains strong
+- normal binding modes should carry the main interaction meaning:
+  - `OneWay` means snapshot display
+  - `TwoWay` means editable field backed by ElmView write-back glue
+- the system should not require F# attributes or model annotations to drive
+  binding behavior
+- the system should not require a custom UI DSL or nonstandard control set
+- imperative control-event forwarding should move out of handwritten
+  code-behind and into generated or runtime-provided glue
+
+That implies ElmView should evolve toward a generated bindable facade over the
+immutable F# snapshot tree:
+
+- generated root and nested bindable node types expose normal CLR properties
+- property getters read from the current immutable snapshot
+- writable properties dispatch Elmish messages instead of mutating the
+  snapshot directly
+- snapshot updates raise `PropertyChanged` across the generated node graph
+- write-back routing is configured centrally near host construction rather than
+  repeated in AXAML or encoded in the F# record definitions
+
+The practical authoring target is:
+
+- plain immutable F# view records
+- ordinary AXAML bindings that look normal to Avalonia users
+- centralized write-back mapping for editable fields
+- no handwritten per-control loop-suppression code for common form controls
+
+This is intentionally closer to Elm's authored feel while still respecting the
+constraints of Avalonia and desktop control behavior.
+
 ## Design-Time Story
 
 Design-time support is a hard requirement, not a follow-up task.
@@ -157,6 +197,8 @@ The goal is breadth across interaction patterns, not full parity with browser-on
 - prefer design snapshots as part of the normal workflow
 - prefer identity-aware updates
 - prefer no handwritten projection trees unless justified
+- prefer generated bindable facades over handwritten imperative bridge code
+  when ElmView needs editable control support
 
 ### Escape hatches
 
@@ -167,6 +209,17 @@ Allow explicit mutable keyed adapters when required for:
 - selection-sensitive controls
 - virtualization-sensitive controls
 - inline-editing or row-heavy interaction
+
+For ElmView specifically, framework-facing writable facades or generated
+write-back glue are acceptable when they are:
+
+- mechanical
+- centralized
+- predictable
+- invisible to the authored F# schema
+
+They should be treated as implementation substrate rather than authored UI
+state.
 
 ### Projection family comparison intent
 
