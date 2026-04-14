@@ -27,7 +27,8 @@ objects. The intended runtime base is `GeneratedViewNode<'RootView,'NodeView,'Ms
 Generated child-node properties follow this pattern:
 
 - getters read from the current immutable node snapshot
-- setters dispatch messages through the root host
+- setters dispatch messages through the root host only when an explicit
+  write-back mapping exists for that property path
 - the node instance stays stable while the underlying snapshot changes
 
 That keeps normal AXAML paths such as `UserInput.Name` valid without requiring
@@ -70,7 +71,7 @@ and UserInputNode(host: AppHost) as this =
 
     member this.Name
         with get () = this.Snapshot.Name
-        and set value = this.Dispatch(Msg.SetName value)
+        and set value = host.TryDispatchWriteBack("UserInput.Name", value) |> ignore
 ```
 
 Task 12 only defines the host and node shape. Centralized mapping syntax and

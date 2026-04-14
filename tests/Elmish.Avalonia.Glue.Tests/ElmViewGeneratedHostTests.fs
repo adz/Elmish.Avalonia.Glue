@@ -95,6 +95,20 @@ module ElmViewGeneratedHostTests =
         Assert.Equal("Ada", host.Child.Name)
 
     [<Fact>]
+    let ``only explicitly registered write-back paths dispatch`` () =
+        let host = SampleHost(createView "Before" "Ada" true)
+        let messages = List<Msg>()
+
+        host.SetDispatch(Action<Msg>(messages.Add))
+
+        let dispatchedMapped = host.TryDispatchWriteBack("Child.Name", "Grace")
+        let dispatchedUnmapped = host.TryDispatchWriteBack("Child.IsEnabled", true)
+
+        Assert.True(dispatchedMapped)
+        Assert.False(dispatchedUnmapped)
+        Assert.Equal<Msg list>([ SetName "Grace" ], Seq.toList messages)
+
+    [<Fact>]
     let ``write-back bindings expose the configured nested property path`` () =
         let host = SampleHost(createView "Before" "Ada" true)
 

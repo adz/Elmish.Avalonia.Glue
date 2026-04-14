@@ -66,6 +66,11 @@ The contract is:
 This keeps message routing explicit while removing repetitive control-specific
 glue from views.
 
+ElmView V2 chooses a fully explicit mapping model rather than a convention-first
+one. Editable properties dispatch only when their property path has been
+registered near host construction. There is no implicit fallback based on
+property names or message naming conventions.
+
 ## Avalonia-First Constraints
 
 ElmView V2 must preserve the repository's Avalonia-first rules:
