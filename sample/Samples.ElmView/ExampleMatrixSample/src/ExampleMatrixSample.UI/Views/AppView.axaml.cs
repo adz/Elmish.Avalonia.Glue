@@ -16,9 +16,15 @@ public partial class AppView : Window
 
     public AppView()
     {
-        InitializeComponent();
-        DataContext = Host;
         Host.Update(Core.App.getDesignView());
+        DataContext = Host;
+        InitializeComponent();
+
+        // Compiled bindings on the window content need the host in place during load.
+        if (!ReferenceEquals(DataContext, Host))
+        {
+            DataContext = Host;
+        }
     }
 
     private void OnNavigateClick(object? sender, RoutedEventArgs e)
@@ -33,7 +39,12 @@ public partial class AppView : Window
     {
         if (sender is TextBox textBox)
         {
-            Host.SetName(textBox.Text ?? "");
+            var next = textBox.Text ?? "";
+
+            if (next != Host.View.UserInput.Name)
+            {
+                Host.SetName(next);
+            }
         }
     }
 
@@ -41,7 +52,12 @@ public partial class AppView : Window
     {
         if (sender is TextBox textBox)
         {
-            Host.SetEmail(textBox.Text ?? "");
+            var next = textBox.Text ?? "";
+
+            if (next != Host.View.UserInput.Email)
+            {
+                Host.SetEmail(next);
+            }
         }
     }
 
@@ -49,7 +65,12 @@ public partial class AppView : Window
     {
         if (sender is CheckBox checkBox)
         {
-            Host.SetNewsletter(checkBox.IsChecked ?? false);
+            var next = checkBox.IsChecked ?? false;
+
+            if (next != Host.View.UserInput.Newsletter)
+            {
+                Host.SetNewsletter(next);
+            }
         }
     }
 
@@ -57,7 +78,10 @@ public partial class AppView : Window
     {
         if (sender is ComboBox comboBox && comboBox.SelectedItem is string language)
         {
-            Host.SetFavoriteLanguage(language);
+            if (language != Host.View.UserInput.FavoriteLanguage)
+            {
+                Host.SetFavoriteLanguage(language);
+            }
         }
     }
 
@@ -65,7 +89,12 @@ public partial class AppView : Window
     {
         if (sender is Slider slider && e.Property.Name == nameof(RangeBase.Value))
         {
-            Host.SetExperience((int)slider.Value);
+            var next = (int)slider.Value;
+
+            if (next != Host.View.UserInput.Experience)
+            {
+                Host.SetExperience(next);
+            }
         }
     }
 
@@ -73,7 +102,12 @@ public partial class AppView : Window
     {
         if (sender is TextBox textBox)
         {
-            Host.SetNotes(textBox.Text ?? "");
+            var next = textBox.Text ?? "";
+
+            if (next != Host.View.UserInput.Notes)
+            {
+                Host.SetNotes(next);
+            }
         }
     }
 

@@ -6,6 +6,7 @@
     x:Class="ExampleMatrixSample.ElmView.UI.Views.AppView"
     x:DataType="local:AppHost"
     x:CompileBindings="True"
+    RequestedThemeVariant="Light"
     Title="ElmView Example Matrix Sample"
     Width="1180"
     Height="820"
@@ -65,7 +66,11 @@
             <Border CornerRadius="18" Background="#FFFDF9" Padding="24,20" BoxShadow="0 8 32 0 #16000000">
                 <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto">
                     <TextBlock Text="{Binding View.HeaderTitle}" FontSize="28" FontWeight="SemiBold"/>
-                    <Border Grid.Column="1" Padding="10,6" Background="#E5F0E9" CornerRadius="999">
+                    <Border Grid.Column="1"
+                            Padding="10,6"
+                            Background="#E5F0E9"
+                            CornerRadius="999"
+                            VerticalAlignment="Center">
                         <TextBlock Text="{Binding View.HeaderKey}" Foreground="#23543E" FontWeight="SemiBold"/>
                     </Border>
                     <TextBlock Grid.Row="1"
@@ -141,22 +146,36 @@
 
                                 <StackPanel Spacing="6">
                                     <TextBlock Text="Name" FontWeight="SemiBold"/>
-                                    <TextBox Text="{Binding View.UserInput.Name, Mode=OneWay}" TextChanged="OnNameChanged"/>
+                                    <TextBox Text="{Binding View.UserInput.Name, Mode=OneWay}"
+                                             TextChanged="OnNameChanged"
+                                             Background="#FFFDF9"
+                                             Foreground="#2F312D"
+                                             BorderBrush="#D8D2C8"
+                                             CaretBrush="#214F40"/>
                                 </StackPanel>
 
                                 <StackPanel Spacing="6">
                                     <TextBlock Text="Email" FontWeight="SemiBold"/>
-                                    <TextBox Text="{Binding View.UserInput.Email, Mode=OneWay}" TextChanged="OnEmailChanged"/>
+                                    <TextBox Text="{Binding View.UserInput.Email, Mode=OneWay}"
+                                             TextChanged="OnEmailChanged"
+                                             Background="#FFFDF9"
+                                             Foreground="#2F312D"
+                                             BorderBrush="#D8D2C8"
+                                             CaretBrush="#214F40"/>
                                 </StackPanel>
 
                                 <CheckBox Content="Subscribe to follow-up notes"
                                           IsChecked="{Binding View.UserInput.Newsletter, Mode=OneWay}"
+                                          Foreground="#2F312D"
                                           Click="OnNewsletterClick"/>
 
                                 <StackPanel Spacing="6">
                                     <TextBlock Text="Favorite language" FontWeight="SemiBold"/>
                                     <ComboBox ItemsSource="{Binding View.UserInput.Languages}"
                                               SelectedItem="{Binding View.UserInput.FavoriteLanguage, Mode=OneWay}"
+                                              Background="#FFFDF9"
+                                              Foreground="#2F312D"
+                                              BorderBrush="#D8D2C8"
                                               SelectionChanged="OnFavoriteLanguageChanged"/>
                                 </StackPanel>
 
@@ -181,6 +200,10 @@
                                              AcceptsReturn="True"
                                              TextWrapping="Wrap"
                                              Text="{Binding View.UserInput.Notes, Mode=OneWay}"
+                                             Background="#FFFDF9"
+                                             Foreground="#2F312D"
+                                             BorderBrush="#D8D2C8"
+                                             CaretBrush="#214F40"
                                              TextChanged="OnNotesChanged"/>
                                 </StackPanel>
 
@@ -267,12 +290,16 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate x:DataType="core:DiceRollView">
                                             <Border Margin="0,0,0,10" Padding="14" CornerRadius="14" Background="#F8F4EC">
-                                                <DockPanel>
-                                                    <TextBlock Text="{Binding Caption}" FontWeight="SemiBold"/>
-                                                    <Border DockPanel.Dock="Right" Padding="10,4" Background="#E8EFEA" CornerRadius="999">
+                                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                                                    <TextBlock Text="{Binding Caption}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                    <Border Grid.Column="1"
+                                                            Padding="10,4"
+                                                            Background="#E8EFEA"
+                                                            CornerRadius="999"
+                                                            VerticalAlignment="Center">
                                                         <TextBlock Text="{Binding Total}" Foreground="#214F40" FontWeight="SemiBold"/>
                                                     </Border>
-                                                </DockPanel>
+                                                </Grid>
                                             </Border>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -287,19 +314,20 @@
                             Padding="24"
                             BoxShadow="0 8 32 0 #16000000">
                         <StackPanel Spacing="16">
-                            <DockPanel>
-                                <StackPanel>
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="24">
+                                <StackPanel VerticalAlignment="Center">
                                     <TextBlock Text="HTTP example" FontSize="24" FontWeight="SemiBold"/>
                                     <TextBlock Text="The runtime fetches a JSONPlaceholder payload and re-renders the immutable view snapshot."
                                                Foreground="#6B6A67"/>
                                 </StackPanel>
-                                <Button DockPanel.Dock="Right"
+                                <Button Grid.Column="1"
                                         Content="Refresh"
                                         Padding="18,10"
                                         Background="#214F40"
                                         Foreground="#F9F5ED"
+                                        VerticalAlignment="Center"
                                         Click="OnRefreshHttpClick"/>
-                            </DockPanel>
+                            </Grid>
 
                             <Border Padding="18" CornerRadius="16" Background="#F8F4EC">
                                 <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="16" RowSpacing="8">
@@ -354,22 +382,29 @@
                             Padding="24"
                             BoxShadow="0 8 32 0 #16000000">
                         <StackPanel Spacing="16">
-                            <DockPanel>
-                                <StackPanel>
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="24">
+                                <StackPanel VerticalAlignment="Center">
                                     <TextBlock Text="Files example" FontSize="24" FontWeight="SemiBold"/>
                                     <TextBlock Text="{Binding View.Files.Status}" Foreground="#6B6A67" TextWrapping="Wrap"/>
                                 </StackPanel>
-                                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="10">
+                                <StackPanel Grid.Column="1"
+                                            Orientation="Horizontal"
+                                            Spacing="10"
+                                            VerticalAlignment="Center">
                                     <Button Content="Open file"
                                             Padding="18,10"
                                             Background="#214F40"
                                             Foreground="#F9F5ED"
+                                            VerticalAlignment="Center"
                                             Click="OnOpenFileClick"/>
                                     <Button Content="Clear"
                                             Padding="18,10"
+                                            Background="#E8E1D7"
+                                            Foreground="#2F312D"
+                                            VerticalAlignment="Center"
                                             Click="OnClearFileClick"/>
                                 </StackPanel>
-                            </DockPanel>
+                            </Grid>
 
                             <Border IsVisible="{Binding View.Files.HasSelection}"
                                     Padding="18"
@@ -397,6 +432,9 @@
                                              IsReadOnly="True"
                                              AcceptsReturn="True"
                                              TextWrapping="Wrap"
+                                             Background="#FFFDF9"
+                                             Foreground="#2F312D"
+                                             BorderBrush="#D8D2C8"
                                              Height="180"/>
                                 </StackPanel>
                             </Border>
@@ -409,18 +447,19 @@
                             Padding="24"
                             BoxShadow="0 8 32 0 #16000000">
                         <StackPanel Spacing="16">
-                            <DockPanel>
-                                <StackPanel>
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="24">
+                                <StackPanel VerticalAlignment="Center">
                                     <TextBlock Text="{Binding View.Svg.Theme.Name}" FontSize="24" FontWeight="SemiBold"/>
                                     <TextBlock Text="{Binding View.Svg.Theme.Caption}" Foreground="#6B6A67" TextWrapping="Wrap"/>
                                 </StackPanel>
-                                <Button DockPanel.Dock="Right"
+                                <Button Grid.Column="1"
                                         Content="Next theme"
                                         Padding="18,10"
                                         Background="#355C7D"
                                         Foreground="White"
+                                        VerticalAlignment="Center"
                                         Click="OnNextThemeClick"/>
-                            </DockPanel>
+                            </Grid>
 
                             <Border Background="{Binding View.Svg.Theme.Background}"
                                     BorderBrush="#DED8D0"
