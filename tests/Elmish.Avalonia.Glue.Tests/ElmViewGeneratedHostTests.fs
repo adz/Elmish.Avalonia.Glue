@@ -35,12 +35,33 @@ module ElmViewGeneratedHostTests =
             Form: FormView
         }
 
+    type private DetailView =
+        {
+            Label: string
+            Count: int
+        }
+
+    type private NestedChildView =
+        {
+            Name: string
+            Detail: DetailView
+        }
+
+    type private NestedRootView =
+        {
+            Title: string
+            Child: NestedChildView
+        }
+
     type private Msg =
         | SetName of string
         | SetNewsletter of bool
         | SetFavoriteLanguage of string
         | SetExperience of float
         | SetNotes of string
+
+    type private NestedMsg =
+        | NoOp
 
     let private childNameSelector () =
         let root = Expression.Parameter(typeof<RootView>, "x")
@@ -148,6 +169,55 @@ module ElmViewGeneratedHostTests =
                     Languages = [ "F#"; "C#"; "Rust" ]
                     Experience = 3.0
                     Notes = "Original notes"
+                }
+        }
+
+    type private NestedHost(initialView: NestedRootView) as this =
+        inherit RuntimeGeneratedViewHost<NestedRootView, NestedMsg>(initialView)
+
+        let child = NestedChildNode(this)
+
+        override _.GeneratedPropertyNames =
+            [ "Title"; "Child" ]
+
+        member this.Title = this.View.Title
+        member _.Child = child
+
+    and private NestedChildNode(host: NestedHost) as this =
+        inherit GeneratedViewNode<NestedRootView, NestedChildView, NestedMsg>(
+            (fun () -> host.View),
+            host.Dispatch,
+            host.RegisterChildNode,
+            (fun root -> root.Child),
+            [ "Name"; "Detail" ])
+
+        let detail = NestedDetailNode(host, this)
+
+        member this.Name = this.Snapshot.Name
+        member _.Detail = detail
+
+    and private NestedDetailNode(host: NestedHost, parent: NestedChildNode) =
+        inherit GeneratedViewNode<NestedRootView, DetailView, NestedMsg>(
+            (fun () -> host.View),
+            host.Dispatch,
+            parent.RegisterChildNode,
+            (fun root -> root.Child.Detail),
+            [ "Label"; "Count" ])
+
+        member this.Label = this.Snapshot.Label
+        member this.Count = this.Snapshot.Count
+
+    let private createNestedView title name label count =
+        {
+            Title = title
+            Child =
+                {
+                    Name = name
+                    Detail =
+                        {
+                            Label = label
+                            Count = count
+                        }
                 }
         }
 
@@ -409,3 +479,60 @@ module ElmViewGeneratedHostTests =
                 "Form.Notes"
             ],
             Seq.toList changed)
+
+    [<Fact>]
+    let ``nested generated nodes stay stable and read the latest snapshot`` () =
+        let host = NestedHost(createNestedView "Before" "Ada" "One" 1)
+        let child = host.Child
+        let detail = host.Child.Detail
+
+        Assert.Equal("Before", host.Title)
+        Assert.Equal("Ada", host.Child.Name)
+        Assert.Equal("One", host.Child.Detail.Label)
+        Assert.Equal(1, host.Child.Detail.Count)
+
+        host.Update(createNestedView "After" "Grace" "Two" 2)
+
+        Assert.Equal("After", host.Title)
+        Assert.Equal("Grace", host.Child.Name)
+        Assert.Equal("Two", host.Child.Detail.Label)
+        Assert.Equal(2, host.Child.Detail.Count)
+        Assert.Same(child, host.Child)
+        Assert.Same(detail, host.Child.Detail)
+
+    [<Fact>]
+    let ``snapshot updates propagate PropertyChanged through nested bindable nodes`` () =
+        let host = NestedHost(createNestedView "Before" "Ada" "One" 1)
+        let changed = ResizeArray<string>()
+
+        (host :> INotifyPropertyChanged).PropertyChanged.Add(fun args -> changed.Add($"Host.{args.PropertyName}"))
+        (host.Child :> INotifyPropertyChanged).PropertyChanged.Add(fun args -> changed.Add($"Child.{args.PropertyName}"))
+        (host.Child.Detail :> INotifyPropertyChanged).PropertyChanged.Add(fun args -> changed.Add($"Detail.{args.PropertyName}"))
+
+        host.Update(createNestedView "After" "Grace" "Two" 2)
+
+        Assert.Equal<string list>(
+            [
+                "Host.View"
+                "Host.Title"
+                "Host.Child"
+                "Child.Name"
+                "Child.Detail"
+                "Detail.Label"
+                "Detail.Count"
+            ],
+            Seq.toList changed)
+
+    [<Fact>]
+    let ``updating with the same snapshot reference does not raise root or nested PropertyChanged`` () =
+        let initialView = createNestedView "Before" "Ada" "One" 1
+        let host = NestedHost(initialView)
+        let changed = ResizeArray<string>()
+
+        (host :> INotifyPropertyChanged).PropertyChanged.Add(fun args -> changed.Add($"Host.{args.PropertyName}"))
+        (host.Child :> INotifyPropertyChanged).PropertyChanged.Add(fun args -> changed.Add($"Child.{args.PropertyName}"))
+        (host.Child.Detail :> INotifyPropertyChanged).PropertyChanged.Add(fun args -> changed.Add($"Detail.{args.PropertyName}"))
+
+        host.Update(initialView)
+
+        Assert.Empty(changed)

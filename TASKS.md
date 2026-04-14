@@ -41,7 +41,7 @@ After each task is completed, create a separate git commit before starting the n
 17. [x] Remove manual form event-forwarding from the ElmView example matrix once the generated write-back host path is in place.
 18. [x] Add ElmView interaction tests for writable generated properties covering text, checkbox, combo-box selection, slider or range, and multiline text.
 19. [x] Add tests that prove snapshot updates do not re-dispatch and user edits dispatch exactly once.
-20. [ ] Add tests for nested bindable node propagation and `PropertyChanged` correctness across root and child nodes.
+20. [x] Add tests for nested bindable node propagation and `PropertyChanged` correctness across root and child nodes.
 21. [ ] Unify snapshot-host concepts across `Projection` and `ElmView` where possible so the core owns one coherent bindable snapshot substrate.
 22. [ ] Rework keyed collection patching to avoid repeated `IndexOf`-driven quadratic behavior before scaling ElmView further into list-heavy scenarios.
 23. [ ] Convert the ElmView example matrix form page to the new generated host and write-back path while keeping AXAML looking ordinary.
