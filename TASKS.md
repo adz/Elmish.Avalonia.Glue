@@ -9,7 +9,7 @@
 7. [x] Implement the agreed initial example matrix in `Samples.Projection`: HTML/static layout, user input, random/dice, HTTP, time/clock, files, and basic SVG-equivalent.
 8. [x] Implement the same initial example matrix in `Samples.ElmView`.
 9. [x] Update docs to describe the shared substrate, the two architecture families, the design-time workflow, and when to choose each path.
-10. [ ] Run builds/tests across the solution and fix any regressions introduced by the split.
+10. [x] Run builds/tests across the solution and fix any regressions introduced by the split.
 
 ## Task Commit Policy
 
