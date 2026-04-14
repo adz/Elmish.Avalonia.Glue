@@ -1,0 +1,387 @@
+<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:ExampleMatrixSample.UI.ViewModels"
+    x:Class="ExampleMatrixSample.UI.Views.AppView"
+    x:DataType="vm:AppProjection"
+    x:CompileBindings="True"
+    Title="Projection Example Matrix"
+    Width="1180"
+    Height="820"
+    MinWidth="960"
+    MinHeight="680">
+    <Grid ColumnDefinitions="230,*" Background="#F3EEE6">
+        <Border Background="#18352D" Padding="18,22">
+            <Grid RowDefinitions="Auto,Auto,*">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="Projection Matrix" FontSize="24" FontWeight="SemiBold" Foreground="#FFF8EF"/>
+                    <TextBlock Text="Samples.Projection coverage for the agreed Elm-style example set."
+                               TextWrapping="Wrap"
+                               Foreground="#C5D5CD"/>
+                </StackPanel>
+
+                <Border Grid.Row="1" Margin="0,20,0,18" Height="1" Background="#2D584B"/>
+
+                <ItemsControl Grid.Row="2" ItemsSource="{Binding NavigationItems}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:NavigationItemProjection">
+                            <Button Margin="0,0,0,10"
+                                    Padding="14,12"
+                                    Background="{Binding Background}"
+                                    BorderThickness="0"
+                                    HorizontalContentAlignment="Stretch"
+                                    Command="{Binding NavigateCommand}">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Title}"
+                                               FontSize="15"
+                                               FontWeight="SemiBold"
+                                               Foreground="{Binding Foreground}"/>
+                                    <TextBlock Text="{Binding Caption}"
+                                               Foreground="#A8C1B5"
+                                               FontSize="12"/>
+                                </StackPanel>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,*" Margin="24">
+            <Border CornerRadius="20" Padding="24,20" Background="#FFFDF9" BoxShadow="0 10 36 0 #14000000">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="{Binding CurrentTitle}" FontSize="30" FontWeight="SemiBold"/>
+                        <TextBlock Text="{Binding CurrentSubtitle}" Foreground="#6F6A63" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <Border Grid.Column="1"
+                            VerticalAlignment="Top"
+                            Padding="12,8"
+                            Background="#E8F1EC"
+                            CornerRadius="999">
+                        <TextBlock Text="{Binding CurrentKey}" Foreground="#1E5A46" FontWeight="SemiBold"/>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="1"
+                    Margin="0,18,0,0"
+                    CornerRadius="20"
+                    Padding="24"
+                    Background="#FFFDF9"
+                    BoxShadow="0 10 36 0 #14000000">
+                <ContentControl Content="{Binding CurrentPage}">
+                    <ContentControl.DataTemplates>
+                        <DataTemplate x:DataType="vm:StaticLayoutPageProjection">
+                            <ScrollViewer>
+                                <StackPanel Spacing="22">
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Text="{Binding Heading}" FontSize="24" FontWeight="SemiBold"/>
+                                        <TextBlock Text="{Binding Summary}" Foreground="#6B6762" TextWrapping="Wrap"/>
+                                    </StackPanel>
+
+                                    <ItemsControl ItemsSource="{Binding Metrics}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel Orientation="Horizontal" ItemWidth="190" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate x:DataType="vm:StaticMetricProjection">
+                                                <Border Margin="0,0,14,14"
+                                                        Padding="18"
+                                                        MinWidth="180"
+                                                        Background="#F7F3ED"
+                                                        CornerRadius="16">
+                                                    <StackPanel Spacing="10">
+                                                        <Ellipse Width="12" Height="12" Fill="{Binding Accent}" HorizontalAlignment="Left"/>
+                                                        <TextBlock Text="{Binding Value}" FontSize="28" FontWeight="Bold"/>
+                                                        <TextBlock Text="{Binding Label}" Foreground="#6A645E"/>
+                                                    </StackPanel>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
+                                    <ItemsControl ItemsSource="{Binding Cards}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate x:DataType="vm:StaticCardProjection">
+                                                <Border Margin="0,0,0,14"
+                                                        Padding="20"
+                                                        BorderBrush="#E6DDD0"
+                                                        BorderThickness="1"
+                                                        CornerRadius="16">
+                                                    <StackPanel Spacing="10">
+                                                        <TextBlock Text="{Binding Title}" FontSize="18" FontWeight="SemiBold"/>
+                                                        <TextBlock Text="{Binding Body}" TextWrapping="Wrap" Foreground="#4F4A44"/>
+                                                        <TextBlock Text="{Binding Footer}" FontSize="12" Foreground="#8A837B"/>
+                                                    </StackPanel>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </DataTemplate>
+
+                        <DataTemplate x:DataType="vm:FormPageProjection">
+                            <ScrollViewer>
+                                <Grid ColumnDefinitions="1.15*,0.85*" ColumnSpacing="24">
+                                    <StackPanel Spacing="18">
+                                        <Border Padding="20" Background="#F7F3ED" CornerRadius="16">
+                                            <StackPanel Spacing="14">
+                                                <TextBlock Text="Contact" FontSize="18" FontWeight="SemiBold"/>
+                                                <TextBox PlaceholderText="Full name" Text="{Binding Name, Mode=TwoWay}"/>
+                                                <TextBox PlaceholderText="Email address" Text="{Binding Email, Mode=TwoWay}"/>
+                                                <TextBlock Text="Favorite language" FontSize="13" FontWeight="SemiBold"/>
+                                                <ComboBox ItemsSource="{Binding Languages}"
+                                                          SelectedItem="{Binding FavoriteLanguage, Mode=TwoWay}"/>
+                                                <CheckBox Content="Receive follow-up notes"
+                                                          IsChecked="{Binding Newsletter, Mode=TwoWay}"/>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Border Padding="20" Background="#F7F3ED" CornerRadius="16">
+                                            <StackPanel Spacing="14">
+                                                <TextBlock Text="Experience" FontSize="18" FontWeight="SemiBold"/>
+                                                <Slider Minimum="0"
+                                                        Maximum="10"
+                                                        TickFrequency="1"
+                                                        IsSnapToTickEnabled="True"
+                                                        Value="{Binding Experience, Mode=TwoWay}"/>
+                                                <TextBlock Text="{Binding Experience}" FontFamily="Monospace"/>
+                                                <TextBox AcceptsReturn="True"
+                                                         Height="120"
+                                                         TextWrapping="Wrap"
+                                                         PlaceholderText="What are you evaluating?"
+                                                         Text="{Binding Notes, Mode=TwoWay}"/>
+                                                <Button Content="Submit"
+                                                        HorizontalAlignment="Left"
+                                                        Padding="18,10"
+                                                        Command="{Binding SubmitCommand}"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1" Spacing="18">
+                                        <Border Padding="20" Background="#EAF3EE" CornerRadius="16">
+                                            <StackPanel Spacing="8">
+                                                <TextBlock Text="Validation" FontSize="18" FontWeight="SemiBold"/>
+                                                <TextBlock Text="{Binding Validation}"
+                                                           TextWrapping="Wrap"
+                                                           Foreground="#8C4B2F"/>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Border Padding="20" Background="#FFF6ED" CornerRadius="16">
+                                            <StackPanel Spacing="8">
+                                                <TextBlock Text="Submitted summary" FontSize="18" FontWeight="SemiBold"/>
+                                                <TextBlock Text="{Binding SubmittedSummary}"
+                                                           TextWrapping="Wrap"
+                                                           IsVisible="{Binding HasSummary}"/>
+                                                <TextBlock Text="Nothing submitted yet."
+                                                           Foreground="#8A837B"
+                                                           IsVisible="{Binding !HasSummary}"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </StackPanel>
+                                </Grid>
+                            </ScrollViewer>
+                        </DataTemplate>
+
+                        <DataTemplate x:DataType="vm:DicePageProjection">
+                            <Grid RowDefinitions="Auto,Auto,*">
+                                <Grid ColumnDefinitions="Auto,Auto,*" ColumnSpacing="14">
+                                    <Button Content="Roll dice"
+                                            Padding="20,12"
+                                            Command="{Binding RollCommand}"/>
+                                    <Border Grid.Column="1"
+                                            Padding="12,8"
+                                            Background="#EAF3EE"
+                                            CornerRadius="999">
+                                        <TextBlock Text="{Binding TotalRolls}" FontWeight="SemiBold"/>
+                                    </Border>
+                                    <TextBlock Grid.Column="2"
+                                               VerticalAlignment="Center"
+                                               Text="{Binding Status}"
+                                               Foreground="#625D57"/>
+                                </Grid>
+
+                                <Border Grid.Row="1" Margin="0,18,0,18" Padding="20" Background="#F7F3ED" CornerRadius="16">
+                                    <StackPanel Spacing="10">
+                                        <TextBlock Text="Latest roll" FontSize="18" FontWeight="SemiBold"/>
+                                        <TextBlock Text="{Binding LastRoll}" FontSize="28" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <ScrollViewer Grid.Row="2">
+                                    <ItemsControl ItemsSource="{Binding History}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate x:DataType="vm:DiceRollProjection">
+                                                <Border Margin="0,0,0,12"
+                                                        Padding="18"
+                                                        BorderBrush="#E6DDD0"
+                                                        BorderThickness="1"
+                                                        CornerRadius="14">
+                                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                                                        <TextBlock Text="{Binding Faces}" FontFamily="Monospace" FontSize="18"/>
+                                                        <TextBlock Grid.Column="1" Text="{Binding Caption}" VerticalAlignment="Center"/>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Grid>
+                        </DataTemplate>
+
+                        <DataTemplate x:DataType="vm:HttpPageProjection">
+                            <StackPanel Spacing="20">
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                                    <Button Content="Fetch sample JSON"
+                                            Padding="18,10"
+                                            Command="{Binding RefreshCommand}"/>
+                                    <TextBlock Grid.Column="1"
+                                               VerticalAlignment="Center"
+                                               Text="{Binding Status}"
+                                               Foreground="#625D57"/>
+                                </Grid>
+
+                                <Border Padding="20" Background="#F7F3ED" CornerRadius="16">
+                                    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="150,*">
+                                        <TextBlock Text="Title" FontWeight="SemiBold"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding PayloadTitle}" TextWrapping="Wrap"/>
+                                        <TextBlock Grid.Row="1" Text="State" FontWeight="SemiBold" Margin="0,12,0,0"/>
+                                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding PayloadState}" Margin="0,12,0,0"/>
+                                        <TextBlock Grid.Row="2" Text="Last updated" FontWeight="SemiBold" Margin="0,12,0,0"/>
+                                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding LastUpdated}" Margin="0,12,0,0"/>
+                                    </Grid>
+                                </Border>
+
+                                <Border Padding="18"
+                                        CornerRadius="14"
+                                        Background="#FFF1ED"
+                                        IsVisible="{Binding HasError}">
+                                    <TextBlock Text="{Binding Error}" TextWrapping="Wrap" Foreground="#8C4B2F"/>
+                                </Border>
+                            </StackPanel>
+                        </DataTemplate>
+
+                        <DataTemplate x:DataType="vm:ClockPageProjection">
+                            <StackPanel Spacing="20">
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                                    <Button Content="{Binding FormatLabel}"
+                                            Padding="18,10"
+                                            Command="{Binding ToggleFormatCommand}"/>
+                                    <TextBlock Grid.Column="1"
+                                               VerticalAlignment="Center"
+                                               Text="Clock updates are driven by an Elmish subscription."
+                                               Foreground="#625D57"/>
+                                </Grid>
+
+                                <Border Padding="24" Background="#18352D" CornerRadius="20">
+                                    <StackPanel Spacing="8">
+                                        <TextBlock Text="{Binding TimeText}" FontSize="44" FontWeight="Bold" Foreground="#FFF8EF"/>
+                                        <TextBlock Text="{Binding DateText}" Foreground="#D7E4DC" FontSize="16"/>
+                                        <TextBlock Text="{Binding ZoneText}" Foreground="#A8C1B5"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Padding="18" Background="#F7F3ED" CornerRadius="16">
+                                    <TextBlock Text="{Binding TickCount, StringFormat='Ticks received: {0}'}"/>
+                                </Border>
+                            </StackPanel>
+                        </DataTemplate>
+
+                        <DataTemplate x:DataType="vm:FilesPageProjection">
+                            <Grid RowDefinitions="Auto,*" RowSpacing="18">
+                                <Grid ColumnDefinitions="Auto,Auto,*" ColumnSpacing="12">
+                                    <Button Content="Open file"
+                                            Padding="18,10"
+                                            Command="{Binding OpenFileCommand}"/>
+                                    <Button Grid.Column="1"
+                                            Content="Clear"
+                                            Padding="18,10"
+                                            Command="{Binding ClearSelectionCommand}"/>
+                                    <TextBlock Grid.Column="2"
+                                               VerticalAlignment="Center"
+                                               Text="{Binding Status}"
+                                               Foreground="#625D57"/>
+                                </Grid>
+
+                                <Grid Grid.Row="1" ColumnDefinitions="0.95*,1.05*" ColumnSpacing="22">
+                                    <Border Padding="20" Background="#F7F3ED" CornerRadius="16">
+                                        <StackPanel Spacing="10">
+                                            <TextBlock Text="Selected file" FontSize="18" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding FileName}" FontSize="22" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding Kind}"/>
+                                            <TextBlock Text="{Binding SizeText}"/>
+                                            <TextBlock Text="{Binding Location}" TextWrapping="Wrap" Foreground="#6B6762"/>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Border Grid.Column="1" Padding="20" Background="#FFF6ED" CornerRadius="16">
+                                        <StackPanel Spacing="10">
+                                            <TextBlock Text="Preview" FontSize="18" FontWeight="SemiBold"/>
+                                            <ScrollViewer MaxHeight="340">
+                                                <TextBlock Text="{Binding Preview}" TextWrapping="Wrap"/>
+                                            </ScrollViewer>
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+
+                        <DataTemplate x:DataType="vm:SvgPageProjection">
+                            <StackPanel Spacing="18">
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                                    <Button Content="Cycle palette"
+                                            Padding="18,10"
+                                            Command="{Binding NextThemeCommand}"/>
+                                    <StackPanel Grid.Column="1" Spacing="4">
+                                        <TextBlock Text="{Binding ThemeName}" FontSize="18" FontWeight="SemiBold"/>
+                                        <TextBlock Text="{Binding Caption}" Foreground="#625D57"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <Border Padding="18" Background="{Binding Background}" CornerRadius="20">
+                                    <Viewbox Stretch="Uniform" Height="420">
+                                        <Canvas Width="520" Height="320">
+                                            <Rectangle Width="520" Height="320" Fill="{Binding Background}"/>
+
+                                            <Line StartPoint="30,40" EndPoint="490,40" Stroke="{Binding GridLine}" StrokeThickness="2"/>
+                                            <Line StartPoint="30,90" EndPoint="490,90" Stroke="{Binding GridLine}" StrokeThickness="1"/>
+                                            <Line StartPoint="30,140" EndPoint="490,140" Stroke="{Binding GridLine}" StrokeThickness="1"/>
+                                            <Line StartPoint="30,190" EndPoint="490,190" Stroke="{Binding GridLine}" StrokeThickness="1"/>
+                                            <Line StartPoint="30,240" EndPoint="490,240" Stroke="{Binding GridLine}" StrokeThickness="1"/>
+
+                                            <Ellipse Width="92" Height="92" Canvas.Left="365" Canvas.Top="34" Fill="{Binding Sun}"/>
+                                            <Path Fill="{Binding Sky}"
+                                                  Data="M 0 210 C 70 150 120 170 180 132 C 228 100 278 112 332 80 C 394 44 438 62 520 18 L 520 320 L 0 320 Z"/>
+                                            <Path Fill="{Binding Hill}"
+                                                  Data="M 0 236 C 78 212 128 232 210 202 C 278 176 340 194 408 164 C 452 146 484 152 520 140 L 520 320 L 0 320 Z"/>
+                                            <Path Stroke="{Binding Accent}"
+                                                  StrokeThickness="4"
+                                                  Fill="#00000000"
+                                                  Data="M 70 242 C 162 216 246 218 332 198 C 386 186 430 166 470 148"/>
+                                            <Path Fill="{Binding Rocket}"
+                                                  Data="M 240 72 L 282 100 L 260 142 L 222 120 Z"/>
+                                            <Path Fill="{Binding Trail}"
+                                                  Data="M 218 124 L 198 148 L 222 142 Z"/>
+                                            <Path Fill="{Binding Trail}"
+                                                  Data="M 232 132 L 220 166 L 246 148 Z"/>
+                                            <Ellipse Width="8" Height="8" Canvas.Left="252" Canvas.Top="106" Fill="{Binding Background}"/>
+                                            <Ellipse Width="10" Height="10" Canvas.Left="124" Canvas.Top="82" Fill="{Binding Accent}"/>
+                                            <Ellipse Width="8" Height="8" Canvas.Left="164" Canvas.Top="58" Fill="{Binding Accent}"/>
+                                            <Ellipse Width="6" Height="6" Canvas.Left="308" Canvas.Top="108" Fill="{Binding Accent}"/>
+                                        </Canvas>
+                                    </Viewbox>
+                                </Border>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ContentControl.DataTemplates>
+                </ContentControl>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
