@@ -7,6 +7,10 @@ open Xunit
 
 module SnapshotSubstrateTests =
 
+    type private KeyedItem(key: int, value: string) =
+        member _.Key = key
+        member _.Value = value
+
     type private RootSnapshot =
         {
             Title: string
@@ -87,3 +91,42 @@ module SnapshotSubstrateTests =
         Assert.Equal<string list>([ "Name"; "Enabled" ], Seq.toList changed)
         Assert.Equal("Grace", child.Name)
         Assert.False(child.Enabled)
+
+    [<Fact>]
+    let ``keyed snapshot collection reorders retained items without losing identity`` () =
+        let first = KeyedItem(1, "one")
+        let second = KeyedItem(2, "two")
+        let third = KeyedItem(3, "three")
+
+        let collection =
+            KeyedSnapshotCollection<KeyedItem, int>(Func<KeyedItem, int>(fun item -> item.Key))
+
+        collection.Update([| first; second; third |])
+
+        let firstItem = collection.Items[0]
+        let secondItem = collection.Items[1]
+        let thirdItem = collection.Items[2]
+
+        collection.Update([| third; first; second |])
+
+        Assert.Collection(
+            collection.Items,
+            (fun item -> Assert.Same(thirdItem, item)),
+            (fun item -> Assert.Same(firstItem, item)),
+            (fun item -> Assert.Same(secondItem, item)))
+
+    [<Fact>]
+    let ``keyed snapshot collection replaces changed references while preserving order`` () =
+        let collection =
+            KeyedSnapshotCollection<KeyedItem, int>(Func<KeyedItem, int>(fun item -> item.Key))
+
+        let initial = [| KeyedItem(1, "alpha"); KeyedItem(2, "beta") |]
+        let updated = [| KeyedItem(1, "alpha*"); KeyedItem(2, "beta*") |]
+
+        collection.Update(initial)
+        let originalAlpha = collection.Items[0]
+
+        collection.Update(updated)
+
+        Assert.NotSame(originalAlpha, collection.Items[0])
+        Assert.Equal<string list>([ "alpha*"; "beta*" ], collection.Items |> Seq.map _.Value |> Seq.toList)

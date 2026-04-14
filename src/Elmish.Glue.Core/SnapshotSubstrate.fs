@@ -110,38 +110,16 @@ type KeyedSnapshotCollection<'T, 'Key when 'T : not struct and 'Key : equality a
         match lastSnapshot with
         | Some previous when obj.ReferenceEquals(previous, next) -> ()
         | _ ->
-            let targetKeys = HashSet<'Key>()
-            for i in 0 .. next.Count - 1 do
-                let key = keySelector.Invoke(next[i])
-                if not (targetKeys.Add(key)) then
-                    invalidArg (nameof next) $"KeyedSnapshotCollection requires unique keys. Duplicate key '{key}' was found."
-
-            let existing = Dictionary<'Key, 'T>()
-            for i in items.Count - 1 .. -1 .. 0 do
-                let item = items[i]
-                let key = keySelector.Invoke(item)
-                existing[key] <- item
-                if not (targetKeys.Contains(key)) then
-                    items.RemoveAt(i)
-
-            for i in 0 .. next.Count - 1 do
-                let nextItem = next[i]
-                let key = keySelector.Invoke(nextItem)
-
-                match existing.TryGetValue(key) with
-                | true, currentItem ->
-                    let currentIndex = items.IndexOf(currentItem)
-                    if not (obj.ReferenceEquals(currentItem, nextItem)) then
-                        items[currentIndex] <- nextItem
-
-                    let updatedItem =
-                        if currentIndex < items.Count then items[currentIndex]
-                        else nextItem
-
-                    let updatedIndex = items.IndexOf(updatedItem)
-                    if updatedIndex <> i then
-                        items.Move(updatedIndex, i)
-                | false, _ ->
-                    items.Insert(i, nextItem)
-
+            KeyedCollectionPatching.patch(
+                items,
+                (fun item -> keySelector.Invoke(item)),
+                next,
+                (fun item -> keySelector.Invoke(item)),
+                ignore,
+                (fun currentItem nextItem ->
+                    if obj.ReferenceEquals(currentItem, nextItem) then currentItem
+                    else nextItem),
+                id,
+                (fun key -> $"KeyedSnapshotCollection requires unique keys. Duplicate key '{key}' was found."),
+                (fun key -> $"KeyedSnapshotCollection requires unique keys. Duplicate key '{key}' was found in the target collection."))
             lastSnapshot <- Some next

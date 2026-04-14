@@ -17,35 +17,15 @@ type ObservableCollectionExtensions =
             create: Func<'Model, 'ViewModel>,
             update: Action<'ViewModel, 'Model>
         ) : unit =
-
-        let modelKeys = HashSet<'Key>()
-        for i in 0 .. models.Count - 1 do
-            let key = modelKey.Invoke(models[i])
-            if not (modelKeys.Add(key)) then
-                invalidArg (nameof models) $"SyncWith requires unique model keys. Duplicate key '{key}' was found."
-
-        let existingKeys = HashSet<'Key>()
-        for i in collection.Count - 1 .. -1 .. 0 do
-            let key = vmKey.Invoke(collection[i])
-            if not (existingKeys.Add(key)) then
-                invalidOp $"SyncWith requires unique view-model keys. Duplicate key '{key}' was found in the target collection."
-
-            if not (modelKeys.Contains(key)) then
-                collection.RemoveAt(i)
-
-        let existing = Dictionary<'Key, 'ViewModel>()
-        for vm in collection do
-            existing[vmKey.Invoke(vm)] <- vm
-
-        for i in 0 .. models.Count - 1 do
-            let model = models[i]
-            let key = modelKey.Invoke(model)
-
-            match existing.TryGetValue(key) with
-            | true, vm ->
+        KeyedCollectionPatching.patch(
+            collection,
+            (fun vm -> vmKey.Invoke(vm)),
+            models,
+            (fun model -> modelKey.Invoke(model)),
+            ignore,
+            (fun vm model ->
                 update.Invoke(vm, model)
-                let currentIndex = collection.IndexOf(vm)
-                if currentIndex <> i then
-                    collection.Move(currentIndex, i)
-            | false, _ ->
-                collection.Insert(i, create.Invoke(model))
+                vm),
+            (fun model -> create.Invoke(model)),
+            (fun key -> $"SyncWith requires unique model keys. Duplicate key '{key}' was found."),
+            (fun key -> $"SyncWith requires unique view-model keys. Duplicate key '{key}' was found in the target collection."))

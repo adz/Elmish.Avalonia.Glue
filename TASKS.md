@@ -43,7 +43,7 @@ After each task is completed, create a separate git commit before starting the n
 19. [x] Add tests that prove snapshot updates do not re-dispatch and user edits dispatch exactly once.
 20. [x] Add tests for nested bindable node propagation and `PropertyChanged` correctness across root and child nodes.
 21. [x] Unify snapshot-host concepts across `Projection` and `ElmView` where possible so the core owns one coherent bindable snapshot substrate.
-22. [ ] Rework keyed collection patching to avoid repeated `IndexOf`-driven quadratic behavior before scaling ElmView further into list-heavy scenarios.
+22. [x] Rework keyed collection patching to avoid repeated `IndexOf`-driven quadratic behavior before scaling ElmView further into list-heavy scenarios.
 23. [ ] Convert the ElmView example matrix form page to the new generated host and write-back path while keeping AXAML looking ordinary.
 24. [ ] Validate that the converted sample still supports design-time preview with the same generated host shape.
 25. [ ] After the form path is proven, extend the same pattern to other interactive sample areas.

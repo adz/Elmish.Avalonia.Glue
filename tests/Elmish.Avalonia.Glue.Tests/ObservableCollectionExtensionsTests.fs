@@ -89,3 +89,40 @@ module ObservableCollectionExtensionsTests =
         Assert.Same(existing, collection[0])
         Assert.Equal("updated", collection[0].Value)
         Assert.Equal(3, collection[1].Id)
+
+    [<Fact>]
+    let ``SyncWith reorders existing instances without recreating them`` () =
+        let first = TestVm(1, "one")
+        let second = TestVm(2, "two")
+        let third = TestVm(3, "three")
+
+        let collection =
+            ObservableCollection<TestVm>(
+                [|
+                    first
+                    second
+                    third
+                |])
+
+        let models =
+            [|
+                { Id = 3; Value = "three*" }
+                { Id = 1; Value = "one*" }
+                { Id = 2; Value = "two*" }
+            |]
+
+        ObservableCollectionExtensions.SyncWith(
+            collection,
+            models,
+            Func<TestModel, int>(fun model -> model.Id),
+            Func<TestVm, int>(fun vm -> vm.Id),
+            Func<TestModel, TestVm>(fun model -> TestVm(model.Id, model.Value)),
+            Action<TestVm, TestModel>(fun vm model -> vm.Value <- model.Value))
+
+        Assert.Equal(3, collection.Count)
+        Assert.Same(third, collection[0])
+        Assert.Equal("three*", collection[0].Value)
+        Assert.Same(first, collection[1])
+        Assert.Equal("one*", collection[1].Value)
+        Assert.Same(second, collection[2])
+        Assert.Equal("two*", collection[2].Value)
