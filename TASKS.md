@@ -39,7 +39,7 @@ After each task is completed, create a separate git commit before starting the n
 15. [x] Prototype generated nested node support so AXAML can bind normally to paths like `UserInput.Name` rather than imperative code-behind event handlers.
 16. [x] Make `Mode=TwoWay` the editable-field contract for ElmView while keeping `OneWay` display-only and non-dispatching.
 17. [x] Remove manual form event-forwarding from the ElmView example matrix once the generated write-back host path is in place.
-18. [ ] Add ElmView interaction tests for writable generated properties covering text, checkbox, combo-box selection, slider or range, and multiline text.
+18. [x] Add ElmView interaction tests for writable generated properties covering text, checkbox, combo-box selection, slider or range, and multiline text.
 19. [ ] Add tests that prove snapshot updates do not re-dispatch and user edits dispatch exactly once.
 20. [ ] Add tests for nested bindable node propagation and `PropertyChanged` correctness across root and child nodes.
 21. [ ] Unify snapshot-host concepts across `Projection` and `ElmView` where possible so the core owns one coherent bindable snapshot substrate.
