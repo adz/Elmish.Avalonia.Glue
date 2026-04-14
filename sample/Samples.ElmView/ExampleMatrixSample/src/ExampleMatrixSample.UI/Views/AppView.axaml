@@ -12,6 +12,9 @@
     Height="820"
     MinWidth="980"
     MinHeight="700">
+    <Design.DataContext>
+        <local:UserInputPreviewHost />
+    </Design.DataContext>
     <Grid ColumnDefinitions="240,*" Background="#F4F1EA">
         <Border Background="#163227" Padding="18,22">
             <Grid RowDefinitions="Auto,Auto,*">

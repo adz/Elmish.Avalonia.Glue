@@ -45,7 +45,7 @@ After each task is completed, create a separate git commit before starting the n
 21. [x] Unify snapshot-host concepts across `Projection` and `ElmView` where possible so the core owns one coherent bindable snapshot substrate.
 22. [x] Rework keyed collection patching to avoid repeated `IndexOf`-driven quadratic behavior before scaling ElmView further into list-heavy scenarios.
 23. [x] Convert the ElmView example matrix form page to the new generated host and write-back path while keeping AXAML looking ordinary.
-24. [ ] Validate that the converted sample still supports design-time preview with the same generated host shape.
+24. [x] Validate that the converted sample still supports design-time preview with the same generated host shape.
 25. [ ] After the form path is proven, extend the same pattern to other interactive sample areas.
 26. [ ] Update docs to explain the new ElmView story clearly: pure F# models, normal AXAML, generated writable facade, centralized message mapping, and no F# binding metadata.
 27. [ ] Re-evaluate the architecture comparison after ElmView V2 lands by measuring boilerplate, reviewability, runtime behavior, design-time quality, and LLM editing ergonomics against `Projection`.

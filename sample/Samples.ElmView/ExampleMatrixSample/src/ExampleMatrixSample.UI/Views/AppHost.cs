@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Elmish.Avalonia.Glue.ElmView;
 using Elmish.Glue.Core;
 using ExampleMatrixSample.ElmView.Core;
@@ -6,7 +7,7 @@ using CoreAppView = ExampleMatrixSample.ElmView.Core.AppView;
 
 namespace ExampleMatrixSample.ElmView.UI.Views;
 
-public sealed class AppHost : RuntimeGeneratedViewHost<CoreAppView, Msg>
+public class AppHost : RuntimeGeneratedViewHost<CoreAppView, Msg>
 {
     private static readonly Action<WriteBackBindings<CoreAppView, Msg>> ConfigureBindings =
         bindings =>
@@ -21,12 +22,16 @@ public sealed class AppHost : RuntimeGeneratedViewHost<CoreAppView, Msg>
 
     private readonly UserInputNode _userInput;
 
-    public AppHost() : base(Core.App.getDesignView(), ConfigureBindings)
+    public AppHost() : this(Core.App.getDesignView())
+    {
+    }
+
+    protected AppHost(CoreAppView initialView) : base(initialView, ConfigureBindings)
     {
         _userInput = new UserInputNode(this);
     }
 
-    public override System.Collections.Generic.IEnumerable<string> GeneratedPropertyNames =>
+    public override IEnumerable<string> GeneratedPropertyNames =>
         ["UserInput"];
 
     public UserInputNode UserInput => _userInput;
@@ -100,5 +105,12 @@ public sealed class AppHost : RuntimeGeneratedViewHost<CoreAppView, Msg>
         public string SummaryText => Snapshot.SummaryText;
 
         public bool HasSummary => Snapshot.HasSummary;
+    }
+}
+
+public sealed class UserInputPreviewHost : AppHost
+{
+    public UserInputPreviewHost() : base(Core.App.getDesignViewFor(Example.UserInput))
+    {
     }
 }

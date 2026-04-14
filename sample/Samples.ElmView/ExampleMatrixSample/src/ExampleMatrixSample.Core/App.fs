@@ -568,9 +568,9 @@ module App =
                 ShowSvg = app.CurrentExample = Svg
         }
 
-    let getDesignView () =
+    let getDesignViewFor currentExample =
         {
-            CurrentExample = StaticLayout
+            CurrentExample = currentExample
             HeaderTitle = ""
             HeaderSubtitle = ""
             HeaderKey = ""
@@ -591,6 +591,8 @@ module App =
             Svg = SvgPage.design
         }
         |> withDerived
+
+    let getDesignView () = getDesignViewFor StaticLayout
 
     let init () =
         {
