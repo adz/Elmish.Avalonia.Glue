@@ -301,6 +301,48 @@ module ElmViewGeneratedHostTests =
         Assert.Equal("Original notes", host.Form.Notes)
 
     [<Fact>]
+    let ``snapshot-driven binding updates do not re-dispatch messages`` () =
+        let host = SampleHost(createView "Before" "Ada" true)
+        let messages = List<Msg>()
+        let textBox = TextBox()
+        let binding = ReflectionBinding("Child.Name")
+
+        host.SetDispatch(Action<Msg>(messages.Add))
+        binding.Source <- host
+        binding.Mode <- BindingMode.TwoWay
+        binding.UpdateSourceTrigger <- UpdateSourceTrigger.PropertyChanged
+        textBox.Bind(TextBox.TextProperty, binding) |> ignore
+
+        Assert.Equal("Ada", textBox.Text)
+
+        host.Update(createView "After" "Grace" true)
+
+        Assert.Equal("Grace", textBox.Text)
+        Assert.Empty(messages)
+
+    [<Fact>]
+    let ``user edits dispatch exactly once even after the snapshot catches up`` () =
+        let host = SampleHost(createView "Before" "Ada" true)
+        let messages = List<Msg>()
+        let textBox = TextBox()
+        let binding = ReflectionBinding("Child.Name")
+
+        host.SetDispatch(Action<Msg>(messages.Add))
+        binding.Source <- host
+        binding.Mode <- BindingMode.TwoWay
+        binding.UpdateSourceTrigger <- UpdateSourceTrigger.PropertyChanged
+        textBox.Bind(TextBox.TextProperty, binding) |> ignore
+
+        textBox.Text <- "Grace"
+
+        Assert.Equal<Msg list>([ SetName "Grace" ], Seq.toList messages)
+
+        host.Update(createView "After" "Grace" true)
+
+        Assert.Equal("Grace", textBox.Text)
+        Assert.Equal<Msg list>([ SetName "Grace" ], Seq.toList messages)
+
+    [<Fact>]
     let ``one-way bindings stay display-only and do not dispatch`` () =
         let host = SampleHost(createView "Before" "Ada" true)
         let messages = List<Msg>()
