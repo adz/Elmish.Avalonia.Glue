@@ -72,6 +72,7 @@ module ElmViewGeneratedHostTests =
     [<Fact>]
     let ``generated host getters read the latest immutable snapshot`` () =
         let host = SampleHost(createView "Before" "Ada" true)
+        let child = host.Child
 
         Assert.Equal("Before", host.Title)
         Assert.Equal("Ada", host.Child.Name)
@@ -82,6 +83,7 @@ module ElmViewGeneratedHostTests =
         Assert.Equal("After", host.Title)
         Assert.Equal("Linus", host.Child.Name)
         Assert.False(host.Child.IsEnabled)
+        Assert.Same(child, host.Child)
 
     [<Fact>]
     let ``generated writable setters dispatch messages instead of mutating snapshots`` () =

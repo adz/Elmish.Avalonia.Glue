@@ -1,0 +1,98 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ExampleMatrixSample.ElmView.UI.Views"
+    x:Class="ExampleMatrixSample.ElmView.UI.Views.UserInputPrototypeView"
+    x:DataType="local:AppHost"
+    x:CompileBindings="True">
+    <Border Padding="24" Background="#FFFDF9" CornerRadius="18">
+        <StackPanel Spacing="14">
+            <TextBlock Text="Generated nested-node prototype"
+                       FontSize="20"
+                       FontWeight="SemiBold"/>
+            <TextBlock Text="This proof-of-shape binds normal AXAML paths such as UserInput.Name directly against a generated child node."
+                       Foreground="#6B6A67"
+                       TextWrapping="Wrap"/>
+
+            <StackPanel Spacing="6">
+                <TextBlock Text="Name" FontWeight="SemiBold"/>
+                <TextBox Text="{Binding UserInput.Name, Mode=TwoWay}"
+                         Background="#FFFDF9"
+                         Foreground="#2F312D"
+                         BorderBrush="#D8D2C8"
+                         CaretBrush="#214F40"/>
+            </StackPanel>
+
+            <StackPanel Spacing="6">
+                <TextBlock Text="Email" FontWeight="SemiBold"/>
+                <TextBox Text="{Binding UserInput.Email, Mode=TwoWay}"
+                         Background="#FFFDF9"
+                         Foreground="#2F312D"
+                         BorderBrush="#D8D2C8"
+                         CaretBrush="#214F40"/>
+            </StackPanel>
+
+            <CheckBox Content="Subscribe to follow-up notes"
+                      IsChecked="{Binding UserInput.Newsletter, Mode=TwoWay}"
+                      Foreground="#2F312D"/>
+
+            <StackPanel Spacing="6">
+                <TextBlock Text="Favorite language" FontWeight="SemiBold"/>
+                <ComboBox ItemsSource="{Binding UserInput.Languages}"
+                          SelectedItem="{Binding UserInput.FavoriteLanguage, Mode=TwoWay}"
+                          Background="#FFFDF9"
+                          Foreground="#2F312D"
+                          BorderBrush="#D8D2C8"/>
+            </StackPanel>
+
+            <StackPanel Spacing="6">
+                <DockPanel>
+                    <TextBlock Text="Experience" FontWeight="SemiBold"/>
+                    <TextBlock DockPanel.Dock="Right"
+                               Text="{Binding UserInput.Experience}"
+                               Foreground="#6B6A67"/>
+                </DockPanel>
+                <Slider Minimum="0"
+                        Maximum="10"
+                        TickFrequency="1"
+                        IsSnapToTickEnabled="True"
+                        Value="{Binding UserInput.Experience, Mode=TwoWay}"/>
+            </StackPanel>
+
+            <StackPanel Spacing="6">
+                <TextBlock Text="Notes" FontWeight="SemiBold"/>
+                <TextBox Height="120"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         Text="{Binding UserInput.Notes, Mode=TwoWay}"
+                         Background="#FFFDF9"
+                         Foreground="#2F312D"
+                         BorderBrush="#D8D2C8"
+                         CaretBrush="#214F40"/>
+            </StackPanel>
+
+            <Border IsVisible="{Binding UserInput.HasValidation}"
+                    Padding="16"
+                    Background="#FFF1EC"
+                    BorderBrush="#E6B7A5"
+                    BorderThickness="1"
+                    CornerRadius="16">
+                <TextBlock Text="{Binding UserInput.ValidationText}"
+                           Foreground="#9C3D21"
+                           TextWrapping="Wrap"/>
+            </Border>
+
+            <Border IsVisible="{Binding UserInput.HasSummary}"
+                    Padding="18"
+                    CornerRadius="16"
+                    Background="#EEF6F1">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Submitted snapshot" FontSize="18" FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding UserInput.SummaryText}"
+                               TextWrapping="Wrap"
+                               Foreground="#30433A"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Border>
+</UserControl>

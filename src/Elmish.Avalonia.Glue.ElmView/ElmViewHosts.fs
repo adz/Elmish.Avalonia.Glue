@@ -4,6 +4,7 @@ open System
 open System.Collections.Generic
 open System.ComponentModel
 open System.Linq.Expressions
+open System.Collections
 
 module private WriteBackPath =
     let rec private collectSegments segments (expression: Expression | null) =
@@ -174,6 +175,21 @@ type GeneratedViewNode<'RootView, 'NodeView, 'Msg when 'RootView : not struct>
     let propertyNames = propertyNames |> Seq.toArray
 
     do registerWithParent (this :> IGeneratedViewNode)
+
+    new
+        (
+            getRootView: Func<'RootView>,
+            dispatch: Action<'Msg>,
+            registerWithParent: Action<IGeneratedViewNode>,
+            getNodeView: Func<'RootView, 'NodeView>,
+            propertyNames: IEnumerable
+        ) =
+        GeneratedViewNode(
+            getRootView.Invoke,
+            dispatch.Invoke,
+            registerWithParent.Invoke,
+            getNodeView.Invoke,
+            propertyNames |> Seq.cast<string>)
 
     member _.Snapshot = getNodeView (getRootView())
 

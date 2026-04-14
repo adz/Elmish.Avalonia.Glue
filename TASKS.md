@@ -36,7 +36,7 @@ After each task is completed, create a separate git commit before starting the n
 12. [x] Define the generated host shape for ElmView: root host, nested bindable child nodes, property getters that read immutable snapshots, and property setters that dispatch messages.
 13. [x] Define the write-back mapping API in one place near host construction with a target shape like `bindings.For(x => x.UserInput.Name).Dispatch(Msg.NewSetName)`.
 14. [x] Decide whether write-back mappings are fully explicit or convention-first with explicit overrides, preferring explicit mappings unless conventions remain predictable.
-15. [ ] Prototype generated nested node support so AXAML can bind normally to paths like `UserInput.Name` rather than imperative code-behind event handlers.
+15. [x] Prototype generated nested node support so AXAML can bind normally to paths like `UserInput.Name` rather than imperative code-behind event handlers.
 16. [ ] Make `Mode=TwoWay` the editable-field contract for ElmView while keeping `OneWay` display-only and non-dispatching.
 17. [ ] Remove manual form event-forwarding from the ElmView example matrix once the generated write-back host path is in place.
 18. [ ] Add ElmView interaction tests for writable generated properties covering text, checkbox, combo-box selection, slider or range, and multiline text.
