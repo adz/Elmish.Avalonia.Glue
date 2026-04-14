@@ -89,11 +89,17 @@ The host should not become a second projection tree.
 - `BindableViewHost<'View>`
 - `RuntimeViewHost<'View>`
 - `DesignViewHost<'View>`
+- `GeneratedViewHost<'View,'Msg>`
+- `GeneratedViewNode<'RootView,'NodeView,'Msg>`
+- `RuntimeGeneratedViewHost<'View,'Msg>`
+- `DesignGeneratedViewHost<'View,'Msg>`
 - `ElmView.runtime`
 - `ElmView.design`
 
 These types keep the bindable surface consistent between runtime and preview
-snapshots.
+snapshots. `GeneratedViewHost` and `GeneratedViewNode` define the bindable host
+shape that ElmView V2 generation should target for nested nodes and writable
+properties over immutable snapshots.
 
 ## Design-Time Workflow
 
