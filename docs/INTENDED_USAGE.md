@@ -72,13 +72,18 @@ Use it when you want:
 
 - immutable F# records to be the authored UI schema
 - most UI shaping logic to live in F# view data and AXAML
-- a single bindable host rather than a handwritten projection tree
+- generated bindable root and child nodes rather than a handwritten projection
+  tree
+- normal Avalonia `Mode=TwoWay` bindings for editable controls
+- centralized write-back mapping instead of F# binding metadata
 - runtime and design-time to share the same view shape as directly as possible
 
 The host layer stays deliberately small. It usually owns:
 
-- the current `View` snapshot exposed to AXAML
-- imperative methods that forward Avalonia events to Elmish messages
+- the current immutable `View` snapshot
+- generated CLR-facing properties that read from that snapshot
+- generated writable setters for explicitly registered editable paths
+- only the small imperative seams that cannot be expressed as normal bindings
 
 The host should not become a second projection tree.
 
@@ -100,6 +105,33 @@ These types keep the bindable surface consistent between runtime and preview
 snapshots. `GeneratedViewHost` and `GeneratedViewNode` define the bindable host
 shape that ElmView V2 generation should target for nested nodes and writable
 properties over immutable snapshots.
+
+### ElmView V2 authoring contract
+
+ElmView V2 is intended to feel like normal Avalonia authoring even though the
+runtime model stays immutable.
+
+The authored surface is:
+
+- plain immutable F# view records
+- ordinary `.axaml`
+- explicit Elmish messages and update functions
+
+The generated/runtime surface is:
+
+- generated root and nested bindable nodes
+- writable CLR setters that call centralized write-back mappings
+- `PropertyChanged` propagation across the generated node graph when the
+  immutable snapshot changes
+
+That means:
+
+- `Mode=OneWay` stays display-only
+- `Mode=TwoWay` is the standard editable-field contract
+- binding paths stay ordinary, such as `UserInput.Name`
+- F# records do not carry binding annotations, write-back attributes, or other
+  metadata
+- editable properties dispatch only when the host registers that path
 
 ## Design-Time Workflow
 
@@ -129,15 +161,19 @@ This keeps design-time preview useful without booting the full application.
 In the ElmView samples:
 
 1. F# defines a design view, for example `Core.App.getDesignView()`.
-2. The root host inherits `RuntimeViewHost<'View>`.
-3. The host starts life with the design view snapshot.
-4. AXAML binds through `View.*` to that immutable record shape.
-5. At runtime, `ElmishHost.startAndBind` calls `Host.Update` with live view
-   snapshots.
+2. The root host inherits `RuntimeGeneratedViewHost<'View,'Msg>`.
+3. The host starts life with the design view snapshot and registers
+   write-back mappings in one place near host construction.
+4. AXAML binds through generated node properties such as `UserInput.Name`.
+5. `Mode=TwoWay` bindings dispatch explicit Elmish messages through the
+   registered write-back routes.
+6. At runtime, `ElmishHost.startAndBind` calls `Host.Update` with live view
+   snapshots, and the generated node graph raises `PropertyChanged` without
+   re-dispatching.
 
-That pattern keeps preview and runtime extremely close while still allowing a
-tiny imperative seam for Avalonia events such as clicks, file picking, or
-selection changes.
+That pattern keeps preview and runtime extremely close while limiting
+imperative seams to the cases Avalonia still needs, such as button clicks,
+file picking, or other command-like interactions.
 
 ## Host Lifetime
 
@@ -154,10 +190,10 @@ The intended runtime lifetime is the same in both families:
 The intended flow remains:
 
 1. the user interacts with Avalonia controls
-2. the view or host emits an Elmish message
+2. a generated writable property or small host seam emits an Elmish message
 3. Elmish updates immutable state
 4. the host posts the update to Avalonia's UI thread
-5. the bindable surface refreshes
+5. the generated bindable surface refreshes from the new snapshot
 
 The difference between the families is not where behavior lives. Behavior stays
 in Elmish in both. The difference is which bindable shape AXAML sees.
@@ -195,6 +231,7 @@ Choose `ElmView` when:
 - the team wants most authored UI shaping logic in F#
 - the review surface should primarily be immutable view records plus AXAML
 - reducing handwritten projection code is a priority
+- editable controls should still look like ordinary Avalonia bindings
 - runtime and design-time should share one bindable view shape with minimal
   translation
 

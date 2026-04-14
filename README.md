@@ -80,12 +80,38 @@ schema and wants to minimize handwritten projection boilerplate.
 This family keeps:
 
 - F# view records as the UI-shaped data model
-- normal AXAML bindings through a single bindable host
-- a tiny host class for commands or event forwarding where Avalonia needs an
-  imperative seam
-- the same shape for runtime updates and design-time preview data
+- normal AXAML bindings through generated bindable root and child nodes
+- standard `Mode=OneWay` and `Mode=TwoWay` bindings as the main authoring
+  contract
+- a generated writable facade that reads immutable snapshots and dispatches
+  Elmish messages from registered editable properties
+- centralized write-back mapping near host construction instead of F# binding
+  metadata or per-control event glue
+- the same generated host shape for runtime updates and design-time preview
+  data
 
-The ElmView samples show the closest-to-Elm path currently in the repository.
+The ElmView samples show the closest-to-Elm path currently in the repository
+while keeping Avalonia normal.
+
+#### ElmView V2 Story
+
+ElmView V2 keeps the authored surface small and conventional:
+
+- pure immutable F# view records define the UI schema
+- `.axaml` stays ordinary Avalonia markup with ordinary binding paths such as
+  `UserInput.Name`
+- generated root and nested node types provide the writable CLR-facing facade
+  Avalonia binds to
+- host-side write-back registration maps editable property paths to explicit
+  Elmish messages
+- F# view records do not carry binding attributes, write-back annotations, or
+  other metadata
+
+The important split is:
+
+- authored logic lives in F# view snapshots, F# update logic, and AXAML
+- generated/runtime glue owns property change propagation and `TwoWay`
+  dispatching
 
 ## Design-Time Workflow
 
@@ -105,8 +131,9 @@ In the current samples:
 - `Samples.Projection` calls `Projection.Update(Core.App.getDesignModel())` in
   the view constructor so the window renders useful preview data before the
   runtime host is attached.
-- `Samples.ElmView` constructs `RuntimeViewHost` with
-  `Core.App.getDesignView()` so the same `View` shape feeds both preview and
+- `Samples.ElmView` constructs `RuntimeGeneratedViewHost` with
+  `Core.App.getDesignView()` and the same centralized write-back bindings used
+  at runtime, so the generated host shape stays aligned between preview and
   live updates.
 
 That keeps AXAML previewable without booting the full Elmish runtime.
@@ -128,6 +155,8 @@ Choose `ElmView` when:
 - immutable view snapshots should be the main review surface
 - reducing handwritten projection boilerplate matters more than exposing many
   named CLR projection types
+- ordinary Avalonia `TwoWay` bindings should handle editable controls without
+  F# binding metadata
 - preview and runtime should share one bindable view shape as directly as
   possible
 
@@ -154,6 +183,11 @@ Use `Elmish.Avalonia.Glue.ElmView` for bindable F# view hosts such as:
 
 - `RuntimeViewHost<'View>`
 - `DesignViewHost<'View>`
+- `GeneratedViewHost<'View,'Msg>`
+- `GeneratedViewNode<'RootView,'NodeView,'Msg>`
+- `RuntimeGeneratedViewHost<'View,'Msg>`
+- `DesignGeneratedViewHost<'View,'Msg>`
+- `WriteBackBindings<'View,'Msg>`
 - `ElmView.runtime`
 - `ElmView.design`
 
@@ -174,6 +208,9 @@ See:
 - `sample/Samples.Projection`
 - `sample/Samples.ElmView`
 - `docs/INTENDED_USAGE.md`
+- `docs/ELMVIEW_V2_CONTRACT.md`
+- `docs/ELMVIEW_GENERATED_HOST_SHAPE.md`
+- `docs/ELMVIEW_WRITE_BACK_MAPPING_API.md`
 
 ## Why
 
