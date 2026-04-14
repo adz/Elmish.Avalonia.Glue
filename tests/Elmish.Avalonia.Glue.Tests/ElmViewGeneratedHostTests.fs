@@ -4,6 +4,9 @@ open System
 open System.Collections.Generic
 open System.ComponentModel
 open System.Linq.Expressions
+open Avalonia
+open Avalonia.Controls
+open Avalonia.Data
 open Elmish.Avalonia.Glue.ElmView
 open Xunit
 
@@ -94,6 +97,45 @@ module ElmViewGeneratedHostTests =
         host.Child.Name <- "Grace"
 
         Assert.Equal<Msg list>([ SetName "Grace" ], Seq.toList messages)
+        Assert.Equal("Ada", host.Child.Name)
+
+    [<Fact>]
+    let ``two-way bindings dispatch through generated writable properties`` () =
+        let host = SampleHost(createView "Before" "Ada" true)
+        let messages = List<Msg>()
+        let textBox = TextBox()
+        let binding = ReflectionBinding("Child.Name")
+
+        host.SetDispatch(Action<Msg>(messages.Add))
+        binding.Source <- host
+        binding.Mode <- BindingMode.TwoWay
+        binding.UpdateSourceTrigger <- UpdateSourceTrigger.PropertyChanged
+        textBox.Bind(TextBox.TextProperty, binding) |> ignore
+
+        Assert.Equal("Ada", textBox.Text)
+
+        textBox.Text <- "Grace"
+
+        Assert.Equal<Msg list>([ SetName "Grace" ], Seq.toList messages)
+        Assert.Equal("Ada", host.Child.Name)
+
+    [<Fact>]
+    let ``one-way bindings stay display-only and do not dispatch`` () =
+        let host = SampleHost(createView "Before" "Ada" true)
+        let messages = List<Msg>()
+        let textBox = TextBox()
+        let binding = ReflectionBinding("Child.Name")
+
+        host.SetDispatch(Action<Msg>(messages.Add))
+        binding.Source <- host
+        binding.Mode <- BindingMode.OneWay
+        textBox.Bind(TextBox.TextProperty, binding) |> ignore
+
+        Assert.Equal("Ada", textBox.Text)
+
+        textBox.Text <- "Grace"
+
+        Assert.Empty(messages)
         Assert.Equal("Ada", host.Child.Name)
 
     [<Fact>]
