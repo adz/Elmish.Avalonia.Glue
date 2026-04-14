@@ -1,5 +1,6 @@
 using System;
 using Elmish.Avalonia.Glue.ElmView;
+using Elmish.Glue.Core;
 using ExampleMatrixSample.ElmView.Core;
 using CoreAppView = ExampleMatrixSample.ElmView.Core.AppView;
 
@@ -45,7 +46,7 @@ public sealed class AppHost : RuntimeGeneratedViewHost<CoreAppView, Msg>
             : base(
                 new Func<CoreAppView>(() => host.View),
                 new Action<Msg>(host.Dispatch),
-                new Action<IGeneratedViewNode>(host.RegisterChildNode),
+                new Action<IBindableSnapshotNode>(host.RegisterChildNode),
                 new Func<CoreAppView, FormView>(view => view.UserInput),
                 new[] { nameof(Name), nameof(Email), nameof(Newsletter), nameof(FavoriteLanguage), nameof(Languages), nameof(Experience), nameof(Notes), nameof(ValidationText), nameof(HasValidation), nameof(SummaryText), nameof(HasSummary) })
         {

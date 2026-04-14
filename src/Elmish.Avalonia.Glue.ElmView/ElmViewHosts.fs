@@ -164,7 +164,7 @@ type GeneratedViewNode<'RootView, 'NodeView, 'Msg when 'RootView : not struct>
         (
             getRootView: Func<'RootView>,
             dispatch: Action<'Msg>,
-            registerWithParent: Action<IGeneratedViewNode>,
+            registerWithParent: Action<IBindableSnapshotNode>,
             getNodeView: Func<'RootView, 'NodeView>,
             propertyNames: IEnumerable
         ) =
