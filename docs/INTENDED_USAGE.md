@@ -239,6 +239,9 @@ If a feature needs a lot of mutable, control-specific mechanics, prefer
 `Projection`. If a feature mostly wants immutable view snapshots and a thinner
 host, prefer `ElmView`.
 
+For the post-ElmView-V2 measured comparison between the two families, see
+`docs/ARCHITECTURE_COMPARISON.md`.
+
 ## What These Libraries Are Not
 
 They are not:

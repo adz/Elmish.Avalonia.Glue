@@ -208,6 +208,7 @@ See:
 - `sample/Samples.Projection`
 - `sample/Samples.ElmView`
 - `docs/INTENDED_USAGE.md`
+- `docs/ARCHITECTURE_COMPARISON.md`
 - `docs/ELMVIEW_V2_CONTRACT.md`
 - `docs/ELMVIEW_GENERATED_HOST_SHAPE.md`
 - `docs/ELMVIEW_WRITE_BACK_MAPPING_API.md`
