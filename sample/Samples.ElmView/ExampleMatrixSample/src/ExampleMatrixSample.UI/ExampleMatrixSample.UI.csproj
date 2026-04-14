@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.0.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.0.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.0" />
+    <PackageReference Include="Tmds.DBus.Protocol" Version="0.92.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\src\Elmish.Avalonia.Glue\Elmish.Avalonia.Glue.fsproj" />
+    <ProjectReference Include="..\..\..\..\..\src\Elmish.Avalonia.Glue.ElmView\Elmish.Avalonia.Glue.ElmView.fsproj" />
+    <ProjectReference Include="..\ExampleMatrixSample.Core\ExampleMatrixSample.Core.fsproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,465 @@
+<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:core="clr-namespace:ExampleMatrixSample.ElmView.Core;assembly=ExampleMatrixSample.Core"
+    xmlns:local="using:ExampleMatrixSample.ElmView.UI.Views"
+    x:Class="ExampleMatrixSample.ElmView.UI.Views.AppView"
+    x:DataType="local:AppHost"
+    x:CompileBindings="True"
+    Title="ElmView Example Matrix Sample"
+    Width="1180"
+    Height="820"
+    MinWidth="980"
+    MinHeight="700">
+    <Grid ColumnDefinitions="240,*" Background="#F4F1EA">
+        <Border Background="#163227" Padding="18,22">
+            <Grid RowDefinitions="Auto,Auto,*">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="ElmView Matrix" FontSize="22" FontWeight="SemiBold" Foreground="#F8F3EA"/>
+                    <TextBlock Text="Immutable F# view records with standard AXAML bindings and design-time snapshots."
+                               TextWrapping="Wrap"
+                               Foreground="#C5D2CA"/>
+                </StackPanel>
+
+                <Border Grid.Row="1" Margin="0,22,0,18" Height="1" Background="#2D5144"/>
+
+                <ItemsControl Grid.Row="2" ItemsSource="{Binding View.Navigation}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="core:NavigationItemView">
+                            <Button Margin="0,0,0,10"
+                                    Padding="14,12"
+                                    Background="{Binding Background}"
+                                    BorderThickness="0"
+                                    CornerRadius="14"
+                                    HorizontalContentAlignment="Stretch"
+                                    Click="OnNavigateClick">
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                                    <Border Width="44"
+                                            Height="44"
+                                            CornerRadius="12"
+                                            Background="#1D4638"
+                                            VerticalAlignment="Center">
+                                        <TextBlock HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Text="{Binding Key}"
+                                                   Foreground="#F7F2E8"
+                                                   FontWeight="SemiBold"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Title}"
+                                                   Foreground="{Binding Foreground}"
+                                                   FontWeight="SemiBold"/>
+                                        <TextBlock Text="{Binding Caption}"
+                                                   Foreground="#C3D3CB"
+                                                   FontSize="12"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,*" Margin="24">
+            <Border CornerRadius="18" Background="#FFFDF9" Padding="24,20" BoxShadow="0 8 32 0 #16000000">
+                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto">
+                    <TextBlock Text="{Binding View.HeaderTitle}" FontSize="28" FontWeight="SemiBold"/>
+                    <Border Grid.Column="1" Padding="10,6" Background="#E5F0E9" CornerRadius="999">
+                        <TextBlock Text="{Binding View.HeaderKey}" Foreground="#23543E" FontWeight="SemiBold"/>
+                    </Border>
+                    <TextBlock Grid.Row="1"
+                               Margin="0,8,0,0"
+                               Text="{Binding View.HeaderSubtitle}"
+                               Foreground="#6B6A67"
+                               TextWrapping="Wrap"/>
+                </Grid>
+            </Border>
+
+            <ScrollViewer Grid.Row="1" Margin="0,18,0,0">
+                <StackPanel Spacing="18">
+                    <Border IsVisible="{Binding View.ShowStaticLayout}"
+                            CornerRadius="18"
+                            Background="#FFFDF9"
+                            Padding="24"
+                            BoxShadow="0 8 32 0 #16000000">
+                        <StackPanel Spacing="18">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="{Binding View.StaticLayout.Heading}" FontSize="24" FontWeight="SemiBold"/>
+                                <TextBlock Text="{Binding View.StaticLayout.Summary}" Foreground="#6B6A67" TextWrapping="Wrap"/>
+                            </StackPanel>
+
+                            <ItemsControl ItemsSource="{Binding View.StaticLayout.Metrics}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="core:StaticMetricView">
+                                        <Border Width="220"
+                                                Margin="0,0,16,16"
+                                                Padding="18"
+                                                CornerRadius="16"
+                                                Background="#F8F4EC">
+                                            <StackPanel Spacing="10">
+                                                <Border Width="32" Height="6" Background="{Binding Accent}" CornerRadius="999"/>
+                                                <TextBlock Text="{Binding Label}" Foreground="#6B6A67"/>
+                                                <TextBlock Text="{Binding Value}" FontSize="28" FontWeight="Bold"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <ItemsControl ItemsSource="{Binding View.StaticLayout.Cards}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="core:StaticCardView">
+                                        <Border Margin="0,0,0,12" Padding="18" CornerRadius="16" Background="#F8F4EC">
+                                            <StackPanel Spacing="8">
+                                                <TextBlock Text="{Binding Title}" FontSize="18" FontWeight="SemiBold"/>
+                                                <TextBlock Text="{Binding Body}" TextWrapping="Wrap" Foreground="#474543"/>
+                                                <TextBlock Text="{Binding Footer}" FontSize="12" Foreground="#7A756F"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                    <Border IsVisible="{Binding View.ShowUserInput}"
+                            CornerRadius="18"
+                            Background="#FFFDF9"
+                            Padding="24"
+                            BoxShadow="0 8 32 0 #16000000">
+                        <Grid ColumnDefinitions="1.1*,0.9*" ColumnSpacing="24">
+                            <StackPanel Spacing="14">
+                                <TextBlock Text="Inputs stay normal Avalonia controls while the page snapshot remains immutable."
+                                           Foreground="#6B6A67"
+                                           TextWrapping="Wrap"/>
+
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Name" FontWeight="SemiBold"/>
+                                    <TextBox Text="{Binding View.UserInput.Name, Mode=OneWay}" TextChanged="OnNameChanged"/>
+                                </StackPanel>
+
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Email" FontWeight="SemiBold"/>
+                                    <TextBox Text="{Binding View.UserInput.Email, Mode=OneWay}" TextChanged="OnEmailChanged"/>
+                                </StackPanel>
+
+                                <CheckBox Content="Subscribe to follow-up notes"
+                                          IsChecked="{Binding View.UserInput.Newsletter, Mode=OneWay}"
+                                          Click="OnNewsletterClick"/>
+
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Favorite language" FontWeight="SemiBold"/>
+                                    <ComboBox ItemsSource="{Binding View.UserInput.Languages}"
+                                              SelectedItem="{Binding View.UserInput.FavoriteLanguage, Mode=OneWay}"
+                                              SelectionChanged="OnFavoriteLanguageChanged"/>
+                                </StackPanel>
+
+                                <StackPanel Spacing="6">
+                                    <DockPanel>
+                                        <TextBlock Text="Experience" FontWeight="SemiBold"/>
+                                        <TextBlock DockPanel.Dock="Right"
+                                                   Text="{Binding View.UserInput.Experience}"
+                                                   Foreground="#6B6A67"/>
+                                    </DockPanel>
+                                    <Slider Minimum="0"
+                                            Maximum="10"
+                                            TickFrequency="1"
+                                            IsSnapToTickEnabled="True"
+                                            Value="{Binding View.UserInput.Experience, Mode=OneWay}"
+                                            PropertyChanged="OnExperienceChanged"/>
+                                </StackPanel>
+
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Notes" FontWeight="SemiBold"/>
+                                    <TextBox Height="120"
+                                             AcceptsReturn="True"
+                                             TextWrapping="Wrap"
+                                             Text="{Binding View.UserInput.Notes, Mode=OneWay}"
+                                             TextChanged="OnNotesChanged"/>
+                                </StackPanel>
+
+                                <Button Content="Submit"
+                                        HorizontalAlignment="Left"
+                                        Padding="18,10"
+                                        Background="#214F40"
+                                        Foreground="#F9F5ED"
+                                        Click="OnSubmitFormClick"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Spacing="14">
+                                <Border IsVisible="{Binding View.UserInput.HasValidation}"
+                                        Padding="16"
+                                        Background="#FFF1EC"
+                                        BorderBrush="#E6B7A5"
+                                        BorderThickness="1"
+                                        CornerRadius="16">
+                                    <TextBlock Text="{Binding View.UserInput.ValidationText}" Foreground="#9C3D21" TextWrapping="Wrap"/>
+                                </Border>
+
+                                <Border IsVisible="{Binding View.UserInput.HasSummary}"
+                                        Padding="18"
+                                        CornerRadius="16"
+                                        Background="#EEF6F1">
+                                    <StackPanel Spacing="8">
+                                        <TextBlock Text="Submitted snapshot" FontSize="18" FontWeight="SemiBold"/>
+                                        <TextBlock Text="{Binding View.UserInput.SummaryText}" TextWrapping="Wrap" Foreground="#30433A"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Border IsVisible="{Binding View.ShowRandomDice}"
+                            CornerRadius="18"
+                            Background="#FFFDF9"
+                            Padding="24"
+                            BoxShadow="0 8 32 0 #16000000">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="24">
+                            <StackPanel Spacing="14">
+                                <Button Content="Roll dice"
+                                        Padding="20,12"
+                                        Background="#355C7D"
+                                        Foreground="White"
+                                        Click="OnRollDiceClick"/>
+                                <TextBlock Text="{Binding View.RandomDice.Status}" Width="240" TextWrapping="Wrap" Foreground="#6B6A67"/>
+                                <TextBlock Text="{Binding View.RandomDice.TotalRolls, StringFormat='Total rolls: {0}'}"
+                                           Foreground="#6B6A67"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Spacing="16">
+                                <Border IsVisible="{Binding View.RandomDice.HasLastRoll}"
+                                        Padding="18"
+                                        Background="#F2F6FB"
+                                        CornerRadius="18">
+                                    <Grid ColumnDefinitions="Auto,Auto,Auto,*" ColumnSpacing="14">
+                                        <Border Width="72" Height="72" Background="#214F40" CornerRadius="18">
+                                            <TextBlock Text="{Binding View.RandomDice.LastRollLeft}"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="28"
+                                                       Foreground="White"
+                                                       FontWeight="Bold"/>
+                                        </Border>
+                                        <TextBlock Grid.Column="1" Text="+" VerticalAlignment="Center" FontSize="26"/>
+                                        <Border Grid.Column="2" Width="72" Height="72" Background="#8C4B2F" CornerRadius="18">
+                                            <TextBlock Text="{Binding View.RandomDice.LastRollRight}"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="28"
+                                                       Foreground="White"
+                                                       FontWeight="Bold"/>
+                                        </Border>
+                                        <StackPanel Grid.Column="3" VerticalAlignment="Center" Spacing="4">
+                                            <TextBlock Text="{Binding View.RandomDice.LastRollCaption}" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding View.RandomDice.LastRollTotal, StringFormat='Total: {0}'}"
+                                                       Foreground="#6B6A67"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <ItemsControl ItemsSource="{Binding View.RandomDice.History}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="core:DiceRollView">
+                                            <Border Margin="0,0,0,10" Padding="14" CornerRadius="14" Background="#F8F4EC">
+                                                <DockPanel>
+                                                    <TextBlock Text="{Binding Caption}" FontWeight="SemiBold"/>
+                                                    <Border DockPanel.Dock="Right" Padding="10,4" Background="#E8EFEA" CornerRadius="999">
+                                                        <TextBlock Text="{Binding Total}" Foreground="#214F40" FontWeight="SemiBold"/>
+                                                    </Border>
+                                                </DockPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Border IsVisible="{Binding View.ShowHttp}"
+                            CornerRadius="18"
+                            Background="#FFFDF9"
+                            Padding="24"
+                            BoxShadow="0 8 32 0 #16000000">
+                        <StackPanel Spacing="16">
+                            <DockPanel>
+                                <StackPanel>
+                                    <TextBlock Text="HTTP example" FontSize="24" FontWeight="SemiBold"/>
+                                    <TextBlock Text="The runtime fetches a JSONPlaceholder payload and re-renders the immutable view snapshot."
+                                               Foreground="#6B6A67"/>
+                                </StackPanel>
+                                <Button DockPanel.Dock="Right"
+                                        Content="Refresh"
+                                        Padding="18,10"
+                                        Background="#214F40"
+                                        Foreground="#F9F5ED"
+                                        Click="OnRefreshHttpClick"/>
+                            </DockPanel>
+
+                            <Border Padding="18" CornerRadius="16" Background="#F8F4EC">
+                                <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="16" RowSpacing="8">
+                                    <TextBlock Text="Status" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding View.Http.Status}" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Row="1" Text="Title" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding View.Http.PayloadTitle}" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Row="2" Text="State" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding View.Http.PayloadState}"/>
+                                    <TextBlock Grid.Row="3" Text="Updated" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding View.Http.LastUpdated}"/>
+                                </Grid>
+                            </Border>
+
+                            <Border IsVisible="{Binding View.Http.HasError}"
+                                    Padding="16"
+                                    Background="#FFF1EC"
+                                    BorderBrush="#E6B7A5"
+                                    BorderThickness="1"
+                                    CornerRadius="16">
+                                <TextBlock Text="{Binding View.Http.ErrorText}" Foreground="#9C3D21" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <Border IsVisible="{Binding View.ShowClock}"
+                            CornerRadius="18"
+                            Background="#FFFDF9"
+                            Padding="24"
+                            BoxShadow="0 8 32 0 #16000000">
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="24">
+                            <StackPanel Spacing="10">
+                                <TextBlock Text="{Binding View.Clock.TimeText}" FontSize="52" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding View.Clock.DateText}" FontSize="18"/>
+                                <TextBlock Text="{Binding View.Clock.ZoneText}" Foreground="#6B6A67" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding View.Clock.TickCount, StringFormat='Ticks since start: {0}'}"
+                                           Foreground="#6B6A67"/>
+                            </StackPanel>
+                            <Button Grid.Column="1"
+                                    Content="{Binding View.Clock.FormatLabel}"
+                                    Padding="18,10"
+                                    VerticalAlignment="Top"
+                                    Background="#355C7D"
+                                    Foreground="White"
+                                    Click="OnToggleClockFormatClick"/>
+                        </Grid>
+                    </Border>
+
+                    <Border IsVisible="{Binding View.ShowFiles}"
+                            CornerRadius="18"
+                            Background="#FFFDF9"
+                            Padding="24"
+                            BoxShadow="0 8 32 0 #16000000">
+                        <StackPanel Spacing="16">
+                            <DockPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Files example" FontSize="24" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding View.Files.Status}" Foreground="#6B6A67" TextWrapping="Wrap"/>
+                                </StackPanel>
+                                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="10">
+                                    <Button Content="Open file"
+                                            Padding="18,10"
+                                            Background="#214F40"
+                                            Foreground="#F9F5ED"
+                                            Click="OnOpenFileClick"/>
+                                    <Button Content="Clear"
+                                            Padding="18,10"
+                                            Click="OnClearFileClick"/>
+                                </StackPanel>
+                            </DockPanel>
+
+                            <Border IsVisible="{Binding View.Files.HasSelection}"
+                                    Padding="18"
+                                    CornerRadius="16"
+                                    Background="#F8F4EC">
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*" ColumnSpacing="16" RowSpacing="10">
+                                    <TextBlock Text="Name" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding View.Files.SelectedName}" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Row="1" Text="Kind" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding View.Files.SelectedKind}"/>
+                                    <TextBlock Grid.Row="2" Text="Size" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding View.Files.SelectedSizeText}"/>
+                                    <TextBlock Grid.Row="3" Text="Location" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding View.Files.SelectedLocation}" TextWrapping="Wrap"/>
+                                </Grid>
+                            </Border>
+
+                            <Border IsVisible="{Binding View.Files.HasSelection}"
+                                    Padding="18"
+                                    CornerRadius="16"
+                                    Background="#EEF6F1">
+                                <StackPanel Spacing="8">
+                                    <TextBlock Text="Preview" FontWeight="SemiBold"/>
+                                    <TextBox Text="{Binding View.Files.SelectedPreview}"
+                                             IsReadOnly="True"
+                                             AcceptsReturn="True"
+                                             TextWrapping="Wrap"
+                                             Height="180"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <Border IsVisible="{Binding View.ShowSvg}"
+                            CornerRadius="18"
+                            Background="#FFFDF9"
+                            Padding="24"
+                            BoxShadow="0 8 32 0 #16000000">
+                        <StackPanel Spacing="16">
+                            <DockPanel>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding View.Svg.Theme.Name}" FontSize="24" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding View.Svg.Theme.Caption}" Foreground="#6B6A67" TextWrapping="Wrap"/>
+                                </StackPanel>
+                                <Button DockPanel.Dock="Right"
+                                        Content="Next theme"
+                                        Padding="18,10"
+                                        Background="#355C7D"
+                                        Foreground="White"
+                                        Click="OnNextThemeClick"/>
+                            </DockPanel>
+
+                            <Border Background="{Binding View.Svg.Theme.Background}"
+                                    BorderBrush="#DED8D0"
+                                    BorderThickness="1"
+                                    CornerRadius="20"
+                                    Padding="18">
+                                <Grid Height="340">
+                                    <Canvas>
+                                        <Rectangle Width="720" Height="300" Fill="{Binding View.Svg.Theme.Background}"/>
+                                        <Rectangle Width="720" Height="300" Stroke="{Binding View.Svg.Theme.GridLine}" StrokeThickness="1"/>
+                                        <Line StartPoint="0,100" EndPoint="720,100" Stroke="{Binding View.Svg.Theme.GridLine}" StrokeThickness="1"/>
+                                        <Line StartPoint="0,200" EndPoint="720,200" Stroke="{Binding View.Svg.Theme.GridLine}" StrokeThickness="1"/>
+                                        <Line StartPoint="180,0" EndPoint="180,300" Stroke="{Binding View.Svg.Theme.GridLine}" StrokeThickness="1"/>
+                                        <Line StartPoint="360,0" EndPoint="360,300" Stroke="{Binding View.Svg.Theme.GridLine}" StrokeThickness="1"/>
+                                        <Line StartPoint="540,0" EndPoint="540,300" Stroke="{Binding View.Svg.Theme.GridLine}" StrokeThickness="1"/>
+                                        <Ellipse Width="96" Height="96" Canvas.Left="560" Canvas.Top="28" Fill="{Binding View.Svg.Theme.Sun}"/>
+                                        <Path Data="M0,230 C120,150 250,210 360,200 C470,188 560,120 720,176 L720,300 L0,300 Z"
+                                              Fill="{Binding View.Svg.Theme.Hill}"/>
+                                        <Path Data="M0,260 C160,220 270,250 430,220 C540,200 630,210 720,196 L720,300 L0,300 Z"
+                                              Fill="{Binding View.Svg.Theme.Accent}"
+                                              Opacity="0.55"/>
+                                        <Polygon Points="262,162 328,182 276,212"
+                                                 Fill="{Binding View.Svg.Theme.Rocket}"/>
+                                        <Rectangle Width="22" Height="10" Canvas.Left="254" Canvas.Top="182" Fill="{Binding View.Svg.Theme.Rocket}" RadiusX="4" RadiusY="4"/>
+                                        <Path Data="M210,170 C180,182 156,196 120,220"
+                                              Stroke="{Binding View.Svg.Theme.Trail}"
+                                              StrokeThickness="8"
+                                              StrokeLineCap="Round"/>
+                                        <Path Data="M228,152 C252,126 284,112 324,106"
+                                              Stroke="{Binding View.Svg.Theme.Sky}"
+                                              StrokeThickness="6"
+                                              StrokeLineCap="Round"/>
+                                    </Canvas>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>
