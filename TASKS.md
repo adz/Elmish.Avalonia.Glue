@@ -34,7 +34,7 @@ After each task is completed, create a separate git commit before starting the n
 
 11. [x] Write a short design note that defines the ElmView V2 contract: pure F# view records, normal AXAML, generated bindable node graph, standard `TwoWay` bindings, and centralized write-back mapping.
 12. [x] Define the generated host shape for ElmView: root host, nested bindable child nodes, property getters that read immutable snapshots, and property setters that dispatch messages.
-13. [ ] Define the write-back mapping API in one place near host construction with a target shape like `bindings.For(x => x.UserInput.Name).Dispatch(Msg.NewSetName)`.
+13. [x] Define the write-back mapping API in one place near host construction with a target shape like `bindings.For(x => x.UserInput.Name).Dispatch(Msg.NewSetName)`.
 14. [ ] Decide whether write-back mappings are fully explicit or convention-first with explicit overrides, preferring explicit mappings unless conventions remain predictable.
 15. [ ] Prototype generated nested node support so AXAML can bind normally to paths like `UserInput.Name` rather than imperative code-behind event handlers.
 16. [ ] Make `Mode=TwoWay` the editable-field contract for ElmView while keeping `OneWay` display-only and non-dispatching.

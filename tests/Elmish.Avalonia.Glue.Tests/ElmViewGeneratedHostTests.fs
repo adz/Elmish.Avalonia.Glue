@@ -3,6 +3,7 @@ namespace Elmish.Avalonia.Glue.Tests
 open System
 open System.Collections.Generic
 open System.ComponentModel
+open System.Linq.Expressions
 open Elmish.Avalonia.Glue.ElmView
 open Xunit
 
@@ -23,8 +24,18 @@ module ElmViewGeneratedHostTests =
     type private Msg =
         | SetName of string
 
+    let private childNameSelector () =
+        let root = Expression.Parameter(typeof<RootView>, "x")
+        let child = Expression.Property(root, nameof Unchecked.defaultof<RootView>.Child)
+        let name = Expression.Property(child, nameof Unchecked.defaultof<ChildView>.Name)
+        Expression.Lambda<Func<RootView, string>>(name, root)
+
+    let private configureBindings =
+        Action<WriteBackBindings<RootView, Msg>>(fun bindings ->
+            bindings.For(childNameSelector()).Dispatch(Func<string, Msg>(SetName)) |> ignore)
+
     type private SampleHost(initialView: RootView) as this =
-        inherit RuntimeGeneratedViewHost<RootView, Msg>(initialView)
+        inherit RuntimeGeneratedViewHost<RootView, Msg>(initialView, configureBindings)
 
         let child = SampleChildNode(this)
 
@@ -44,7 +55,7 @@ module ElmViewGeneratedHostTests =
 
         member this.Name
             with get () = this.Snapshot.Name
-            and set value = this.Dispatch(SetName value)
+            and set value = host.TryDispatchWriteBack("Child.Name", value) |> ignore
 
         member this.IsEnabled = this.Snapshot.IsEnabled
 
@@ -82,6 +93,12 @@ module ElmViewGeneratedHostTests =
 
         Assert.Equal<Msg list>([ SetName "Grace" ], Seq.toList messages)
         Assert.Equal("Ada", host.Child.Name)
+
+    [<Fact>]
+    let ``write-back bindings expose the configured nested property path`` () =
+        let host = SampleHost(createView "Before" "Ada" true)
+
+        Assert.Equal<string list>([ "Child.Name" ], Seq.toList host.WriteBackBindings.Paths)
 
     [<Fact>]
     let ``snapshot updates notify root and nested generated properties`` () =

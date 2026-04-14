@@ -3,6 +3,86 @@ namespace Elmish.Avalonia.Glue.ElmView
 open System
 open System.Collections.Generic
 open System.ComponentModel
+open System.Linq.Expressions
+
+module private WriteBackPath =
+    let rec private collectSegments segments (expression: Expression | null) =
+        match expression with
+        | null ->
+            invalidArg
+                (nameof expression)
+                "Write-back bindings only support simple property-access paths such as x => x.UserInput.Name."
+        | :? MemberExpression as memberExpression ->
+            collectSegments (memberExpression.Member.Name :: segments) memberExpression.Expression
+        | :? ParameterExpression -> segments
+        | :? UnaryExpression as unaryExpression
+            when unaryExpression.NodeType = ExpressionType.Convert
+                 || unaryExpression.NodeType = ExpressionType.ConvertChecked ->
+            collectSegments segments unaryExpression.Operand
+        | _ ->
+            invalidArg
+                (nameof expression)
+                "Write-back bindings only support simple property-access paths such as x => x.UserInput.Name."
+
+    let fromSelector (selector: Expression<Func<'View, 'Value>>) =
+        if isNull (box selector) then
+            nullArg (nameof selector)
+
+        let segments = collectSegments [] selector.Body
+
+        match segments with
+        | [] ->
+            invalidArg
+                (nameof selector)
+                "Write-back bindings require at least one readable property in the selector."
+        | _ -> String.Join(".", segments)
+
+type WriteBackBindingRegistration<'Owner, 'Msg, 'Value> internal
+    (
+        owner: 'Owner,
+        propertyPath: string,
+        register: (obj | null -> 'Msg) -> unit
+    ) =
+    member _.PropertyPath = propertyPath
+
+    member _.Dispatch(map: Func<'Value, 'Msg>) =
+        if isNull (box map) then
+            nullArg (nameof map)
+
+        register (unbox<'Value> >> map.Invoke)
+        owner
+
+    member _.Dispatch(map: 'Value -> 'Msg) =
+        register (unbox<'Value> >> map)
+        owner
+
+type WriteBackBindings<'View, 'Msg>() as this =
+    let routes = Dictionary<string, obj | null -> 'Msg>(StringComparer.Ordinal)
+
+    let registerDispatcher (propertyPath: string) (map: obj | null -> 'Msg) =
+        if String.IsNullOrWhiteSpace propertyPath then
+            invalidArg (nameof propertyPath) "Write-back bindings require a non-empty property path."
+
+        if routes.ContainsKey propertyPath then
+            invalidOp $"A write-back binding for '{propertyPath}' is already registered."
+
+        routes.Add(propertyPath, map)
+
+    member _.For<'Value>(selector: Expression<Func<'View, 'Value>>) =
+        let propertyPath = WriteBackPath.fromSelector selector
+        WriteBackBindingRegistration<WriteBackBindings<'View, 'Msg>, 'Msg, 'Value>(
+            this,
+            propertyPath,
+            registerDispatcher propertyPath)
+
+    member _.Paths = routes.Keys :> seq<string>
+
+    member internal _.TryDispatch(propertyPath: string, value: obj | null, dispatch: 'Msg -> unit) =
+        match routes.TryGetValue propertyPath with
+        | true, map ->
+            dispatch (map value)
+            true
+        | false, _ -> false
 
 [<AbstractClass>]
 type BindableViewHost<'View when 'View : not struct>(initialView: 'View) =
@@ -35,11 +115,23 @@ type IGeneratedViewNode =
     abstract RefreshSubtree: unit -> unit
 
 [<AbstractClass>]
-type GeneratedViewHost<'View, 'Msg when 'View : not struct>(initialView: 'View) =
+type GeneratedViewHost<'View, 'Msg when 'View : not struct>
+    (
+        initialView: 'View,
+        configureBindings: Action<WriteBackBindings<'View, 'Msg>>
+    ) =
     inherit BindableViewHost<'View>(initialView)
 
     let children = ResizeArray<IGeneratedViewNode>()
     let mutable dispatch = ignore<'Msg>
+    let writeBackBindings = WriteBackBindings<'View, 'Msg>()
+
+    do
+        if isNull (box configureBindings) |> not then
+            configureBindings.Invoke(writeBackBindings)
+
+    new(initialView: 'View) =
+        GeneratedViewHost(initialView, Action<WriteBackBindings<'View, 'Msg>>(ignore))
 
     member _.SetDispatch(dispatcher: 'Msg -> unit) =
         dispatch <- dispatcher
@@ -49,6 +141,11 @@ type GeneratedViewHost<'View, 'Msg when 'View : not struct>(initialView: 'View) 
 
     member _.Dispatch(message: 'Msg) =
         dispatch message
+
+    member _.WriteBackBindings = writeBackBindings
+
+    member _.TryDispatchWriteBack<'Value>(propertyPath: string, value: 'Value) =
+        writeBackBindings.TryDispatch(propertyPath, box value, dispatch)
 
     member _.RegisterChildNode(child: IGeneratedViewNode) =
         children.Add(child)
@@ -116,11 +213,25 @@ type RuntimeViewHost<'View when 'View : not struct>(initialView: 'View) =
 type DesignViewHost<'View when 'View : not struct>(sampleView: 'View) =
     inherit BindableViewHost<'View>(sampleView)
 
-type RuntimeGeneratedViewHost<'View, 'Msg when 'View : not struct>(initialView: 'View) =
-    inherit GeneratedViewHost<'View, 'Msg>(initialView)
+type RuntimeGeneratedViewHost<'View, 'Msg when 'View : not struct>
+    (
+        initialView: 'View,
+        configureBindings: Action<WriteBackBindings<'View, 'Msg>>
+    ) =
+    inherit GeneratedViewHost<'View, 'Msg>(initialView, configureBindings)
 
-type DesignGeneratedViewHost<'View, 'Msg when 'View : not struct>(sampleView: 'View) =
-    inherit GeneratedViewHost<'View, 'Msg>(sampleView)
+    new(initialView: 'View) =
+        RuntimeGeneratedViewHost(initialView, Action<WriteBackBindings<'View, 'Msg>>(ignore))
+
+type DesignGeneratedViewHost<'View, 'Msg when 'View : not struct>
+    (
+        sampleView: 'View,
+        configureBindings: Action<WriteBackBindings<'View, 'Msg>>
+    ) =
+    inherit GeneratedViewHost<'View, 'Msg>(sampleView, configureBindings)
+
+    new(sampleView: 'View) =
+        DesignGeneratedViewHost(sampleView, Action<WriteBackBindings<'View, 'Msg>>(ignore))
 
 module ElmView =
     let runtime initialView = RuntimeViewHost(initialView)
