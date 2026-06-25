@@ -4,47 +4,171 @@ sidebar_position: 1
 
 # Getting Started
 
-Welcome to **Elmish.Avalonia.Glue**. This project is a laboratory for exploring different ways to author Avalonia UIs using the Elmish architecture.
+Start with an Avalonia view:
 
-We believe there isn't a single "right" way to connect Elmish to a XAML-based framework. Instead, we offer two distinct "families" of authoring styles that share a common, framework-neutral substrate.
+```xml
+<TextBlock Text="{Binding Title}" />
+<TextBox Text="{Binding UserInput.Name, Mode=TwoWay}" />
+```
 
-## The Two Families
+The choice is not AXAML syntax. It is the object behind the binding path.
 
-### 1. Projection
-For teams that prefer the familiarity and control of **explicit, named CLR viewmodels**. It uses mutable "projections" to bridge the gap between immutable state and the UI.
-- [Understand Projection](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand/projection-family)
+If your team wants explicit CLR viewmodels, start with `Projection`. If your
+team wants F# records to describe the screen and only wants CLR glue for
+Avalonia binding, start with `ElmView`.
+
+## Step 1: Understand The Shared Loop
+
+Both families sit on the same Elmish loop:
+
+```fsharp
+let init () =
+    { Name = ""; Newsletter = false }, Cmd.none
+
+let update msg model =
+    match msg with
+    | SetName value ->
+        { model with Name = value }, Cmd.none
+    | SetNewsletter value ->
+        { model with Newsletter = value }, Cmd.none
+```
+
+The package boundary starts after this. `Elmish.Avalonia.Glue` connects model
+updates to a bindable object on the Avalonia UI thread.
+
+```fsharp
+ElmishHost.startAndBind(program, host.Update, host.SetDispatch)
+```
+
+`host.Update` is the bridge from F# into Avalonia. Each time Elmish produces a
+new model or view snapshot, the host receives it and raises property-change
+notifications for the AXAML bindings.
+
+`host.SetDispatch` is the bridge from Avalonia back into F#. It gives the host
+a dispatcher so button methods and `TwoWay` property setters can send Elmish
+messages.
+
+Avalonia sees the host as a stable `DataContext`. Elmish sees it as the
+adapter around immutable state.
+
+## Step 2: Choose Projection When You Want Named Viewmodels
+
+Projection keeps the XAML-facing contract explicit.
+
+```csharp
+public sealed class FormProjection : ObservableObject
+{
+    public string Name { get; private set; } = "";
+
+    public void Update(FormModel model)
+    {
+        Name = model.Name;
+        OnPropertyChanged(nameof(Name));
+    }
+}
+```
+
+The connection is direct: `startAndBind` calls `projection.Update(model)` after
+each Elmish update, and the projection raises `PropertyChanged`.
+
+```fsharp
+ElmishHost.startAndBind(program, projection.Update, projection.SetDispatch)
+```
+
+AXAML binds to the projection object.
+
+```xml
+<TextBox Text="{Binding Name}" />
+<Button Command="{Binding SubmitCommand}" />
+```
+
+Choose this when named properties and methods are part of the design. It fits
+C# UI teams, complex command surfaces, or controls that need
+stable mutable row identity.
+
+Elmish owns state transitions. The projection owns the mutable CLR surface
+that Avalonia sees.
+
+Read next:
+
+- [Projection family](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand/projection-family)
 - [Projection API](https://adz.github.io/Elmish.Avalonia.Glue/docs/api/projection)
 
-### 2. ElmView
-An **F#-first** approach designed to minimize boilerplate. Your UI schema is defined in plain F# records, and Avalonia binds to a thin, generated facade.
-- [Understand ElmView](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand/elmview-family)
+## Step 3: Choose ElmView When F# Records Are The Screen Shape
+
+ElmView moves the screen-shaped data into immutable F# records.
+
+```fsharp
+type FormView =
+    { Name: string
+      Newsletter: bool
+      ValidationText: string }
+```
+
+AXAML binds to generated or mechanical CLR nodes over the record.
+
+```xml
+<TextBox Text="{Binding UserInput.Name, Mode=TwoWay}" />
+<TextBlock Text="{Binding UserInput.ValidationText}" />
+```
+
+Editable paths are mapped to messages once near host construction.
+
+```csharp
+bindings.For(x => x.UserInput.Name).Dispatch(Msg.NewSetName);
+bindings.For(x => x.UserInput.Newsletter).Dispatch(Msg.NewSetNewsletter);
+```
+
+`bindings.For(...)` does not create the Avalonia binding. The AXAML binding is
+still the `Text="{Binding UserInput.Name, Mode=TwoWay}"` line. `bindings`
+registers the message to dispatch when Avalonia writes to that property.
+
+The full path is:
+
+1. Elmish produces an immutable F# view snapshot.
+2. The host exposes generated CLR properties over that snapshot.
+3. AXAML reads those properties through bindings.
+4. `Mode=TwoWay` writes call generated setters.
+5. Setters use `bindings` to turn the new value into an Elmish message.
+
+Choose this when the F# view record and AXAML are the main review surface. The
+sample host is mechanical; it follows a generated shape
+instead of carrying product logic.
+
+The F# view record is the UI schema. The host is generated or mechanical
+binding infrastructure.
+
+Read next:
+
+- [ElmView family](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand/elmview-family)
 - [ElmView API](https://adz.github.io/Elmish.Avalonia.Glue/docs/api/elmview)
 
-## Project Structure
+## Step 4: Use Design Snapshots For Preview
 
-The repository is organized into four main packages:
+Do not start the full Elmish runtime just to preview a view. Provide realistic
+sample data from F#, then wrap it in the same bindable shape the AXAML expects.
 
-- **`Elmish.Glue.Core`**: The framework-neutral engine for host management and snapshot propagation.
-- **`Elmish.Avalonia.Glue`**: The Avalonia-specific bridge (threading and dispatcher integration).
-- **`Elmish.Avalonia.Glue.Projection`**: Primitives for building explicit viewmodel trees.
-- **`Elmish.Avalonia.Glue.ElmView`**: Primitives for the record-first, generated host style.
+```fsharp
+let designView =
+    { UserInput =
+        { Name = "Ada"
+          Newsletter = true
+          ValidationText = "Looks good" } }
+```
 
-## Why this project exists?
+```csharp
+public AppHost() : this(Core.App.getDesignView())
+{
+}
+```
 
-We implement the **exact same sample matrix** in both styles so you can compare:
-- **Boilerplate**: How much code do you actually have to write?
-- **Reviewability**: How easy is it to see what changed in a pull request?
-- **Tooling**: How well does it work with the Avalonia Designer and DevTools?
-- **Ergonomics**: Which style feels more natural to your team?
+Design-time preview uses the runtime binding shape without starting runtime.
 
-## Next Steps
+If preview and runtime need different binding paths, the glue has leaked into
+the view.
 
-- **[Understand the Architecture](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand)**: Deep dive into the shared substrate and families.
-- **[Preview and Design Data](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/start/preview-and-design)**: See how we keep the design-time workflow first-class.
-- **[Executable Examples](https://adz.github.io/Elmish.Avalonia.Glue/docs/examples)**: Browse runnable examples with observed output.
+## What To Inspect First
 
-## Source
-
-- [Project README](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/README.md)
-- [Current development plan](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/PLAN.md)
-- [Task tracking](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/TASKS.md)
+- [Preview and design data](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/start/preview-and-design)
+- [Shared substrate](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand/shared-substrate)
+- [Executable examples](https://adz.github.io/Elmish.Avalonia.Glue/docs/examples)

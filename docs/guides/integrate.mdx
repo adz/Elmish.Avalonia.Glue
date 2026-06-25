@@ -4,9 +4,9 @@ sidebar_position: 2
 
 # Integrate
 
-This repo can fit into an Avalonia app that already has a normal XAML and Elmish workflow.
+This repo fits into an Avalonia app with an existing XAML and Elmish workflow.
 
-## What this shows
+## Scope
 
 - how the Avalonia dispatcher bridge stays thin
 - how the Elmish host surface remains framework-neutral
@@ -14,7 +14,7 @@ This repo can fit into an Avalonia app that already has a normal XAML and Elmish
 
 ## Core shape
 
-The integration story is deliberately modest:
+The integration boundary is narrow:
 
 - Avalonia-specific threading lives above the core host
 - the core owns the lifetime and projection primitives

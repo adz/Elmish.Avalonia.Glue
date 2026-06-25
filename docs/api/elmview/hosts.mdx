@@ -4,7 +4,8 @@ sidebar_position: 2
 
 # Generated hosts
 
-The `GeneratedViewHost` classes provide the bindable root for the ElmView authoring style. They bridge the gap between immutable F# view records and the Avalonia `DataContext`.
+The `GeneratedViewHost` classes provide the bindable root for ElmView. They
+bridge immutable F# view records and the Avalonia `DataContext`.
 
 ## `GeneratedViewHost<'View, 'Msg>`
 
@@ -19,19 +20,22 @@ The abstract base class for all ElmView root hosts.
 | `Dispatch(message)` | Dispatches a message to the Elmish loop. |
 | `WriteBackBindings` | Returns the `WriteBackBindings` collection for this host. |
 | `TryDispatchWriteBack(path, value)` | Attempts to dispatch a message for a property change at the specified path. This is used by generated property setters. |
-| `GeneratedPropertyNames` | An overridable property that returns the names of the properties exposed by the host. These properties will be included in the `PropertyChanged` notification during a refresh. |
+| `GeneratedPropertyNames` | Returns the property names exposed by the host. These properties are included in `PropertyChanged` notifications during refresh. |
 
 ## Host Variants
 
-ElmView provides specific host types for different stages of the development lifecycle, ensuring that the bindable shape remains consistent.
+ElmView provides host types for runtime and design-time while preserving one
+bindable shape.
 
 ### `RuntimeGeneratedViewHost<'View, 'Msg>`
 
-Used when the application is running. It is typically started and bound via `ElmishHost.startAndBind`.
+Used when the application is running. It is started and bound through
+`ElmishHost.startAndBind`.
 
 ### `DesignGeneratedViewHost<'View, 'Msg>`
 
-Used for Avalonia design-time preview. It is initialized with a sample snapshot and allows the designer to render the view exactly as it would appear at runtime.
+Used for Avalonia design-time preview. It is initialized with a sample
+snapshot so the designer can render the same bindable shape used at runtime.
 
 ## How it works
 

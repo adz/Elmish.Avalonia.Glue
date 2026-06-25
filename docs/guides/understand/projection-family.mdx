@@ -2,42 +2,110 @@
 sidebar_position: 5
 ---
 
-# Projection family
+# Projection: Explicit Viewmodels Over Elmish State
 
-The **Projection** family is for teams that prefer explicit, named CLR viewmodels (C# or F# classes). It provides the most control over the Avalonia-facing contract and is ideal for complex, command-heavy screens.
+Projection is the explicit CLR-facing path. Use it when the Avalonia-facing
+contract is named viewmodel classes with properties, methods, and
+collection adapters.
 
-## Two sub-styles
+The F# model owns state transitions. The projection owns the object shape
+that AXAML sees.
 
-The Projection family supports two primary ways of authoring viewmodels:
+```fsharp
+type FormModel =
+    { Name: string
+      Newsletter: bool }
 
-### 1. Snapshot-Host Projection (Lightweight)
+type Msg =
+    | SetName of string
+    | SetNewsletter of bool
+```
 
-This is the simplest way to use named viewmodels. You create a shallow class that inherits from `SnapshotHost<'T>`. It exposes the current immutable snapshot and can also expose explicit commands that dispatch messages.
+The projection owns the mutable object Avalonia binds to.
 
-- **Best for**: Read-mostly screens or simple forms where you still want a named class for better Avalonia tooling support or C# consumption.
-- **How it works**: You bind your AXAML to properties on the `SnapshotHost` (e.g., `DataContext.Current.UserName`).
+```csharp
+public sealed class FormProjection : ObservableObject
+{
+    public string Name { get; private set; } = "";
 
-### 2. Classic Projection Tree (Deep)
+    public void Update(FormModel model)
+    {
+        Name = model.Name;
+        OnPropertyChanged(nameof(Name));
+    }
+}
+```
 
-In this style, you build a tree of mutable viewmodel classes that implement `IProjection<'Model>`. Each viewmodel is responsible for updating itself when a new model snapshot arrives.
+## Snapshot-Host Projection For Shallow Viewmodels
 
-- **Best for**: Selection-sensitive views, large complex lists, or views that require significant logic in the property getters (e.g., complex formatting or calculated fields).
-- **How it works**: When the top-level model updates, you propagate the update down the viewmodel tree using `SyncWith` extensions for collections.
+For small screens, a projection can expose one immutable snapshot through
+`SnapshotHost<'T>`.
 
-## Core interfaces
+```csharp
+public sealed class FormHost : SnapshotHost<FormView>
+{
+    public FormHost(FormView initial) : base(initial) {}
 
-- `IProjection<'Model>`: Defines an `Update` method that accepts the new model snapshot.
-- `IDispatchTarget<'Msg>`: Defines a `SetDispatch` method to connect the viewmodel to the Elmish loop.
+    public void Submit() => Dispatch(Msg.SubmitForm);
+}
+```
 
-## What you can do
+AXAML can bind through the current snapshot.
 
-- **Explicit CLR contract**: Use named properties and methods that are easy to discover via IntelliSense and friendly to compiled bindings.
-- **Customized row identity**: Maintain stable row viewmodels in lists even as the underlying data changes, which is critical for preserving selection and scroll state.
-- **Bridge C# and F#**: Authored F# model/update logic can be easily consumed by C# UI teams through these familiar viewmodel patterns.
+```xml
+<TextBlock Text="{Binding Current.Name}" />
+```
 
-## Read next
+This keeps a named CLR host while avoiding a deep tree of mutable properties.
+
+Use this when a conventional host object helps but most displayed values
+come straight from an immutable F# view snapshot.
+
+## Classic Projection Trees For Mutable Control Identity
+
+Some Avalonia controls benefit from stable mutable row objects. A projection
+tree keeps those objects and updates them when Elmish produces a new model.
+
+```csharp
+Rows.SyncWith(
+    model.Rows,
+    row => row.Id,
+    vm => vm.Id,
+    row => new RowProjection(row),
+    (vm, row) => vm.Update(row));
+```
+
+This suits selection-sensitive lists, virtualization-sensitive lists, and rows
+with local command surfaces.
+
+The tradeoff is more CLR viewmodel code in exchange for explicit object
+identity and command surfaces.
+
+## What Changes In A Typical Feature
+
+Projection usually touches more files than ElmView:
+
+- the F# model and update logic
+- the projection class or row adapter
+- the AXAML binding surface
+
+That cost buys an explicit CLR contract that C# and Avalonia tooling can see
+directly.
+
+## When Projection Is A Good Fit
+
+Use Projection when a screen needs named CLR types as part of its design.
+
+It also fits screens where row identity, selection, or view-specific commands
+matter more than minimizing boilerplate.
+
+Use ElmView when the F# record is the main UI schema and the CLR surface is
+binding glue.
+
+## Read Next
 
 - [Projection API hub](https://adz.github.io/Elmish.Avalonia.Glue/docs/api/projection)
+- [Snapshot host](https://adz.github.io/Elmish.Avalonia.Glue/docs/api/projection/snapshot-host)
 - [Projection snapshot-host example](https://adz.github.io/Elmish.Avalonia.Glue/docs/examples/projection-snapshot-host)
 
 ## Source

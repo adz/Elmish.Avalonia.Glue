@@ -2,56 +2,161 @@
 sidebar_position: 6
 ---
 
-# ElmView family
+# ElmView: F# Records With An Avalonia Binding Surface
 
-**ElmView** is the F#-first path. It is designed to minimize boilerplate by using plain F# records as your primary UI schema. Instead of writing manual projection classes, you bind your AXAML to a generated (or mechanically authored) host facade that wraps your immutable records.
+ElmView is the F#-first path. Screen-shaped data is a plain immutable F#
+record. Avalonia binds to CLR properties exposed over that record.
 
-## The ElmView V2 Philosophy
-
-ElmView V2 focuses on making interactive views feel like "normal" Avalonia authoring while keeping the state purely functional.
-
-### 1. F# Records as UI Schema
-Your view model is a hierarchy of plain, immutable F# records. They represent exactly what you want to see on the screen.
+ElmView makes this record the authored UI schema:
 
 ```fsharp
-type UserInputView = {
-    Name: string
-    Email: string
-    Newsletter: bool
+type UserInputView =
+    { Name: string
+      Email: string
+      Newsletter: bool
+      ValidationText: string }
+```
+
+The CLR host exists because Avalonia needs a bindable object with properties
+and `PropertyChanged`.
+
+## What Avalonia Sees
+
+AXAML uses standard bindings. There is no custom markup extension and no
+custom control set.
+
+```xml
+<TextBox Text="{Binding UserInput.Name, Mode=TwoWay}" />
+<CheckBox IsChecked="{Binding UserInput.Newsletter, Mode=TwoWay}" />
+<TextBlock Text="{Binding UserInput.ValidationText}" />
+```
+
+`OneWay` display bindings read from the current immutable snapshot. `TwoWay`
+editable bindings call a setter on the generated node.
+
+The binding path must exist on the generated host or one of its generated
+nodes. If AXAML says `UserInput.Name`, the host needs a `UserInput` node and
+that node needs a `Name` property.
+
+That shape is mechanical. Application meaning belongs in the F# view, AXAML,
+and write-back mapping.
+
+## What The Generated Node Does
+
+A generated or mechanically authored node reads from the latest snapshot.
+Writable properties do not mutate the snapshot. They dispatch messages.
+
+```csharp
+public string Name
+{
+    get => Snapshot.Name;
+    set => Host.TryDispatchWriteBack("UserInput.Name", value);
 }
 ```
 
-### 2. Normal AXAML Bindings
-You use ordinary Avalonia `Binding` syntax in your AXAML. You don't need custom markup extensions or special control libraries.
+When Elmish produces a new snapshot, the host raises `PropertyChanged` across
+the node graph so Avalonia refreshes its bindings.
 
-- `Mode=OneWay`: Binds to a snapshot property for display.
-- `Mode=TwoWay`: Binds to an editable property. The host facade automatically dispatches the mapped Elmish message when the user changes the value.
+The setter path goes back to Elmish. It does not mutate the snapshot in place;
+the next snapshot comes from `update`.
 
-### 3. Generated Host Facade
-The `GeneratedViewHost` (and nested `GeneratedViewNode`s) provides the bindable surface that Avalonia expects. It implements `INotifyPropertyChanged` and handles the mapping between UI property changes and Elmish messages.
+## Where Message Routing Lives
 
-### 4. Centralized Write-Back Mappings
-Instead of scattering message dispatch logic through your AXAML or code-behind, you register all editable fields in one place near host construction.
+Write-back routing is centralized near host construction.
+
+```csharp
+bindings.For(x => x.UserInput.Name).Dispatch(Msg.NewSetName);
+bindings.For(x => x.UserInput.Email).Dispatch(Msg.NewSetEmail);
+bindings.For(x => x.UserInput.Newsletter).Dispatch(Msg.NewSetNewsletter);
+```
+
+Interaction meaning stays out of AXAML and out of F# record metadata. The
+binding path names the editable value. The mapping names the Elmish message.
+
+`bindings.For(...)` has one job: register a write-back route.
+
+```csharp
+bindings.For(x => x.UserInput.Name)
+        .Dispatch(value => Msg.NewSetName(value));
+```
+
+The selector is converted to the path string `"UserInput.Name"`. Later, when a
+generated setter calls `TryDispatchWriteBack("UserInput.Name", value)`, the
+host finds that route and dispatches `Msg.NewSetName(value)`.
+
+If a property is display-only, it does not need a write-back route.
+
+```xml
+<TextBlock Text="{Binding UserInput.ValidationText}" />
+```
+
+If a property is editable, it needs both the AXAML `TwoWay` binding and the
+write-back route.
+
+```xml
+<TextBox Text="{Binding UserInput.Name, Mode=TwoWay}" />
+```
 
 ```csharp
 bindings.For(x => x.UserInput.Name).Dispatch(Msg.NewSetName);
 ```
 
-## How it works
+## What Kinds Of Values Can Be Bound
 
-1. **Snapshots**: When the Elmish model updates, the host receives a new `AppView` snapshot.
-2. **Propagation**: The host calls `RefreshSubtree()`, which triggers `PropertyChanged` events across the entire generated node graph.
-3. **Write-Back**: When a `TwoWay` binding updates a property on the host, the host looks up the registered mapping and calls `dispatch`.
+ElmView can expose values that Avalonia can bind to through CLR properties.
 
-## What you can do
+Common display bindings:
 
-- **Minimize boilerplate**: No need to write deep trees of manual projection classes for every screen.
-- **Ordinary AXAML**: Keep your UI code clean and readable, using standard Avalonia features like Compiled Bindings.
-- **Design-time parity**: Use the same host shape and snapshots to drive the Avalonia previewer, ensuring what you see in the designer is what you get at runtime.
+- `string`, `int`, `float`, `bool`, and other scalar values
+- computed text such as `ValidationText` or `FormatLabel`
+- nested records exposed as generated child nodes
+- lists exposed as `IReadOnlyList<T>` or collection properties
+- styling values such as brushes, colors, flags, and indexes
 
-## Read next
+Common editable bindings:
+
+- `TextBox.Text` to `string`
+- `CheckBox.IsChecked` to `bool`
+- `ComboBox.SelectedItem` to a selected value
+- `ComboBox.SelectedIndex` to `int`
+- `Slider.Value` or similar range controls to numeric values
+- multiline `TextBox.Text` to `string`
+
+Editable bindings map to messages that represent user intent. The
+generated setter dispatches the message; the Elmish `update` function decides
+how the immutable model changes.
+
+## What Changes In A Typical Feature
+
+For a new editable field, change:
+
+- add a field to the F# view record
+- render it in AXAML with binding syntax
+- ensure the generated host exposes the property
+- add one write-back mapping from path to message if the field is editable
+
+The host code stays mechanical. Today the sample host is handwritten in that
+generated shape; the direction is to generate it rather than author it by hand.
+
+Feature reviews usually touch the F# model, F# view record, design snapshot,
+AXAML, and editable-path message routes.
+
+## When ElmView Is A Good Fit
+
+Use ElmView when the F# view type is the source of truth for what the screen
+can display.
+
+It fits forms, dashboards, and pages where most UI state is derived from
+immutable model data. It is weaker for controls with bespoke mutable behavior
+or heavy row-level state.
+
+Use Projection when the explicit CLR viewmodel is part of the design rather
+than only infrastructure.
+
+## Read Next
 
 - [ElmView API hub](https://adz.github.io/Elmish.Avalonia.Glue/docs/api/elmview)
+- [Write-back bindings](https://adz.github.io/Elmish.Avalonia.Glue/docs/api/elmview/write-back)
 - [ElmView write-back example](https://adz.github.io/Elmish.Avalonia.Glue/docs/examples/elmview-write-back)
 
 ## Source

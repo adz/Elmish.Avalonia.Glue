@@ -4,7 +4,9 @@ sidebar_position: 4
 
 # Generated nodes
 
-`GeneratedViewNode<'RootView, 'NodeView, 'Msg>` is the base class for nested bindable objects in an ElmView tree. It allows Avalonia to bind to deep paths in your immutable F# view records while still receiving change notifications.
+`GeneratedViewNode<'RootView, 'NodeView, 'Msg>` is the base class for nested
+bindable objects in an ElmView tree. Avalonia binds to deep paths in immutable
+F# view records and still receives change notifications.
 
 ## `GeneratedViewNode<'RootView, 'NodeView, 'Msg>`
 
@@ -13,11 +15,12 @@ sidebar_position: 4
 | Member | Description |
 | :--- | :--- |
 | `Snapshot` | Returns the current immutable view record for *this specific node*, plucked from the root view. |
-| `Dispatch(message)` | Dispatches a message to the Elmish loop. This typically delegates to the root host's dispatcher. |
+| `Dispatch(message)` | Dispatches a message to the Elmish loop through the root host dispatcher. |
 
 ## How they enable nested bindings
 
-In a traditional MVVM setup, you might have deep trees of mutable viewmodel objects. In ElmView, your data is just a tree of records.
+Traditional MVVM often uses deep trees of mutable viewmodel objects. ElmView
+uses a tree of records behind generated bindable nodes.
 
 `GeneratedViewNode` acts as a stable proxy for a specific record in that tree:
 
@@ -27,7 +30,7 @@ In a traditional MVVM setup, you might have deep trees of mutable viewmodel obje
 
 ## Implementation Example
 
-In a generated host, you would typically define nested node classes like this:
+Generated hosts define nested node classes in this shape:
 
 ```csharp
 public sealed class UserInputNode : GeneratedViewNode<AppView, FormView, Msg>
@@ -50,11 +53,11 @@ public sealed class UserInputNode : GeneratedViewNode<AppView, FormView, Msg>
 }
 ```
 
-## Why use generated nodes?
+## Why Use Generated Nodes
 
-- **Deep Bindings**: Enables standard XAML binding paths like `<TextBox Text="{Binding UserInput.Name}" />`.
-- **Identity Preservation**: Keeps the UI responsive and stable without requiring you to manually write deep projection trees.
-- **Auto-Refresh**: Notifications propagate automatically from the root down to the leaf nodes.
+- Deep bindings: supports XAML binding paths like `<TextBox Text="{Binding UserInput.Name}" />`.
+- Identity preservation: keeps stable bindable nodes without hand-authored projection trees.
+- Refresh propagation: notifications move from the root to child nodes.
 
 ## Source
 

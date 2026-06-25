@@ -4,7 +4,9 @@ sidebar_position: 3
 
 # Keyed collections
 
-The `KeyedSnapshotCollection<'T, 'Key>` in the Projection package is a specialization of the core collection patching logic. It provides a simple, bindable way to manage lists of immutable snapshots while preserving stable UI identity.
+`KeyedSnapshotCollection<'T, 'Key>` in the Projection package specializes the
+core collection patching logic. It manages immutable snapshot lists while
+preserving stable UI identity.
 
 ## `KeyedSnapshotCollection<'T, 'Key>`
 
@@ -27,11 +29,12 @@ The `KeyedSnapshotCollection<'T, 'Key>` in the Projection package is a specializ
 
 ## Why use it in a Projection?
 
-If you are building a Projection-style viewmodel and need to display a list of data, `KeyedSnapshotCollection` is often the best choice:
+For Projection-style viewmodels that display lists, `KeyedSnapshotCollection`
+keeps row identity stable:
 
-- **Stable Rows**: Because it patches the collection, Avalonia can keep the same UI containers (like `ListBoxItem`) for items that haven't been removed.
-- **Selection Preservation**: If a user has selected a row, that selection is preserved even as the data within the row is updated.
-- **Smooth Updates**: Avoids the "flicker" that occurs when a whole collection is replaced.
+- Stable rows: Avalonia can keep the same UI containers for retained items.
+- Selection preservation: selected rows remain selected while their data changes.
+- Smoother updates: retained rows are patched instead of replacing the whole collection.
 
 ## Source
 

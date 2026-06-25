@@ -4,30 +4,32 @@ sidebar_position: 3
 
 # Understand
 
-This section explains the shape of the repository before the API pages get specific.
+Project map before the API pages:
 
-## What this shows
+The project keeps Avalonia as the UI surface and uses Elmish-style F# state
+behind it. There is no new view syntax to learn.
 
-- the shared substrate that both families rely on
-- why Projection remains explicit
-- why ElmView stays F#-first
+## The Short Version
 
-## Core shape
+Avalonia wants stable bindable objects. Elmish wants immutable snapshots.
 
-The shared substrate holds the generic concepts:
+The shared substrate bridges that mismatch with stable hosts, bindable nodes,
+snapshot updates, dispatch surfaces, and keyed collection patching.
 
-- host lifetime management
-- bindable snapshot nodes and hosts
-- keyed collection patching
-- projection contracts
+`Projection` exposes that bridge as explicit CLR viewmodels.
 
-The families then decide how much of that substrate is surfaced as named CLR viewmodels versus generated bindable nodes.
+`ElmView` exposes that bridge as generated or mechanical nodes over immutable
+F# view records.
 
-## What you can do
+## How To Read The Families
 
-- compare the authored change surface for a normal screen in each family
-- understand where generated glue ends and hand-authored UI shape begins
-- decide when a feature wants stable mutable shells versus immutable snapshots
+For each screen, locate the UI-facing shape.
+
+If the answer is a named C# or CLR viewmodel, you are looking at Projection.
+
+If the answer is an immutable F# view record, you are looking at ElmView.
+
+Both can use the same AXAML binding path.
 
 ## Read next
 

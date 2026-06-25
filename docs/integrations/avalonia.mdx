@@ -4,15 +4,16 @@ sidebar_position: 2
 
 # Avalonia
 
-This repo can sit behind normal Avalonia windows, views, compiled bindings, and preview data.
+This repo sits behind Avalonia windows, views, compiled bindings, and preview
+data.
 
-## What this shows
+## Integration Points
 
-The integration points are thin and familiar:
+The integration points are thin:
 
 - `AvaloniaHost.start` posts updates back to the UI thread
-- windows still use ordinary `x:DataType` and `x:CompileBindings`
-- design-time data is still just design-time data
+- windows use `x:DataType` and `x:CompileBindings`
+- design-time data remains design-time data
 
 ## Core shape
 
@@ -20,9 +21,9 @@ The integration points are thin and familiar:
 - binding and host shape stay in the family-specific packages
 - AXAML remains the authored view format
 
-## What you can do
+## Use It To
 
-- keep DevTools and preview workflows unchanged
+- keep DevTools and preview workflows
 - attach Elmish to a classic Avalonia app
 - use either Projection or ElmView without changing the binding model
 

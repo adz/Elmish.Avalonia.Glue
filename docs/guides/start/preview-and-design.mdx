@@ -4,23 +4,27 @@ sidebar_position: 2
 
 # Preview and design data
 
-The docs and samples keep design-time preview in the normal Avalonia workflow.
+The docs and samples keep design-time preview in the Avalonia workflow.
 
-## What this shows
+Design data is part of the authoring loop.
 
-Design data is not a separate documentation toy. It is part of the normal authoring loop.
+AXAML preview binds to the same shape runtime uses, with realistic F# data
+supplied up front.
 
-## Core shape
+## Core Shape
 
-- Projection samples populate a projection root with a design model before the runtime host attaches.
-- ElmView samples start the generated host with a design snapshot and keep the writable facade in the same shape at runtime.
-- AXAML binds to the same ordinary data-context path in both cases.
+- Projection samples populate a projection root with a design model.
+- ElmView samples start the generated host with a design snapshot.
+- AXAML binds to the same data-context path in both cases.
+- Runtime later attaches dispatch and pushes live snapshots into that shape.
 
-## What you can do
+## What You Can Do
 
 - open the sample windows in preview without booting the full runtime
 - inspect the same page structure in DevTools at design time and runtime
 - keep the preview path close enough to runtime that markup edits remain trustworthy
+
+The F# part is where the sample snapshot is authored.
 
 ## Read next
 

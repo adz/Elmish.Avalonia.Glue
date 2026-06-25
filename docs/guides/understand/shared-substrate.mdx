@@ -4,52 +4,71 @@ sidebar_position: 4
 
 # Shared substrate
 
-`Elmish.Glue.Core` provides the foundational building blocks for both authoring families. Its primary goal is to bridge the gap between immutable Elmish state and the mutable, notification-heavy world of Avalonia.
+`Elmish.Glue.Core` holds the concepts that do not belong specifically to
+Avalonia styling, AXAML loading, or one authoring family.
+
+Its job is to bridge immutable Elmish snapshots and stable .NET objects that
+can raise change notifications.
 
 ## The problem: Stability vs. Immutability
 
-Avalonia (and XAML in general) expects stable object identities that notify when properties change. Elmish, however, works by producing entirely new state snapshots.
+Avalonia expects stable object identities that notify when properties change.
+Elmish works by producing new immutable state snapshots.
 
 If we simply replaced the `DataContext` with a new record on every update:
+
 1. Existing bindings would often break or require expensive re-evaluation.
 2. Control state (like scroll position, focus, or selection) might be lost.
 3. Animations and transitions would be interrupted.
 
-The shared substrate solves this by providing **stable bindable shells** that wrap **changing immutable snapshots**.
+The shared substrate solves this with stable bindable shells over changing
+immutable snapshots.
+
+The shell remains the object Avalonia knows. The snapshot is the latest value
+from Elmish.
 
 ## Core concepts
 
 ### BindableNode
 
-The base class for everything that needs to notify the UI. It implements `INotifyPropertyChanged` and provides a protected `NotifyPropertyChanged` method.
+The base class for anything that needs to notify the UI. It implements
+`INotifyPropertyChanged` and provides a protected notification method.
 
 ### BindableSnapshotHost
 
-This is the "shell" for a top-level view. It holds a single `Snapshot` property and notifies the UI whenever a new snapshot is provided via the `Update` method.
+The stable shell for a top-level view. It holds the current `Snapshot` and
+notifies the UI when `Update` receives a new one.
 
-- **Stability**: The host instance itself remains the same for the lifetime of the view.
-- **Identity**: It uses `obj.ReferenceEquals` to skip updates if the snapshot hasn't actually changed.
+- Stability: the host instance remains the same for the lifetime of the view.
+- Identity: unchanged snapshot references can skip redundant refresh work.
 
 ### BindableSnapshotNode
 
-For nested data, we don't always want to expose the entire root snapshot. `BindableSnapshotNode` allows you to create a stable, bindable object for a *part* of the snapshot tree.
+Nested AXAML paths often need nested bindable objects. `BindableSnapshotNode`
+represents a stable object for one part of the immutable snapshot tree.
 
-- **Projection**: It takes a function to "pluck" its specific data from the root snapshot.
-- **Propagation**: When the root host updates, it triggers a `RefreshSubtree` call that propagates down the node graph, raising `PropertyChanged` for any properties exposed by the nodes.
+- Projection: each node knows how to read its part of the root snapshot.
+- Propagation: root updates refresh the node graph and raise property changes.
 
 ### KeyedSnapshotCollection
 
-Lists are particularly sensitive to identity. If you replace a `List` or `ObservableCollection` entirely, Avalonia has to throw away all the UI controls (rows) and recreate them.
+Lists are especially sensitive to identity. Replacing a whole list can force
+Avalonia to discard row containers and recreate them.
 
-`KeyedSnapshotCollection` uses a **patching algorithm** to sync an `ObservableCollection` with an immutable list:
+`KeyedSnapshotCollection` patches an `ObservableCollection` from an immutable
+list:
+
 - It uses keys to identify which items were added, removed, or moved.
-- It updates existing items in place if they are already present, preserving the stable UI container.
+- It updates existing items in place when keys are already present.
+- It preserves stable UI containers for selection and virtualization.
 
-## What you can do
+## Why This Is In Core
 
-- **Hold a stable dispatch surface**: Keep a consistent `dispatch` function available to the UI even as the model changes.
-- **Refresh without rebuilding**: Update the entire UI tree efficiently using identity-aware snapshot propagation.
-- **Patch collection identity**: Maintain smooth scrolling and selection in large lists by patching rather than replacing.
+These pieces are standard .NET concepts: snapshots, property change
+notification, dispatch storage, and keyed collection patching.
+
+Avalonia-specific concerns stay in the higher packages. Core grows only for
+framework-neutral concepts.
 
 ## Source
 

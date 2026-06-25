@@ -39,10 +39,11 @@ Synchronizes a collection of viewmodels with a list of models.
 
 ## Why use explicit projections?
 
-While ElmView is great for simple views, explicit projections are useful when:
-- **Complex UI Logic**: You need to perform significant transformations on the model data before exposing it to the UI.
-- **Interoperability**: You are working in a mixed C#/F# environment and want to provide a familiar C# viewmodel surface.
-- **Fine-grained Control**: You need to manage the lifecycle or identity of specific UI components very closely.
+Use explicit projections when:
+
+- Complex UI logic: model data needs significant transformation before binding.
+- Interoperability: a mixed C#/F# codebase needs a C# viewmodel surface.
+- Fine-grained control: specific UI components need explicit lifecycle or identity handling.
 
 ## Source
 

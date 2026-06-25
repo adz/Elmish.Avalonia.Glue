@@ -4,7 +4,16 @@ sidebar_position: 3
 
 # Write-back bindings
 
-`WriteBackBindings<'View, 'Msg>` is a centralized registry that maps UI property changes back to Elmish messages. This is the heart of the ElmView V2 "no-boilerplate" story for interactive views.
+`WriteBackBindings<'View, 'Msg>` is a registry for editable properties.
+
+It does not replace Avalonia bindings. AXAML declares the binding. The
+registry says what message to dispatch when Avalonia writes to a generated
+property through a `TwoWay` binding.
+
+**If the snapshot is immutable, where does a `TextBox` write go?**
+
+It goes to a generated setter. The setter asks this registry for the matching
+Elmish message. The Elmish `update` function produces the next snapshot.
 
 ## `WriteBackBindings<'View, 'Msg>`
 
@@ -22,31 +31,91 @@ sidebar_position: 3
 
 ## Usage Example
 
-Typically, you configure these bindings in your host's constructor or via a static configuration block:
+Configure these bindings in the host constructor or in a static configuration
+block:
 
 ```csharp
 private static readonly Action<WriteBackBindings<AppView, Msg>> ConfigureBindings =
     bindings =>
     {
-        // Simple mapping
         bindings.For(x => x.UserInput.Name).Dispatch(Msg.NewSetName);
-
-        // Mapping with conversion if needed
-        bindings.For(x => x.UserInput.Experience).Dispatch(val => Msg.NewSetExperience(val));
+        bindings.For(x => x.UserInput.Newsletter).Dispatch(Msg.NewSetNewsletter);
+        bindings.For(x => x.UserInput.Experience).Dispatch(Msg.NewSetExperience);
     };
 ```
 
+Those routes correspond to AXAML bindings:
+
+```xml
+<TextBox Text="{Binding UserInput.Name, Mode=TwoWay}" />
+<CheckBox IsChecked="{Binding UserInput.Newsletter, Mode=TwoWay}" />
+<Slider Value="{Binding UserInput.Experience, Mode=TwoWay}" />
+```
+
+The AXAML path and the write-back selector name the same property. The
+AXAML line controls Avalonia binding behavior. The registry line controls
+Elmish message routing.
+
 ## How it works
 
-1. **Registration**: The `For` method uses an expression tree to extract the string path to the property (e.g., `"UserInput.Name"`).
-2. **Detection**: When an Avalonia `TwoWay` binding updates a property on a generated host or node, the setter calls `host.TryDispatchWriteBack(path, value)`.
-3. **Dispatch**: The host looks up the path in its `WriteBackBindings` registry and, if found, calls the registered mapping function and dispatches the resulting message.
+1. `For` reads the expression tree and stores a path such as
+   `"UserInput.Name"`.
+2. A generated setter calls `host.TryDispatchWriteBack("UserInput.Name",
+   value)`.
+3. The host finds the registered route.
+4. The route maps the new value to a message.
+5. The host dispatches that message into Elmish.
 
-## Why use write-back bindings?
+The generated setter does not mutate the snapshot.
 
-- **Centralization**: All interaction logic is in one place, making it easy to review and maintain.
-- **Type Safety**: The `For` selector is type-checked against your view record.
-- **No Code-Behind**: You don't need to write manual event handlers in your XAML code-behind for every text box or checkbox.
+```csharp
+public string Name
+{
+    get => Snapshot.Name;
+    set => Host.TryDispatchWriteBack("UserInput.Name", value);
+}
+```
+
+The Elmish update function applies the state change.
+
+## What Can Use Write-Back
+
+Use write-back for generated properties that Avalonia writes to:
+
+- `TextBox.Text`
+- `CheckBox.IsChecked`
+- `ComboBox.SelectedItem`
+- `ComboBox.SelectedIndex`
+- `Slider.Value`
+- other scalar editable control properties
+
+Display-only values do not need write-back:
+
+```xml
+<TextBlock Text="{Binding UserInput.ValidationText}" />
+<ItemsControl ItemsSource="{Binding RandomDice.History}" />
+```
+
+Commands and events can stay as small explicit host methods:
+
+```xml
+<Button Click="OnRefreshHttpClick" />
+```
+
+```csharp
+public void RefreshHttp() => Dispatch(Msg.RefreshHttp);
+```
+
+## Why Use This Registry
+
+- One place lists the editable UI paths.
+- The selector is type-checked against the F# view record.
+- AXAML stays standard.
+- F# view records do not need binding attributes or metadata.
+- Common form controls avoid handwritten event-forwarding code.
+
+ElmView keeps the F# record plain, AXAML standard, and the bridge code in the
+host.
 
 ## Source
 

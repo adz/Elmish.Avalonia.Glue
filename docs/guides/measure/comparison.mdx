@@ -4,14 +4,15 @@ sidebar_position: 6
 
 # Post-V2 comparison
 
-After the implementation of **ElmView V2**, the architectural landscape of the repository has shifted significantly. We can now compare the two families based on empirical evidence from the same sample matrix implemented in both styles.
+ElmView V2 gives the repository two comparable authoring families. Both are
+implemented against the same sample matrix.
 
 ## 1. Boilerplate and Code Volume
 
-The most striking difference is in the amount of "glue" code required to connect Elmish to Avalonia.
+The main difference is the amount and location of glue code.
 
 - **Projection**: Requires a deep tree of mutable viewmodel classes. For a typical form, you must manually define properties, handle `OnPropertyChanged` events to dispatch messages, and use an `_isUpdating` flag to suppress feedback loops during model updates.
-- **ElmView**: Reduces glue code to a single, mechanical host class. There is no need for manual property-change suppression or event-handler boilerplate. The authored F# records serve as the primary UI schema.
+- **ElmView**: Moves most glue into a mechanical host class. Manual property-change suppression and event-handler boilerplate disappear from the form path. Authored F# records serve as the primary UI schema.
 
 | Feature | Projection | ElmView |
 | :--- | :--- | :--- |
@@ -22,29 +23,27 @@ The most striking difference is in the amount of "glue" code required to connect
 ## 2. Reviewability
 
 - **Projection**: A UI change often requires reviewing changes in three places: the F# model, the C# viewmodel, and the AXAML. The logic is spread across different paradigms (immutable vs. mutable).
-- **ElmView**: Visual changes are primarily reviewed in the F# records and AXAML. The host facade is so mechanical that it often doesn't require deep scrutiny, making the intent of the change much clearer.
+- **ElmView**: Visual changes are primarily reviewed in the F# records and AXAML. The host facade is mechanical and usually changes only when the binding shape changes.
 
 ## 3. Design-Time Quality
 
-Both families achieve high-quality design-time support, but through different paths:
+Both families support design-time preview through different paths:
 
 - **Projection**: Relies on a `PreviewHost` that populates the projection tree with design data. This works well but requires maintaining the design data in the projection layer.
-- **ElmView**: Uses the *exact same* snapshots and host shape for both design-time and runtime. The `DesignGeneratedViewHost` ensures that the preview you see in the Avalonia designer is 100% faithful to the runtime behavior.
+- **ElmView**: Uses the same snapshots and host shape for design-time and runtime. `DesignGeneratedViewHost` renders the runtime binding shape with design data.
 
 ## 4. LLM Ergonomics
 
-This is an increasingly important metric for modern development.
+- **Projection**: Boilerplate and mutable transition code create more places for generated code to drift from the pattern.
+- **ElmView**: The generated-host shape and F# records give generated code a smaller pattern to follow.
 
-- **Projection**: While familiar, the high volume of boilerplate and the need to manage mutable state transitions can lead to "hallucinations" or subtle bugs in LLM-generated code.
-- **ElmView**: The rigid, mechanical nature of the `GeneratedViewHost` and the simplicity of F# records make it highly predictable for LLMs. An LLM can reliably extend an ElmView host because it follows a strict, repeatable pattern with no hidden state.
-
-## Summary: When to choose?
+## Summary: When To Choose
 
 | Choose **Projection** if... | Choose **ElmView** if... |
 | :--- | :--- |
-| You have a dedicated C# UI team that wants named viewmodels. | You want the absolute minimum boilerplate. |
+| You have a dedicated C# UI team that wants named viewmodels. | You want less handwritten binding glue. |
 | You need fine-grained control over row identity and selection. | You want F# records to be your single source of truth for UI shape. |
-| You are building an extremely complex, command-heavy desktop app. | You want a fast, "Elm-like" authoring loop in Avalonia. |
+| You are building a command-heavy desktop app. | You want an Elm-like authoring loop in Avalonia. |
 
 ## Source Evidence
 

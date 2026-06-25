@@ -6,19 +6,20 @@ sidebar_position: 2
 
 This package is the Avalonia-facing bridge over the core host.
 
-## What this shows
+## Scope
 
-The package keeps Avalonia threading and bindings normal while delegating the actual host mechanics to the shared core.
+The package keeps Avalonia threading and bindings in the Avalonia layer while
+delegating host mechanics to the shared core.
 
 ## Core shape
 
-- dispatcher marshalling to Avalonia’s UI thread
+- dispatcher marshalling to Avalonia's UI thread
 - compatibility aliases that preserve the existing public shape
 - the same `ElmishHost` entry points at a higher integration layer
 
 ## What you can do
 
-- attach Elmish to a normal Avalonia app
+- attach Elmish to an Avalonia app
 - keep viewmodels and AXAML conventional
 - preserve existing `Elmish.Avalonia.Glue` call sites while the core evolves
 
