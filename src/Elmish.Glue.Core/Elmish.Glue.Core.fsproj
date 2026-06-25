@@ -24,7 +24,7 @@
     <Compile Include="Projections.fs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Elmish" Version="4.2.0" />
+    <PackageReference Include="Elmish" Version="5.0.2" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" Link="README.md" />
