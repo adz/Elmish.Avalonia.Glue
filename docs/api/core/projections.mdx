@@ -1,0 +1,49 @@
+---
+sidebar_position: 5
+---
+
+# Projection contracts
+
+The core projection contracts define how explicit, named viewmodels interact with the Elmish state and dispatch loop.
+
+## Interfaces
+
+### `IProjection<'Model>`
+Defines the contract for an object that can be updated with a new model snapshot.
+
+| Member | Description |
+| :--- | :--- |
+| `Update(model)` | Updates the object with the latest model data. |
+
+### `IDispatchTarget<'Msg>`
+Defines the contract for an object that can dispatch messages back to the Elmish loop.
+
+| Member | Description |
+| :--- | :--- |
+| `SetDispatch(dispatch)` | Provides the object with a dispatch function. |
+
+## Extensions
+
+The `ProjectionExtensions` module provides helpers for wiring up projection trees.
+
+### `ForwardTo`
+Composes a child dispatcher into a parent dispatcher using a message mapping function.
+
+### `SyncWith`
+Synchronizes a collection of viewmodels with a list of models.
+
+| Overload | Description |
+| :--- | :--- |
+| `SyncWith(collection, models, modelKey, vmKey, create)` | Simple synchronization where viewmodels only need an `Update` call. |
+| `SyncWith(collection, models, modelKey, vmKey, create, parentDispatch, map)` | Synchronization that also wires up dispatching for new viewmodels. |
+
+## Why use explicit projections?
+
+While ElmView is great for simple views, explicit projections are useful when:
+- **Complex UI Logic**: You need to perform significant transformations on the model data before exposing it to the UI.
+- **Interoperability**: You are working in a mixed C#/F# environment and want to provide a familiar C# viewmodel surface.
+- **Fine-grained Control**: You need to manage the lifecycle or identity of specific UI components very closely.
+
+## Source
+
+- [Projections.fs](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Glue.Core/Projections.fs)

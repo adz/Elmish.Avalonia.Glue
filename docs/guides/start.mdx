@@ -1,0 +1,50 @@
+---
+sidebar_position: 1
+---
+
+# Getting Started
+
+Welcome to **Elmish.Avalonia.Glue**. This project is a laboratory for exploring different ways to author Avalonia UIs using the Elmish architecture.
+
+We believe there isn't a single "right" way to connect Elmish to a XAML-based framework. Instead, we offer two distinct "families" of authoring styles that share a common, framework-neutral substrate.
+
+## The Two Families
+
+### 1. Projection
+For teams that prefer the familiarity and control of **explicit, named CLR viewmodels**. It uses mutable "projections" to bridge the gap between immutable state and the UI.
+- [Understand Projection](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand/projection-family)
+- [Projection API](https://adz.github.io/Elmish.Avalonia.Glue/docs/api/projection)
+
+### 2. ElmView
+An **F#-first** approach designed to minimize boilerplate. Your UI schema is defined in plain F# records, and Avalonia binds to a thin, generated facade.
+- [Understand ElmView](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand/elmview-family)
+- [ElmView API](https://adz.github.io/Elmish.Avalonia.Glue/docs/api/elmview)
+
+## Project Structure
+
+The repository is organized into four main packages:
+
+- **`Elmish.Glue.Core`**: The framework-neutral engine for host management and snapshot propagation.
+- **`Elmish.Avalonia.Glue`**: The Avalonia-specific bridge (threading and dispatcher integration).
+- **`Elmish.Avalonia.Glue.Projection`**: Primitives for building explicit viewmodel trees.
+- **`Elmish.Avalonia.Glue.ElmView`**: Primitives for the record-first, generated host style.
+
+## Why this project exists?
+
+We implement the **exact same sample matrix** in both styles so you can compare:
+- **Boilerplate**: How much code do you actually have to write?
+- **Reviewability**: How easy is it to see what changed in a pull request?
+- **Tooling**: How well does it work with the Avalonia Designer and DevTools?
+- **Ergonomics**: Which style feels more natural to your team?
+
+## Next Steps
+
+- **[Understand the Architecture](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand)**: Deep dive into the shared substrate and families.
+- **[Preview and Design Data](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/start/preview-and-design)**: See how we keep the design-time workflow first-class.
+- **[Executable Examples](https://adz.github.io/Elmish.Avalonia.Glue/docs/examples)**: Browse runnable examples with observed output.
+
+## Source
+
+- [Project README](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/README.md)
+- [Current development plan](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/PLAN.md)
+- [Task tracking](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/TASKS.md)

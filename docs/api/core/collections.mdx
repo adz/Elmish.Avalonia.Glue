@@ -1,0 +1,54 @@
+---
+sidebar_position: 4
+---
+
+# Collections
+
+The collections substrate provides utilities for syncing mutable `ObservableCollection`s with immutable lists while preserving the identity of the items.
+
+## `ObservableCollectionExtensions`
+
+These extensions provide the primary way to sync collections in a Projection-style viewmodel.
+
+### `SyncWith`
+
+Synchronizes an `ObservableCollection<'ViewModel>` with an `IReadOnlyList<'Model>`.
+
+| Parameter | Description |
+| :--- | :--- |
+| `models` | The new list of model snapshots. |
+| `modelKey` | A function to extract a unique key from a model. |
+| `vmKey` | A function to extract a unique key from a viewmodel. |
+| `create` | A function to create a new viewmodel from a model. |
+| `update` | An action to update an existing viewmodel with a new model snapshot. |
+
+**Behavior:**
+- **Matches** existing viewmodels to models using the provided keys.
+- **Updates** matched viewmodels in place using the `update` action.
+- **Inserts** new viewmodels using the `create` function.
+- **Removes** viewmodels that no longer have a corresponding model.
+- **Moves** viewmodels to match the order of the models.
+
+## `KeyedSnapshotCollection<'T, 'Key>`
+
+A helper class that encapsulates an `ObservableCollection` and provides a simple `Update` method. This is used by both Projection and ElmView families for managing lists of snapshots.
+
+### Members
+
+| Member | Description |
+| :--- | :--- |
+| `Items` | Returns the underlying `ObservableCollection<'T>`. |
+| `Update(next: IReadOnlyList<'T>)` | Patches the collection to match the new list of snapshots. |
+
+## Why use keyed patching?
+
+By patching the collection instead of replacing it:
+1. **Container Reuse**: Avalonia can reuse the existing `ListBoxItem` or `DataGridRow` containers.
+2. **Selection Stability**: Selected items remain selected if they are still present in the list.
+3. **Smooth Transitions**: List animations and layout transitions work correctly.
+
+## Source
+
+- [ObservableCollectionExtensions.fs](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Glue.Core/ObservableCollectionExtensions.fs)
+- [KeyedCollectionPatching.fs](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Glue.Core/KeyedCollectionPatching.fs)
+- [KeyedSnapshotCollection source](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Glue.Core/SnapshotSubstrate.fs)

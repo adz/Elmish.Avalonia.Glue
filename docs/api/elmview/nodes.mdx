@@ -1,0 +1,61 @@
+---
+sidebar_position: 4
+---
+
+# Generated nodes
+
+`GeneratedViewNode<'RootView, 'NodeView, 'Msg>` is the base class for nested bindable objects in an ElmView tree. It allows Avalonia to bind to deep paths in your immutable F# view records while still receiving change notifications.
+
+## `GeneratedViewNode<'RootView, 'NodeView, 'Msg>`
+
+### Members
+
+| Member | Description |
+| :--- | :--- |
+| `Snapshot` | Returns the current immutable view record for *this specific node*, plucked from the root view. |
+| `Dispatch(message)` | Dispatches a message to the Elmish loop. This typically delegates to the root host's dispatcher. |
+
+## How they enable nested bindings
+
+In a traditional MVVM setup, you might have deep trees of mutable viewmodel objects. In ElmView, your data is just a tree of records.
+
+`GeneratedViewNode` acts as a stable proxy for a specific record in that tree:
+
+1. **Stability**: The node instance itself is stable. If you have a `UserInputNode`, it remains the same object even as the `UserInput` record within the snapshot is replaced.
+2. **Plucking**: The node is configured with a function that knows how to find its specific record within the root snapshot (e.g., `view => view.UserInput`).
+3. **Notification**: When the root host receives a new snapshot, it triggers a refresh. Each node then raises `PropertyChanged` for the specific properties it exposes, allowing Avalonia to update the UI.
+
+## Implementation Example
+
+In a generated host, you would typically define nested node classes like this:
+
+```csharp
+public sealed class UserInputNode : GeneratedViewNode<AppView, FormView, Msg>
+{
+    public UserInputNode(AppHost host)
+        : base(
+            () => host.View,           // Get root snapshot
+            host.Dispatch,             // Dispatch message
+            host.RegisterChildNode,    // Register for refresh
+            view => view.UserInput,    // Pluck nested view
+            new[] { nameof(Name) })    // Properties to notify
+    {
+    }
+
+    public string Name
+    {
+        get => Snapshot.Name;
+        set => Host.TryDispatchWriteBack("UserInput.Name", value);
+    }
+}
+```
+
+## Why use generated nodes?
+
+- **Deep Bindings**: Enables standard XAML binding paths like `<TextBox Text="{Binding UserInput.Name}" />`.
+- **Identity Preservation**: Keeps the UI responsive and stable without requiring you to manually write deep projection trees.
+- **Auto-Refresh**: Notifications propagate automatically from the root down to the leaf nodes.
+
+## Source
+
+- [ElmViewHosts.fs](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Avalonia.Glue.ElmView/ElmViewHosts.fs)

@@ -1,0 +1,33 @@
+---
+sidebar_position: 2
+---
+
+# Avalonia
+
+This repo can sit behind normal Avalonia windows, views, compiled bindings, and preview data.
+
+## What this shows
+
+The integration points are thin and familiar:
+
+- `AvaloniaHost.start` posts updates back to the UI thread
+- windows still use ordinary `x:DataType` and `x:CompileBindings`
+- design-time data is still just design-time data
+
+## Core shape
+
+- UI thread marshalling stays in the Avalonia layer
+- binding and host shape stay in the family-specific packages
+- AXAML remains the authored view format
+
+## What you can do
+
+- keep DevTools and preview workflows unchanged
+- attach Elmish to a classic Avalonia app
+- use either Projection or ElmView without changing the binding model
+
+## Read next
+
+- [Avalonia host bridge](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Avalonia.Glue/AvaloniaHost.fs)
+- [Projection app bootstrap](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/sample/Samples.Projection/ExampleMatrixSample/src/ExampleMatrixSample.UI/App.axaml.cs)
+- [ElmView app bootstrap](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/sample/Samples.ElmView/ExampleMatrixSample/src/ExampleMatrixSample.UI/App.axaml.cs)

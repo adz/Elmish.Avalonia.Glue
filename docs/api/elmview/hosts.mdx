@@ -1,0 +1,45 @@
+---
+sidebar_position: 2
+---
+
+# Generated hosts
+
+The `GeneratedViewHost` classes provide the bindable root for the ElmView authoring style. They bridge the gap between immutable F# view records and the Avalonia `DataContext`.
+
+## `GeneratedViewHost<'View, 'Msg>`
+
+The abstract base class for all ElmView root hosts.
+
+### Members
+
+| Member | Description |
+| :--- | :--- |
+| `View` | Returns the current immutable view record snapshot. |
+| `SetDispatch(dispatcher)` | Connects the host to the Elmish loop. |
+| `Dispatch(message)` | Dispatches a message to the Elmish loop. |
+| `WriteBackBindings` | Returns the `WriteBackBindings` collection for this host. |
+| `TryDispatchWriteBack(path, value)` | Attempts to dispatch a message for a property change at the specified path. This is used by generated property setters. |
+| `GeneratedPropertyNames` | An overridable property that returns the names of the properties exposed by the host. These properties will be included in the `PropertyChanged` notification during a refresh. |
+
+## Host Variants
+
+ElmView provides specific host types for different stages of the development lifecycle, ensuring that the bindable shape remains consistent.
+
+### `RuntimeGeneratedViewHost<'View, 'Msg>`
+
+Used when the application is running. It is typically started and bound via `ElmishHost.startAndBind`.
+
+### `DesignGeneratedViewHost<'View, 'Msg>`
+
+Used for Avalonia design-time preview. It is initialized with a sample snapshot and allows the designer to render the view exactly as it would appear at runtime.
+
+## How it works
+
+1. **Initialization**: The host is constructed with an initial snapshot and an optional configuration action for `WriteBackBindings`.
+2. **Binding**: In AXAML, the host is set as the `DataContext`.
+3. **Update**: When the Elmish program produces a new view snapshot, `host.Update(newSnapshot)` is called.
+4. **Refresh**: The host raises `PropertyChanged` for its `View` property and all names in `GeneratedPropertyNames`, then calls `RefreshSubtree()` on all nested nodes.
+
+## Source
+
+- [ElmViewHosts.fs](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Avalonia.Glue.ElmView/ElmViewHosts.fs)

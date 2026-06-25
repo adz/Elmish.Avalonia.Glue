@@ -1,0 +1,53 @@
+---
+sidebar_position: 3
+---
+
+# Write-back bindings
+
+`WriteBackBindings<'View, 'Msg>` is a centralized registry that maps UI property changes back to Elmish messages. This is the heart of the ElmView V2 "no-boilerplate" story for interactive views.
+
+## `WriteBackBindings<'View, 'Msg>`
+
+### Members
+
+| Member | Description |
+| :--- | :--- |
+| `For<'Value>(selector)` | Starts a registration for the property identified by the expression selector (e.g., `x => x.UserInput.Name`). Returns a registration object. |
+
+### `WriteBackBindingRegistration`
+
+| Member | Description |
+| :--- | :--- |
+| `Dispatch(map)` | Completes the registration by providing a function that takes the new property value and returns a message to dispatch. |
+
+## Usage Example
+
+Typically, you configure these bindings in your host's constructor or via a static configuration block:
+
+```csharp
+private static readonly Action<WriteBackBindings<AppView, Msg>> ConfigureBindings =
+    bindings =>
+    {
+        // Simple mapping
+        bindings.For(x => x.UserInput.Name).Dispatch(Msg.NewSetName);
+
+        // Mapping with conversion if needed
+        bindings.For(x => x.UserInput.Experience).Dispatch(val => Msg.NewSetExperience(val));
+    };
+```
+
+## How it works
+
+1. **Registration**: The `For` method uses an expression tree to extract the string path to the property (e.g., `"UserInput.Name"`).
+2. **Detection**: When an Avalonia `TwoWay` binding updates a property on a generated host or node, the setter calls `host.TryDispatchWriteBack(path, value)`.
+3. **Dispatch**: The host looks up the path in its `WriteBackBindings` registry and, if found, calls the registered mapping function and dispatches the resulting message.
+
+## Why use write-back bindings?
+
+- **Centralization**: All interaction logic is in one place, making it easy to review and maintain.
+- **Type Safety**: The `For` selector is type-checked against your view record.
+- **No Code-Behind**: You don't need to write manual event handlers in your XAML code-behind for every text box or checkbox.
+
+## Source
+
+- [ElmViewHosts.fs](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Avalonia.Glue.ElmView/ElmViewHosts.fs)

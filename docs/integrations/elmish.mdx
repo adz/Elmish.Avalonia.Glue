@@ -1,0 +1,29 @@
+---
+sidebar_position: 3
+---
+
+# Elmish
+
+Elmish remains the state and behavior engine in both families.
+
+## What this shows
+
+The host owns lifetime, dispatch, and posting back to the UI thread. Elmish still owns init, update, subscriptions, and commands.
+
+## Core shape
+
+- `ElmishHost.start` and `ElmishHost.startAndBind` attach a running program to a host-managed sink.
+- the `update` function still decides how the model changes
+- subscriptions still stay in Elmish
+
+## What you can do
+
+- keep the Elmish architecture intact
+- compare the authoring families without changing the application model
+- separate UI shape from behavior more cleanly
+
+## Read next
+
+- [Core host lifetime](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Glue.Core/ElmishHost.fs)
+- [Projection sample program](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/sample/Samples.Projection/ExampleMatrixSample/src/ExampleMatrixSample.Core/App.fs)
+- [ElmView sample program](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/sample/Samples.ElmView/ExampleMatrixSample/src/ExampleMatrixSample.Core/App.fs)

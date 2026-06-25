@@ -1,0 +1,31 @@
+---
+sidebar_position: 3
+---
+
+# Compatibility aliases
+
+The Avalonia package preserves the familiar type names as aliases to the core surface.
+
+## What this shows
+
+This keeps the public API stable while the framework-neutral types live in `Elmish.Glue.Core`.
+
+## Core shape
+
+- `ElmishHostConnection<'Msg>`
+- `IProjection<'Model>`
+- `IDispatchTarget<'Msg>`
+- `IProjection<'Model,'Msg>`
+- `ProjectionExtensions`
+- `ObservableCollectionExtensions`
+- `FSharpProjectionBase<'Model,'Msg>`
+- `Dispatcher<'Msg>`
+
+## What you can do
+
+- keep older call sites readable
+- move new docs toward the core package without breaking the existing package shape
+
+## Read next
+
+- [Package.fs](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Avalonia.Glue/Package.fs)

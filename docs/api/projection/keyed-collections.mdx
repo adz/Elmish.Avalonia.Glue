@@ -1,0 +1,39 @@
+---
+sidebar_position: 3
+---
+
+# Keyed collections
+
+The `KeyedSnapshotCollection<'T, 'Key>` in the Projection package is a specialization of the core collection patching logic. It provides a simple, bindable way to manage lists of immutable snapshots while preserving stable UI identity.
+
+## `KeyedSnapshotCollection<'T, 'Key>`
+
+### Members
+
+| Member | Description |
+| :--- | :--- |
+| `Items` | Returns the underlying `ObservableCollection<'T>`. Binds in XAML to `Items`. |
+| `Update(next)` | Synchronizes the collection with the provided list of snapshots. |
+
+## How it works
+
+1. **Inheritance**: It inherits from `Elmish.Glue.Core.KeyedSnapshotCollection`.
+2. **Keying**: You provide a key selector function in the constructor. This key is used to determine which items in the collection correspond to which items in the new snapshot list.
+3. **Patching**: When `Update` is called, it uses the core `KeyedCollectionPatching` algorithm to:
+    - **Add** new snapshots to the collection.
+    - **Remove** snapshots that are no longer present.
+    - **Move** existing snapshots to their new positions.
+    - **Update** items in place if they are already present (by reference or value).
+
+## Why use it in a Projection?
+
+If you are building a Projection-style viewmodel and need to display a list of data, `KeyedSnapshotCollection` is often the best choice:
+
+- **Stable Rows**: Because it patches the collection, Avalonia can keep the same UI containers (like `ListBoxItem`) for items that haven't been removed.
+- **Selection Preservation**: If a user has selected a row, that selection is preserved even as the data within the row is updated.
+- **Smooth Updates**: Avoids the "flicker" that occurs when a whole collection is replaced.
+
+## Source
+
+- [SnapshotHosts.fs](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Avalonia.Glue.Projection/SnapshotHosts.fs)
+- [KeyedCollectionPatching.fs](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Glue.Core/KeyedCollectionPatching.fs)

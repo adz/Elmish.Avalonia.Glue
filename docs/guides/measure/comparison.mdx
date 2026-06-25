@@ -1,0 +1,53 @@
+---
+sidebar_position: 6
+---
+
+# Post-V2 comparison
+
+After the implementation of **ElmView V2**, the architectural landscape of the repository has shifted significantly. We can now compare the two families based on empirical evidence from the same sample matrix implemented in both styles.
+
+## 1. Boilerplate and Code Volume
+
+The most striking difference is in the amount of "glue" code required to connect Elmish to Avalonia.
+
+- **Projection**: Requires a deep tree of mutable viewmodel classes. For a typical form, you must manually define properties, handle `OnPropertyChanged` events to dispatch messages, and use an `_isUpdating` flag to suppress feedback loops during model updates.
+- **ElmView**: Reduces glue code to a single, mechanical host class. There is no need for manual property-change suppression or event-handler boilerplate. The authored F# records serve as the primary UI schema.
+
+| Feature | Projection | ElmView |
+| :--- | :--- | :--- |
+| **Form Property** | ~10 lines (Property + Event Handler) | 1 line (F# Record Field) |
+| **List Sync** | Manual `SyncWith` calls | Automatic refresh propagation |
+| **Message Routing** | Scattered through viewmodels | Centralized `WriteBackBindings` |
+
+## 2. Reviewability
+
+- **Projection**: A UI change often requires reviewing changes in three places: the F# model, the C# viewmodel, and the AXAML. The logic is spread across different paradigms (immutable vs. mutable).
+- **ElmView**: Visual changes are primarily reviewed in the F# records and AXAML. The host facade is so mechanical that it often doesn't require deep scrutiny, making the intent of the change much clearer.
+
+## 3. Design-Time Quality
+
+Both families achieve high-quality design-time support, but through different paths:
+
+- **Projection**: Relies on a `PreviewHost` that populates the projection tree with design data. This works well but requires maintaining the design data in the projection layer.
+- **ElmView**: Uses the *exact same* snapshots and host shape for both design-time and runtime. The `DesignGeneratedViewHost` ensures that the preview you see in the Avalonia designer is 100% faithful to the runtime behavior.
+
+## 4. LLM Ergonomics
+
+This is an increasingly important metric for modern development.
+
+- **Projection**: While familiar, the high volume of boilerplate and the need to manage mutable state transitions can lead to "hallucinations" or subtle bugs in LLM-generated code.
+- **ElmView**: The rigid, mechanical nature of the `GeneratedViewHost` and the simplicity of F# records make it highly predictable for LLMs. An LLM can reliably extend an ElmView host because it follows a strict, repeatable pattern with no hidden state.
+
+## Summary: When to choose?
+
+| Choose **Projection** if... | Choose **ElmView** if... |
+| :--- | :--- |
+| You have a dedicated C# UI team that wants named viewmodels. | You want the absolute minimum boilerplate. |
+| You need fine-grained control over row identity and selection. | You want F# records to be your single source of truth for UI shape. |
+| You are building an extremely complex, command-heavy desktop app. | You want a fast, "Elm-like" authoring loop in Avalonia. |
+
+## Source Evidence
+
+- [Projection boilerplate (500+ lines)](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/sample/Samples.Projection/ExampleMatrixSample/src/ExampleMatrixSample.UI/ViewModels/AppProjection.cs)
+- [ElmView mechanical host](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/sample/Samples.ElmView/ExampleMatrixSample/src/ExampleMatrixSample.UI/Views/AppHost.cs)
+- [ElmView F# UI schema](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/sample/Samples.ElmView/ExampleMatrixSample/src/ExampleMatrixSample.Core/App.fs)

@@ -1,0 +1,25 @@
+{
+  "name": "elmish-avalonia-glue-docs",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Docs site for Elmish.Avalonia.Glue.",
+  "scripts": {
+    "docs:generate": "node scripts/generate-docs-examples.js",
+    "docs:sync-version": "bash scripts/sync-docs-version.sh",
+    "docs:prepare": "npm run docs:generate && npm run docs:sync-version",
+    "start": "docusaurus start",
+    "build": "npm run docs:prepare && docusaurus build",
+    "clear": "docusaurus clear"
+  },
+  "dependencies": {
+    "@docusaurus/core": "^3.8.1",
+    "@docusaurus/preset-classic": "^3.8.1",
+    "clsx": "^2.1.1",
+    "prism-react-renderer": "^2.4.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "overrides": {
+    "webpackbar": "7.0.0"
+  }
+}

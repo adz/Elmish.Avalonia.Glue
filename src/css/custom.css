@@ -1,0 +1,43 @@
+:root {
+  --ifm-color-primary: #285b49;
+  --ifm-color-primary-dark: #214c3d;
+  --ifm-color-primary-darker: #1e4437;
+  --ifm-color-primary-darkest: #18372d;
+  --ifm-color-primary-light: #326d58;
+  --ifm-color-primary-lighter: #3a7760;
+  --ifm-color-primary-lightest: #4f8d76;
+  --ifm-background-color: #fbf7f0;
+  --ifm-background-surface-color: #fffdf9;
+  --ifm-font-color-base: #201d18;
+  --ifm-font-color-secondary: #635d54;
+  --ifm-heading-color: #172219;
+  --ifm-navbar-background-color: rgba(251, 247, 240, 0.92);
+  --ifm-footer-background-color: #18231d;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background:
+    radial-gradient(circle at top, rgba(40, 91, 73, 0.06), transparent 28%),
+    var(--ifm-background-color);
+}
+
+.navbar {
+  backdrop-filter: blur(10px);
+}
+
+.markdown > h1:first-child,
+.markdown > h2:first-child {
+  letter-spacing: -0.03em;
+}
+
+.theme-doc-sidebar-container {
+  background: rgba(255, 253, 249, 0.9);
+}
+
+.footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}

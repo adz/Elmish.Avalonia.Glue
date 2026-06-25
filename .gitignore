@@ -1,6 +1,12 @@
 bin/
 obj/
 artifacts/
+.docusaurus/
+build/
+node_modules/
+versioned_docs/
+versioned_sidebars/
+versions.json
 .vs/
 .idea/
 TestResults/

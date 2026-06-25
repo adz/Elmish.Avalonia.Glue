@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Examples\ProjectionSnapshotHost.fs" />
+    <Compile Include="Examples\ElmViewWriteBack.fs" />
+    <Compile Include="Examples\KeyedCollectionSync.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Elmish.Glue.Core\Elmish.Glue.Core.fsproj" />
+    <ProjectReference Include="..\..\src\Elmish.Avalonia.Glue.Projection\Elmish.Avalonia.Glue.Projection.fsproj" />
+    <ProjectReference Include="..\..\src\Elmish.Avalonia.Glue.ElmView\Elmish.Avalonia.Glue.ElmView.fsproj" />
+    <ProjectReference Include="..\..\sample\Samples.ElmView\ExampleMatrixSample\src\ExampleMatrixSample.Core\ExampleMatrixSample.Core.fsproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,29 @@
+---
+sidebar_position: 2
+---
+
+# Preview and design data
+
+The docs and samples keep design-time preview in the normal Avalonia workflow.
+
+## What this shows
+
+Design data is not a separate documentation toy. It is part of the normal authoring loop.
+
+## Core shape
+
+- Projection samples populate a projection root with a design model before the runtime host attaches.
+- ElmView samples start the generated host with a design snapshot and keep the writable facade in the same shape at runtime.
+- AXAML binds to the same ordinary data-context path in both cases.
+
+## What you can do
+
+- open the sample windows in preview without booting the full runtime
+- inspect the same page structure in DevTools at design time and runtime
+- keep the preview path close enough to runtime that markup edits remain trustworthy
+
+## Read next
+
+- [Projection preview host](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/sample/Samples.Projection/ExampleMatrixSample/src/ExampleMatrixSample.UI/Views/AppView.axaml.cs)
+- [ElmView preview host](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/sample/Samples.ElmView/ExampleMatrixSample/src/ExampleMatrixSample.UI/Views/AppView.axaml.cs)
+- [ElmView generated host](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/sample/Samples.ElmView/ExampleMatrixSample/src/ExampleMatrixSample.UI/Views/AppHost.cs)
