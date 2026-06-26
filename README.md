@@ -1,28 +1,31 @@
 # Elmish.Avalonia.Glue
 
-**Can an Avalonia app keep normal AXAML and designer tooling while moving UI
-state and UI-shaped data into Elmish-style F#?**
-
 - Avalonia has `.axaml`, bindings, design-time preview, and great DevTools.
 - Elmish has immutable state, explicit messages, and one update loop.
 
-Elmish.Avalonia.Glue does exactly this in two flavours in different projects:
+**Can an Avalonia app keep normal AXAML and designer tooling while moving UI
+state and UI-shaped data into Elmish-style F#?**
 
-- `Projection` where you create nomral CLR XAML-facing viewmodels, and 'project' into it
+*Elmish.Avalonia.Glue* does exactly this in two different approaches:
+
+- `Projection` where you create normal CLR XAML-facing viewmodels, and 'project' into it
 - `ElmView` with less C# - immutable F# view records bind via a thin api
 
-The project does not replace AXAML with an F# UI DSL in either case. It's just glue.
+The project does not replace AXAML with an F# UI DSL or change how Elmish works in either case.
+
+It's just the glue between them.
 
 ## Read next
 
 - [Docs site](https://adz.github.io/Elmish.Avalonia.Glue/docs/intro): start here if you want the intent before the APIs.
-- [Getting started](docs/guides/start.mdx): compare the two families from the same Avalonia binding.
-- [Projection samples](sample/Samples.Projection): explicit CLR viewmodel path.
-- [ElmView samples](sample/Samples.ElmView): F# view-record path.
 
 ## Packages
 
-- `Elmish.Glue.Core`
-- `Elmish.Avalonia.Glue`
-- `Elmish.Avalonia.Glue.Projection`
-- `Elmish.Avalonia.Glue.ElmView`
+- [Elmish.Avalonia.Glue](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand/shared-substrate) - the shared substrate glue between immutable snapthos and bindable objects.
+- [Elmish.Avalonia.Glue.Projection](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand/projection-family)
+- [Elmish.Avalonia.Glue.ElmView](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand/elmview-family)
+
+## Samples
+
+- [Projection samples](sample/Samples.Projection): explicit CLR viewmodel path.
+- [ElmView samples](sample/Samples.ElmView): F# view-record path.
