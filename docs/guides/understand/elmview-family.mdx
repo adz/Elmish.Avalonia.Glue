@@ -7,7 +7,7 @@ sidebar_position: 6
 ElmView is the F#-first path. Screen-shaped data is a plain immutable F#
 record. Avalonia binds to CLR properties exposed over that record.
 
-ElmView makes this record the authored UI schema:
+ElmView makes records like this the authored UI schema:
 
 ```fsharp
 type UserInputView =
@@ -17,8 +17,26 @@ type UserInputView =
       ValidationText: string }
 ```
 
+That nested record is normally part of a root view record:
+
+```fsharp
+type AppView =
+    { UserInput: UserInputView }
+```
+
+The AXAML path uses the root record field name, not the nested record type
+name. `UserInputView` is the type. `UserInput` is the field that becomes the
+first segment in `{Binding UserInput.Name}`.
+
 The CLR host exists because Avalonia needs a bindable object with properties
 and `PropertyChanged`.
+
+Today, this repository provides the host and node base classes, and the sample
+host is handwritten in the shape a generator would produce. There is not yet a
+source generator or CLI command that turns F# records into host code. When the
+docs say "generated host" or "generated node", read that as "code with the
+generated/mechanical shape"; in the current samples, that code is authored by
+hand.
 
 ## What Avalonia Sees
 
@@ -32,18 +50,49 @@ custom control set.
 ```
 
 `OneWay` display bindings read from the current immutable snapshot. `TwoWay`
-editable bindings call a setter on the generated node.
+editable bindings call a setter on the generated-shaped node.
 
-The binding path must exist on the generated host or one of its generated
-nodes. If AXAML says `UserInput.Name`, the host needs a `UserInput` node and
-that node needs a `Name` property.
+The binding path must exist on the host or one of its nodes. If AXAML says
+`UserInput.Name`, the host needs a `UserInput` property and that object needs a
+`Name` property.
+
+In the sample, the handwritten host exposes the root segment:
+
+```csharp
+private readonly UserInputNode _userInput;
+
+public UserInputNode UserInput => _userInput;
+```
+
+The node then plucks the nested F# record from the latest root snapshot:
+
+```csharp
+public UserInputNode(AppHost host)
+    : base(
+        () => host.View,
+        host.Dispatch,
+        host.RegisterChildNode,
+        view => view.UserInput,
+        new[] { nameof(Name), nameof(Email), nameof(Newsletter) })
+{
+}
+```
+
+That is the full path:
+
+```text
+AppView.UserInput field
+-> AppHost.UserInput CLR property
+-> UserInputNode.Name CLR property
+-> {Binding UserInput.Name}
+```
 
 That shape is mechanical. Application meaning belongs in the F# view, AXAML,
 and write-back mapping.
 
 ## What The Generated Node Does
 
-A generated or mechanically authored node reads from the latest snapshot.
+A generated-shaped or mechanically authored node reads from the latest snapshot.
 Writable properties do not mutate the snapshot. They dispatch messages.
 
 ```csharp
@@ -81,7 +130,7 @@ bindings.For(x => x.UserInput.Name)
 ```
 
 The selector is converted to the path string `"UserInput.Name"`. Later, when a
-generated setter calls `TryDispatchWriteBack("UserInput.Name", value)`, the
+node setter calls `TryDispatchWriteBack("UserInput.Name", value)`, the
 host finds that route and dispatches `Msg.NewSetName(value)`.
 
 If a property is display-only, it does not need a write-back route.
@@ -132,11 +181,12 @@ For a new editable field, change:
 
 - add a field to the F# view record
 - render it in AXAML with binding syntax
-- ensure the generated host exposes the property
+- ensure the host exposes the matching CLR property or node
 - add one write-back mapping from path to message if the field is editable
 
 The host code stays mechanical. Today the sample host is handwritten in that
-generated shape; the direction is to generate it rather than author it by hand.
+generated shape; the intended direction is to generate it rather than author it
+by hand.
 
 Feature reviews usually touch the F# model, F# view record, design snapshot,
 AXAML, and editable-path message routes.

@@ -2,11 +2,15 @@
 sidebar_position: 4
 ---
 
-# Generated nodes
+# Generated-shaped nodes
 
 `GeneratedViewNode<'RootView, 'NodeView, 'Msg>` is the base class for nested
 bindable objects in an ElmView tree. Avalonia binds to deep paths in immutable
 F# view records and still receives change notifications.
+
+Despite the type name, this package does not currently ship a generator. The
+sample nodes are handwritten in a regular, mechanical shape that a future
+generator could emit.
 
 ## `GeneratedViewNode<'RootView, 'NodeView, 'Msg>`
 
@@ -30,7 +34,7 @@ uses a tree of records behind generated bindable nodes.
 
 ## Implementation Example
 
-Generated hosts define nested node classes in this shape:
+Generated-shaped hosts define nested node classes in this shape:
 
 ```csharp
 public sealed class UserInputNode : GeneratedViewNode<AppView, FormView, Msg>
@@ -53,7 +57,23 @@ public sealed class UserInputNode : GeneratedViewNode<AppView, FormView, Msg>
 }
 ```
 
-## Why Use Generated Nodes
+The binding segment before `.Name` comes from the root host property:
+
+```csharp
+public UserInputNode UserInput => _userInput;
+```
+
+That property normally mirrors a root F# view-record field:
+
+```fsharp
+type AppView =
+    { UserInput: FormView }
+```
+
+Avalonia then resolves `<TextBox Text="{Binding UserInput.Name}" />` by reading
+`AppHost.UserInput`, then `UserInputNode.Name`.
+
+## Why Use Generated-shaped Nodes
 
 - Deep bindings: supports XAML binding paths like `<TextBox Text="{Binding UserInput.Name}" />`.
 - Identity preservation: keeps stable bindable nodes without hand-authored projection trees.

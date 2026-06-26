@@ -8,13 +8,18 @@ ElmView is the F#-first package family.
 
 ## Scope
 
-This package keeps the authored UI schema in F# and exposes a generated
+This package keeps the authored UI schema in F# and exposes a mechanical
 bindable surface for Avalonia markup.
+
+The current package provides the runtime/design host base classes, node base
+classes, and write-back routing. It does not yet include a source generator or
+CLI that emits host code from F# records. The sample `AppHost` is handwritten in
+the generated shape that future tooling is expected to produce.
 
 ## Core shape
 
-- generated runtime and design hosts
-- nested generated nodes
+- generated-shaped runtime and design hosts
+- nested generated-shaped nodes
 - centralized write-back routing
 - `OneWay` and `TwoWay` bindings
 
