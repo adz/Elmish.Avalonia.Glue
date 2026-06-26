@@ -11,11 +11,21 @@ Start with an Avalonia view:
 <TextBox Text="{Binding UserInput.Name, Mode=TwoWay}" />
 ```
 
-The choice is not AXAML syntax. It is the object behind the binding path.
+Elmish glue is all about keeping normal views and providing ways of bridging
+to them. The AXAML stays the same; what changes is the object behind the
+binding path.
 
-If your team wants explicit CLR viewmodels, start with `Projection`. If your
-team wants F# records to describe the screen and only wants CLR glue for
-Avalonia binding, start with `ElmView`.
+There are two approaches in this repository:
+
+- `Projection` uses explicit CLR-facing viewmodels. It is straightforward to
+  inspect from XAML, easy to adapt for controls that expect mutable identity,
+  and familiar when a screen already has named properties, commands, and row
+  objects. The tradeoff is more handwritten binding surface beside the F#
+  model.
+- `ElmView` uses immutable F# view records as the screen shape, with a thin
+  bindable host for Avalonia. It keeps more authored UI shape in F# and makes
+  the host mechanical, but it asks you to be disciplined about generated or
+  generated-shaped binding infrastructure and explicit write-back mapping.
 
 ## Step 1: Understand The Shared Loop
 
@@ -51,7 +61,7 @@ messages.
 Avalonia sees the host as a stable `DataContext`. Elmish sees it as the
 adapter around immutable state.
 
-## Step 2: Choose Projection When You Want Named Viewmodels
+## Step 2: Use Projection For Named Viewmodels
 
 Projection keeps the XAML-facing contract explicit.
 
@@ -82,9 +92,13 @@ AXAML binds to the projection object.
 <Button Command="{Binding SubmitCommand}" />
 ```
 
-Choose this when named properties and methods are part of the design. It fits
-C# UI teams, complex command surfaces, or controls that need
-stable mutable row identity.
+Projection is a good fit when named properties and methods are part of the
+design. It works well for complex command surfaces, views that already have a
+clear CLR contract, and controls that benefit from stable mutable row identity.
+
+The cost is that the CLR viewmodel becomes another authored surface. You keep
+Avalonia binding and inspection very explicit, but you write and maintain the
+properties, commands, and update code that expose the F# state.
 
 Elmish owns state transitions. The projection owns the mutable CLR surface
 that Avalonia sees.
@@ -94,7 +108,7 @@ Read next:
 - [Projection family](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand/projection-family)
 - [Projection API](https://adz.github.io/Elmish.Avalonia.Glue/docs/api/projection)
 
-## Step 3: Choose ElmView When F# Records Are The Screen Shape
+## Step 3: Use ElmView When F# Records Are The Screen Shape
 
 ElmView moves the screen-shaped data into immutable F# records.
 
@@ -131,9 +145,13 @@ The full path is:
 4. `Mode=TwoWay` writes call generated setters.
 5. Setters use `bindings` to turn the new value into an Elmish message.
 
-Choose this when the F# view record and AXAML are the main review surface. The
-sample host is mechanical; it follows a generated shape
-instead of carrying product logic.
+ElmView is a good fit when the F# view record and AXAML are the main review
+surface. The sample host is mechanical; it follows a generated shape instead
+of carrying product logic.
+
+The cost is that the bindable host must stay boring and predictable. Editable
+paths need explicit write-back mappings, and any generated surface has to keep
+normal Avalonia binding paths stable.
 
 The F# view record is the UI schema. The host is generated or mechanical
 binding infrastructure.

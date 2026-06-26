@@ -1,7 +1,7 @@
 {
   "name": "elmish-avalonia-glue-docs",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Docs site for Elmish.Avalonia.Glue.",
   "scripts": {
     "docs:generate": "node scripts/generate-docs-examples.js",

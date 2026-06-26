@@ -3,20 +3,15 @@
 **Can an Avalonia app keep normal AXAML and designer tooling while moving UI
 state and UI-shaped data into Elmish-style F#?**
 
-Avalonia has `.axaml`, bindings, design-time preview, and DevTools.
+- Avalonia has `.axaml`, bindings, design-time preview, and great DevTools.
+- Elmish has immutable state, explicit messages, and one update loop.
 
-Elmish has immutable state, explicit messages, and one update loop.
+Elmish.Avalonia.Glue does exactly this in two flavours in different projects:
 
-This repository leaves each of these to what they do best via two projects:
+- `Projection` where you create nomral CLR XAML-facing viewmodels, and 'project' into it
+- `ElmView` with less C# - immutable F# view records bind via a thin api
 
-- `Projection` for normal, explicit CLR XAML-facing viewmodels
-- `ElmView` for immutable F# view records and a thin generated bindable surface
-
-`ElmView` makes plain F# records the UI schema, then exposes them through
-bindable hosts, standard `OneWay` / `TwoWay` bindings, and centralized
-write-back mapping.
-
-The project does not replace AXAML with an F# UI DSL in either case.
+The project does not replace AXAML with an F# UI DSL in either case. It's just glue.
 
 ## Read next
 

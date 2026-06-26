@@ -3,22 +3,23 @@ set -euo pipefail
 
 root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source_dir="$root_dir/docs"
-version_dir="$root_dir/versioned_docs/version-1.0.0"
+version="0.1.0"
+version_dir="$root_dir/versioned_docs/version-$version"
 sidebar_dir="$root_dir/versioned_sidebars"
 
-rm -rf "$version_dir"
+rm -rf "$root_dir/versioned_docs" "$sidebar_dir"
 mkdir -p "$version_dir"
 mkdir -p "$sidebar_dir"
 
 cp -R "$source_dir"/. "$version_dir"/
 
-cat > "$root_dir/versions.json" <<'JSON'
+cat > "$root_dir/versions.json" <<JSON
 [
-  "1.0.0"
+  "$version"
 ]
 JSON
 
-cat > "$sidebar_dir/version-1.0.0-sidebars.json" <<'JSON'
+cat > "$sidebar_dir/version-$version-sidebars.json" <<'JSON'
 {
   "docsSidebar": [
     "intro",
