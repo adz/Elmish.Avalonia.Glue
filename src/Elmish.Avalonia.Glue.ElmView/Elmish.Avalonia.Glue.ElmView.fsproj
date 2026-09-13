@@ -4,22 +4,18 @@
     <AssemblyName>Elmish.Avalonia.Glue.ElmView</AssemblyName>
     <RootNamespace>Elmish.Avalonia.Glue.ElmView</RootNamespace>
     <Nullable>enable</Nullable>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Elmish.Avalonia.Glue.ElmView</PackageId>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Authors>Your Name</Authors>
     <Description>
       F#-first Elm-style Avalonia binding helpers centered on immutable view snapshots
       and design-time-friendly bindable hosts.
     </Description>
     <PackageTags>fsharp elmish avalonia elm axaml design-time</PackageTags>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ElmViewHosts.fs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\README.md" Pack="true" PackagePath="\" Link="README.md" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Elmish.Glue.Core\Elmish.Glue.Core.fsproj" />

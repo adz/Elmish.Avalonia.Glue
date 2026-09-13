@@ -4,16 +4,12 @@
     <AssemblyName>Elmish.Avalonia.Glue</AssemblyName>
     <RootNamespace>Elmish.Avalonia.Glue</RootNamespace>
     <Nullable>enable</Nullable>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Elmish.Avalonia.Glue</PackageId>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Authors>Your Name</Authors>
     <Description>
       Minimal glue between an Elmish program and an Avalonia ViewModel.
       No Rx. No DynamicData. Just the wiring.
     </Description>
     <PackageTags>fsharp elmish avalonia mvvm</PackageTags>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Compatibility.fs" />
@@ -24,7 +20,7 @@
     <PackageReference Include="Avalonia" Version="12.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\README.md" Pack="true" PackagePath="\" Link="README.md" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Elmish.Glue.Core\Elmish.Glue.Core.fsproj" />

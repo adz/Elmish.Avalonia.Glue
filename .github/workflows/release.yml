@@ -1,0 +1,139 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Existing release version to resume (e.g. 0.1.0)
+        required: true
+        type: string
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Resolve release version
+        id: version
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            version="${{ inputs.version }}"
+          else
+            version="${GITHUB_REF_NAME#v}"
+          fi
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]]; then
+            echo "Release version must have the form MAJOR.MINOR.PATCH[-suffix]; got $version" >&2
+            exit 1
+          fi
+          echo "value=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+
+      - name: Check out release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.version.outputs.tag }}
+          fetch-depth: 0
+
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Check release notes
+        run: bash scripts/check-release-notes.sh "${{ steps.version.outputs.value }}"
+
+      - name: Build
+        run: dotnet build Elmish.Avalonia.Glue.Build.slnf --configuration Release --nologo -v minimal -m:1 -p:Version="${{ steps.version.outputs.value }}"
+
+      - name: Test
+        run: dotnet test Elmish.Avalonia.Glue.Build.slnf --configuration Release --no-build --nologo -v minimal
+
+      - name: Pack libraries
+        run: bash scripts/pack.sh -v "${{ steps.version.outputs.value }}"
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          version="${{ steps.version.outputs.value }}"
+          tag="${{ steps.version.outputs.tag }}"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "GitHub release $tag already exists; keeping its assets."
+          else
+            prerelease=()
+            [[ "$version" == *-* ]] && prerelease=(--prerelease)
+            gh release create "$tag" --title "$tag" --notes-file "dev-docs/releases/$version.md" "${prerelease[@]}" \
+              artifacts/package/*.nupkg artifacts/package/*.snupkg
+          fi
+
+      - name: Upload packages for NuGet publication
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          path: artifacts/package/
+          if-no-files-found: error
+
+  publish-nuget:
+    runs-on: ubuntu-latest
+    needs: release
+    environment: nuget
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Download package artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: packages
+          path: artifacts/package
+
+      - name: Authenticate to NuGet.org (trusted publishing)
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ vars.NUGET_USER }}
+
+      - name: Publish NuGet packages
+        shell: bash
+        env:
+          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
+        run: |
+          # A resumed release re-runs this job; skip packages already live so symbol validation isn't raced.
+          already_published() {
+            local id="${1,,}" version="${2,,}"
+            [ "$(curl -s -o /dev/null -w '%{http_code}' "https://api.nuget.org/v3-flatcontainer/$id/$version/$id.$version.nupkg")" = "200" ]
+          }
+
+          # Dependencies first, so a consumer never sees a package whose dependency isn't published yet.
+          for id in Elmish.Glue.Core Elmish.Avalonia.Glue Elmish.Avalonia.Glue.Projection Elmish.Avalonia.Glue.ElmView; do
+            package="$(ls artifacts/package/$id.[0-9]*.nupkg)"
+            version="$(basename "$package" .nupkg)"; version="${version#"$id."}"
+
+            if already_published "$id" "$version"; then
+              echo "Skipping $id $version: already on NuGet."
+              continue
+            fi
+
+            dotnet nuget push "$package" --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
+            snupkg="artifacts/package/$id.$version.snupkg"
+            if [ -e "$snupkg" ]; then
+              dotnet nuget push "$snupkg" --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
+            fi
+          done

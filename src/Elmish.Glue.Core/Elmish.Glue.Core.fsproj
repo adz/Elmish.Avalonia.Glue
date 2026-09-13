@@ -4,16 +4,12 @@
     <AssemblyName>Elmish.Glue.Core</AssemblyName>
     <RootNamespace>Elmish.Glue.Core</RootNamespace>
     <Nullable>enable</Nullable>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Elmish.Glue.Core</PackageId>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Authors>Your Name</Authors>
     <Description>
       Framework-neutral Elmish host, projection, and keyed collection primitives
       that higher-level UI integrations can build on.
     </Description>
     <PackageTags>fsharp elmish mvvm core projection collections</PackageTags>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ElmishHost.fs" />
@@ -26,6 +22,6 @@
     <PackageReference Include="Elmish" Version="5.0.2" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\README.md" Pack="true" PackagePath="\" Link="README.md" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>
