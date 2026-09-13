@@ -9,7 +9,7 @@ record. Avalonia binds to CLR properties exposed over that record.
 
 ElmView makes records like this the authored UI schema:
 
-```fsharp no-check reason="Illustrative snippet; the complete runnable form is in the samples."
+```fsharp isolated
 type UserInputView =
     { Name: string
       Email: string
@@ -19,9 +19,14 @@ type UserInputView =
 
 That nested record is normally part of a root view record:
 
-```fsharp no-check reason="Illustrative snippet; the complete runnable form is in the samples."
-type AppView =
-    { UserInput: UserInputView }
+```fsharp isolated
+type UserInputView =
+    { Name: string
+      Email: string
+      Newsletter: bool
+      ValidationText: string }
+
+type AppView = { UserInput: UserInputView }
 ```
 
 The AXAML path uses the root record field name, not the nested record type

@@ -79,7 +79,7 @@ This example shows `ObservableCollectionExtensions.SyncWith` preserving item ide
 
 [Source file]({sourceUrl})
 
-```fsharp no-check reason="Excerpted from the linked runnable example."
+```text
 {source.Trim()}
 ```
 

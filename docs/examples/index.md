@@ -1,20 +1,27 @@
 ---
-sidebar_position: 1
+title: Runnable examples
 ---
 
-# Executable examples
+# Runnable examples
 
-These pages are generated from runnable example code and include observed output.
+Each example page is generated from code in `tools/DocsExamples`. The example
+project is built before the documentation site, so its linked source is the
+authoritative, compilable version—not a copy that can drift.
 
-The examples isolate the moving part: snapshot hosting, ElmView write-back, or
-keyed collection patching.
+## Choose an example
 
-## Read next
+- [Use a snapshot host](projection-snapshot-host.html) to see an immutable value
+  replace a stable host snapshot.
+- [Route an ElmView edit](elmview-write-back.html) to see a generated-shaped
+  setter dispatch one message.
+- [Patch a keyed collection](keyed-collection-sync.html) to see retained rows
+  keep identity while order and values change.
 
-- [Projection snapshot-host example](https://adz.github.io/Elmish.Avalonia.Glue/docs/examples/projection-snapshot-host)
-- [ElmView write-back example](https://adz.github.io/Elmish.Avalonia.Glue/docs/examples/elmview-write-back)
-- [Keyed collection patching example](https://adz.github.io/Elmish.Avalonia.Glue/docs/examples/keyed-collection-sync)
+Run all examples and regenerate their observed output with:
 
-## Why this section exists
+```bash
+dotnet run --project tools/DocsExamples/DocsExamples.fsproj
+```
 
-The docs site includes observed output, not only source snippets.
+Use an example as a narrow proof of one mechanism. Use the sample suites when
+you need complete AXAML, design-time data, and application startup.

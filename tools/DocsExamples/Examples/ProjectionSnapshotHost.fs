@@ -46,7 +46,7 @@ This example shows a single immutable snapshot flowing through `SnapshotHost<'T>
 
 [Source file]({sourceUrl})
 
-```fsharp no-check reason="Excerpted from the linked runnable example."
+```text
 {source.Trim()}
 ```
 

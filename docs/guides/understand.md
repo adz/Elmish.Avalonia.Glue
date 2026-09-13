@@ -1,43 +1,43 @@
 ---
-sidebar_position: 3
+title: Understand the architecture
 ---
 
-# Understand
+# Understand the architecture
 
-Project map before the API pages:
+Read this after the quickstart. It names the few moving parts so the API pages
+are easier to use.
 
-The project keeps Avalonia as the UI surface and uses Elmish-style F# state
-behind it. There is no new view syntax to learn.
+## The boundary
 
-## The Short Version
+Elmish replaces immutable values. Avalonia binds to stable objects. A **host**
+is the stable object. A **snapshot** is the current immutable value behind it.
 
-Avalonia wants stable bindable objects. Elmish wants immutable snapshots.
+When a snapshot changes, the host raises `PropertyChanged`. When a user edits
+a writable property, the host dispatches an Elmish message. The host never
+mutates the snapshot in place.
 
-The shared substrate bridges that mismatch with stable hosts, bindable nodes,
-snapshot updates, dispatch surfaces, and keyed collection patching.
+## The layers
 
-`Projection` exposes that bridge as explicit CLR viewmodels.
+| Layer | Owns | Does not own |
+| --- | --- | --- |
+| `Elmish.Glue.Core` | snapshots, notifications, dispatch, keyed patching | Avalonia threading |
+| `Elmish.Avalonia.Glue` | UI-thread delivery and compatibility names | UI schema |
+| `Projection` | explicit CLR-facing hosts and collections | the Elmish model |
+| `ElmView` | generated-shaped hosts, nodes, and write-back routes | a custom markup language |
 
-`ElmView` exposes that bridge as generated or mechanical nodes over immutable
-F# view records.
+## The two authoring families
 
-## How To Read The Families
+**Projection** makes the UI-facing shape explicit in CLR viewmodels. Choose it
+when commands, derived properties, or mutable row adapters deserve named code.
 
-For each screen, locate the UI-facing shape.
+**ElmView** makes an immutable F# view record the UI-facing schema. Choose it
+when most UI shaping belongs in F# and the host can remain mechanical.
 
-If the answer is a named C# or CLR viewmodel, you are looking at Projection.
+## The important invariant
 
-If the answer is an immutable F# view record, you are looking at ElmView.
+The AXAML binding path is a contract. Runtime and design-time hosts must expose
+the same paths. A `TwoWay` path must dispatch exactly once for a user edit;
+receiving a new snapshot must never dispatch again.
 
-Both can use the same AXAML binding path.
-
-## Read next
-
-- [Shared substrate](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand/shared-substrate)
-- [Projection family](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand/projection-family)
-- [ElmView family](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand/elmview-family)
-
-## Source
-
-- [Snapshot substrate](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Glue.Core/SnapshotSubstrate.fs)
-- [Projection contracts](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Glue.Core/Projections.fs)
+Read [the Projection guide](understand/projection-family.html) or [the ElmView
+guide](understand/elmview-family.html) next.

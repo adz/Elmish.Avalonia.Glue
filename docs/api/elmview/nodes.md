@@ -65,9 +65,9 @@ public UserInputNode UserInput => _userInput;
 
 That property normally mirrors a root F# view-record field:
 
-```fsharp no-check reason="Illustrative snippet; the complete runnable form is in the samples."
-type AppView =
-    { UserInput: FormView }
+```fsharp isolated
+type FormView = { Name: string }
+type AppView = { UserInput: FormView }
 ```
 
 Avalonia then resolves `<TextBox Text="{Binding UserInput.Name}" />` by reading

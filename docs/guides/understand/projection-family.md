@@ -11,7 +11,7 @@ collection adapters.
 The F# model owns state transitions. The projection owns the object shape
 that AXAML sees.
 
-```fsharp no-check reason="Illustrative snippet; the complete runnable form is in the samples."
+```fsharp isolated
 type FormModel =
     { Name: string
       Newsletter: bool }

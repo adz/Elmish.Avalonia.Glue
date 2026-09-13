@@ -1,149 +1,46 @@
 ---
-sidebar_position: 1
+title: What this library changes
 ---
 
-# Elmish.Avalonia.Glue
+# What this library changes
 
-Goal:
+Elmish.Avalonia.Glue is for an Avalonia application that wants immutable F#
+state without giving up normal desktop UI authoring.
 
-**Can an Avalonia app keep AXAML and designer tooling while moving UI
-state and UI-shaped data into Elmish-style F#?**
+## Keep the parts of Avalonia that already work
 
-The Avalonia surface stays intact: `.axaml`, binding paths,
-compiled-binding friendliness, preview data, and DevTools inspection.
-
-The Elmish part is small: application state is immutable, user events become
-messages, and an `update` function returns the next state.
-
-The glue connects those two models without a custom UI DSL or a new binding
-language.
-
-## The Elmish Shape This Builds On
-
-State is a value. User or system events become messages. `update` returns the
-next state.
-
-```fsharp no-check reason="Illustrative snippet; the complete runnable form is in the samples."
-type Model =
-    { Name: string
-      Newsletter: bool }
-
-type Msg =
-    | SetName of string
-    | SetNewsletter of bool
-
-let update msg model =
-    match msg with
-    | SetName name ->
-        { model with Name = name }
-    | SetNewsletter enabled ->
-        { model with Newsletter = enabled }
-```
-
-Avalonia cannot bind directly to that immutable F# model in the same way it
-binds to a mutable CLR viewmodel. Something has to expose properties,
-`INotifyPropertyChanged`, and dispatch back into Elmish.
-
-The glue supplies that bindable surface. Application code chooses how explicit
-the surface is.
-
-## What The Glue Owns
-
-The glue does not replace Avalonia controls or binding syntax. AXAML remains
-AXAML.
+Keep `.axaml`, binding paths, `Mode=TwoWay`, compiled bindings, preview data,
+and DevTools. A control still sees an ordinary CLR `DataContext`.
 
 ```xml
 <TextBox Text="{Binding UserInput.Name, Mode=TwoWay}" />
 <CheckBox IsChecked="{Binding UserInput.Newsletter, Mode=TwoWay}" />
 ```
 
-The glue owns the bindable surface behind that AXAML:
+## Move state transitions into F#
 
-- publish a CLR property such as `UserInput.Name`
-- read the value from an immutable F# snapshot
-- raise `PropertyChanged` when a new snapshot arrives
-- dispatch an Elmish message when Avalonia writes a `TwoWay` value
+Your model is immutable. An event becomes a message, and `update` returns the
+next model. The following standalone example is valid F# and is representative
+of the state layer this library connects to Avalonia.
 
-Avalonia sees a bindable object. The state logic stays in F#.
+```fsharp isolated
+type Model = { Name: string; Newsletter: bool }
 
-## Two Ways To Expose The Bindable Surface
+type Msg = SetName of string | SetNewsletter of bool
 
-The repository keeps two families because applications need different
-ownership boundaries.
-
-Both families use AXAML. The difference is where the UI-facing shape is
-authored.
-
-### Projection: Explicit Viewmodels
-
-Use `Projection` when you want named CLR viewmodels that Avalonia binds to
-directly.
-
-```csharp
-public sealed class UserInputProjection : ObservableObject
-{
-    public string Name { get; set; }
-
-    public void Update(FormModel model)
-    {
-        Name = model.Name;
-    }
-}
+let update message model =
+    match message with
+    | SetName name -> { model with Name = name }
+    | SetNewsletter enabled -> { model with Newsletter = enabled }
 ```
 
-This gives XAML teams a named CLR contract. The tradeoff is extra mutable
-viewmodel code beside the F# model and AXAML.
+## Add one deliberately boring bridge
 
-### ElmView: F# View Records Plus A Bindable Host
+The bridge publishes properties, reads the latest immutable snapshot, raises
+change notifications, and dispatches a message when Avalonia writes a
+`TwoWay` property. It owns no product state and does not interpret your UI.
 
-Use `ElmView` when the F# record is the UI schema and the CLR surface is
-generated or mechanically authored.
+Choose **Projection** for an explicit CLR contract. Choose **ElmView** when
+the F# view record is the contract and the CLR host is mechanical.
 
-```fsharp no-check reason="Illustrative snippet; the complete runnable form is in the samples."
-type UserInputView =
-    { Name: string
-      Newsletter: bool }
-```
-
-The host maps editable properties to messages in one place.
-
-```csharp
-bindings.For(x => x.UserInput.Name).Dispatch(Msg.NewSetName);
-bindings.For(x => x.UserInput.Newsletter).Dispatch(Msg.NewSetNewsletter);
-```
-
-Here the F# record describes the UI-shaped data. The host exists so Avalonia
-can bind to it.
-
-The current samples may handwrite the host, but it follows a generated shape.
-Product behavior belongs in the F# model, the F# view record, AXAML, and the
-message mapping.
-
-## How Runtime And Preview Stay Aligned
-
-Design-time preview is not a separate mode with fake binding rules. Samples
-provide realistic F# view snapshots, then wrap those snapshots in the same
-kind of bindable surface used at runtime.
-
-```csharp
-public AppHost() : this(Core.App.getDesignView())
-{
-}
-```
-
-At runtime, the Elmish loop pushes new snapshots into that host.
-
-```fsharp no-check reason="Illustrative snippet; the complete runnable form is in the samples."
-ElmishHost.startAndBind(program, host.Update, host.SetDispatch)
-```
-
-Preview gets real data without starting the full Elmish application.
-
-Design-time preview is a constraint, not a later feature. A design that only
-works after booting the full Elmish runtime misses the Avalonia-first goal.
-
-## Where To Go Next
-
-- [Getting started](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/start): choose a family from the same AXAML problem.
-- [Understand](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand): concepts before API details.
-- [Executable examples](https://adz.github.io/Elmish.Avalonia.Glue/docs/examples): small docs examples generated from runnable code.
+Continue with [the quickstart](guides/start.html).
