@@ -31,7 +31,7 @@ There are two approaches in this repository:
 
 Both families sit on the same Elmish loop:
 
-```fsharp
+```fsharp no-check reason="Illustrative snippet; the complete runnable form is in the samples."
 let init () =
     { Name = ""; Newsletter = false }, Cmd.none
 
@@ -46,7 +46,7 @@ let update msg model =
 The package boundary starts after this. `Elmish.Avalonia.Glue` connects model
 updates to a bindable object on the Avalonia UI thread.
 
-```fsharp
+```fsharp no-check reason="Illustrative snippet; the complete runnable form is in the samples."
 ElmishHost.startAndBind(program, host.Update, host.SetDispatch)
 ```
 
@@ -81,7 +81,7 @@ public sealed class FormProjection : ObservableObject
 The connection is direct: `startAndBind` calls `projection.Update(model)` after
 each Elmish update, and the projection raises `PropertyChanged`.
 
-```fsharp
+```fsharp no-check reason="Illustrative snippet; the complete runnable form is in the samples."
 ElmishHost.startAndBind(program, projection.Update, projection.SetDispatch)
 ```
 
@@ -112,7 +112,7 @@ Read next:
 
 ElmView moves the screen-shaped data into immutable F# records.
 
-```fsharp
+```fsharp no-check reason="Illustrative snippet; the complete runnable form is in the samples."
 type FormView =
     { Name: string
       Newsletter: bool
@@ -166,7 +166,7 @@ Read next:
 Do not start the full Elmish runtime just to preview a view. Provide realistic
 sample data from F#, then wrap it in the same bindable shape the AXAML expects.
 
-```fsharp
+```fsharp no-check reason="Illustrative snippet; the complete runnable form is in the samples."
 let designView =
     { UserInput =
         { Name = "Ada"

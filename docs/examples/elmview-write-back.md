@@ -11,7 +11,7 @@ This example shows `WriteBackBindings<'View,'Msg>` routing an edit through a gen
 
 [Source file](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/tools/DocsExamples/Examples/ElmViewWriteBack.fs)
 
-```fsharp
+```fsharp no-check reason="Excerpted from the linked runnable example."
 type View =
     { UserInput: UserInput }
 

@@ -3,6 +3,7 @@ obj/
 artifacts/
 .docusaurus/
 build/
+output/
 node_modules/
 versioned_docs/
 versioned_sidebars/
@@ -13,3 +14,5 @@ TestResults/
 .codex
 .codex/
 scripts/ralph-loop-tasks.sh
+.livedocs/cache/
+.livedocs/releases/

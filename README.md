@@ -17,13 +17,13 @@ It's just the glue between them.
 
 ## Read next
 
-- [Docs site](https://adz.github.io/Elmish.Avalonia.Glue/docs/intro): start here if you want the intent before the APIs.
+- [Docs site](https://adz.github.io/Elmish.Avalonia.Glue/): start here if you want the intent before the APIs.
 
 ## Packages
 
-- [Elmish.Avalonia.Glue](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand/shared-substrate) - the shared substrate glue between immutable snapthos and bindable objects.
-- [Elmish.Avalonia.Glue.Projection](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand/projection-family)
-- [Elmish.Avalonia.Glue.ElmView](https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand/elmview-family)
+- [Elmish.Avalonia.Glue](https://adz.github.io/Elmish.Avalonia.Glue/guides/understand/shared-substrate.html) - the shared substrate glue between immutable snapshots and bindable objects.
+- [Elmish.Avalonia.Glue.Projection](https://adz.github.io/Elmish.Avalonia.Glue/guides/understand/projection-family.html)
+- [Elmish.Avalonia.Glue.ElmView](https://adz.github.io/Elmish.Avalonia.Glue/guides/understand/elmview-family.html)
 
 ## Samples
 

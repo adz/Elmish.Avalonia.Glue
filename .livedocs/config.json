@@ -1,0 +1,20 @@
+{
+  "siteName": "Elmish.Avalonia.Glue",
+  "repoUrl": "https://github.com/adz/Elmish.Avalonia.Glue",
+  "logoText": "EAG",
+  "logoPath": "content/logo.svg",
+  "themes": ["light", "dark"],
+  "projects": [
+    "src/Elmish.Avalonia.Glue.ElmView/Elmish.Avalonia.Glue.ElmView.fsproj",
+    "src/Elmish.Avalonia.Glue.Projection/Elmish.Avalonia.Glue.Projection.fsproj",
+    "src/Elmish.Avalonia.Glue/Elmish.Avalonia.Glue.fsproj",
+    "src/Elmish.Glue.Core/Elmish.Glue.Core.fsproj"
+  ],
+  "navigation": [
+    { "label": "Home", "href": "index.html" },
+    { "label": "Start", "href": "guides/start.html" },
+    { "label": "API", "href": "api.html" },
+    { "label": "Examples", "href": "examples/index.html" },
+    { "label": "Source", "href": "https://github.com/adz/Elmish.Avalonia.Glue" }
+  ]
+}

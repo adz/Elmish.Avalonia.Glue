@@ -11,7 +11,7 @@ This example shows `ObservableCollectionExtensions.SyncWith` preserving item ide
 
 [Source file](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/tools/DocsExamples/Examples/KeyedCollectionSync.fs)
 
-```fsharp
+```fsharp no-check reason="Excerpted from the linked runnable example."
 type Row =
     { Id: Guid
       Name: string }

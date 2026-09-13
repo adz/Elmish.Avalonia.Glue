@@ -65,7 +65,7 @@ public UserInputNode UserInput => _userInput;
 
 That property normally mirrors a root F# view-record field:
 
-```fsharp
+```fsharp no-check reason="Illustrative snippet; the complete runnable form is in the samples."
 type AppView =
     { UserInput: FormView }
 ```

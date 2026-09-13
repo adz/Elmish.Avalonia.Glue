@@ -11,7 +11,7 @@ This example shows a single immutable snapshot flowing through `SnapshotHost<'T>
 
 [Source file](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/tools/DocsExamples/Examples/ProjectionSnapshotHost.fs)
 
-```fsharp
+```fsharp no-check reason="Excerpted from the linked runnable example."
 type Snapshot =
     { Name: string
       Count: int }

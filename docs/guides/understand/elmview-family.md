@@ -9,7 +9,7 @@ record. Avalonia binds to CLR properties exposed over that record.
 
 ElmView makes records like this the authored UI schema:
 
-```fsharp
+```fsharp no-check reason="Illustrative snippet; the complete runnable form is in the samples."
 type UserInputView =
     { Name: string
       Email: string
@@ -19,7 +19,7 @@ type UserInputView =
 
 That nested record is normally part of a root view record:
 
-```fsharp
+```fsharp no-check reason="Illustrative snippet; the complete runnable form is in the samples."
 type AppView =
     { UserInput: UserInputView }
 ```

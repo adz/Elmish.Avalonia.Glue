@@ -23,7 +23,7 @@ language.
 State is a value. User or system events become messages. `update` returns the
 next state.
 
-```fsharp
+```fsharp no-check reason="Illustrative snippet; the complete runnable form is in the samples."
 type Model =
     { Name: string
       Newsletter: bool }
@@ -99,7 +99,7 @@ viewmodel code beside the F# model and AXAML.
 Use `ElmView` when the F# record is the UI schema and the CLR surface is
 generated or mechanically authored.
 
-```fsharp
+```fsharp no-check reason="Illustrative snippet; the complete runnable form is in the samples."
 type UserInputView =
     { Name: string
       Newsletter: bool }
@@ -133,7 +133,7 @@ public AppHost() : this(Core.App.getDesignView())
 
 At runtime, the Elmish loop pushes new snapshots into that host.
 
-```fsharp
+```fsharp no-check reason="Illustrative snippet; the complete runnable form is in the samples."
 ElmishHost.startAndBind(program, host.Update, host.SetDispatch)
 ```
 

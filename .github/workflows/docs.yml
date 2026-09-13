@@ -22,27 +22,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Restore local tools
+        run: dotnet tool restore
 
       - name: Build docs
-        run: npm run build
+        run: bash scripts/build-docs.sh
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: build
+          path: output
 
   deploy:
     needs: build

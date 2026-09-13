@@ -49,3 +49,4 @@ After each task is completed, create a separate git commit before starting the n
 25. [x] After the form path is proven, extend the same pattern to other interactive sample areas.
 26. [x] Update docs to explain the new ElmView story clearly: pure F# models, normal AXAML, generated writable facade, centralized message mapping, and no F# binding metadata.
 27. [x] Re-evaluate the architecture comparison after ElmView V2 lands by measuring boilerplate, reviewability, runtime behavior, design-time quality, and LLM editing ergonomics against `Projection`.
+28. [x] Replace the Docusaurus documentation site with the repository-local FsLiveDocs .NET tool and GitHub Pages build workflow.

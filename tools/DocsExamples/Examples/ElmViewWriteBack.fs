@@ -70,7 +70,7 @@ This example shows `WriteBackBindings<'View,'Msg>` routing an edit through a gen
 
 [Source file]({sourceUrl})
 
-```fsharp
+```fsharp no-check reason="Excerpted from the linked runnable example."
 {source.Trim()}
 ```
 
