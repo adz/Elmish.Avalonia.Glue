@@ -1,12 +1,8 @@
----
-sidebar_position: 5
----
-
 # Projection contracts
 
 The core projection contracts define how explicit, named viewmodels interact with the Elmish state and dispatch loop.
 
-## Interfaces
+## Update and dispatch contracts
 
 ### `IProjection<'Model>`
 Defines the contract for an object that can be updated with a new model snapshot.
@@ -22,7 +18,7 @@ Defines the contract for an object that can dispatch messages back to the Elmish
 | :--- | :--- |
 | `SetDispatch(dispatch)` | Provides the object with a dispatch function. |
 
-## Extensions
+## Composition helpers
 
 The `ProjectionExtensions` module provides helpers for wiring up projection trees.
 
@@ -37,7 +33,7 @@ Synchronizes a collection of viewmodels with a list of models.
 | `SyncWith(collection, models, modelKey, vmKey, create)` | Simple synchronization where viewmodels only need an `Update` call. |
 | `SyncWith(collection, models, modelKey, vmKey, create, parentDispatch, map)` | Synchronization that also wires up dispatching for new viewmodels. |
 
-## Why use explicit projections?
+## Appropriate uses
 
 Use explicit projections when:
 
@@ -45,6 +41,6 @@ Use explicit projections when:
 - Interoperability: a mixed C#/F# codebase needs a C# viewmodel surface.
 - Fine-grained control: specific UI components need explicit lifecycle or identity handling.
 
-## Source
+## Implementation
 
 - [Projections.fs](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Glue.Core/Projections.fs)

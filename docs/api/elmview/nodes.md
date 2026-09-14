@@ -1,7 +1,3 @@
----
-sidebar_position: 4
----
-
 # Generated-shaped nodes
 
 `GeneratedViewNode<'RootView, 'NodeView, 'Msg>` is the base class for nested
@@ -21,7 +17,7 @@ generator could emit.
 | `Snapshot` | Returns the current immutable view record for *this specific node*, plucked from the root view. |
 | `Dispatch(message)` | Dispatches a message to the Elmish loop through the root host dispatcher. |
 
-## How they enable nested bindings
+## Stable nested binding paths
 
 Traditional MVVM often uses deep trees of mutable viewmodel objects. ElmView
 uses a tree of records behind generated bindable nodes.
@@ -32,7 +28,7 @@ uses a tree of records behind generated bindable nodes.
 2. **Plucking**: The node is configured with a function that knows how to find its specific record within the root snapshot (e.g., `view => view.UserInput`).
 3. **Notification**: When the root host receives a new snapshot, it triggers a refresh. Each node then raises `PropertyChanged` for the specific properties it exposes, allowing Avalonia to update the UI.
 
-## Implementation Example
+## Define a node
 
 Generated-shaped hosts define nested node classes in this shape:
 
@@ -73,12 +69,12 @@ type AppView = { UserInput: FormView }
 Avalonia then resolves `<TextBox Text="{Binding UserInput.Name}" />` by reading
 `AppHost.UserInput`, then `UserInputNode.Name`.
 
-## Why Use Generated-shaped Nodes
+## Identity and notification guarantees
 
 - Deep bindings: supports XAML binding paths like `<TextBox Text="{Binding UserInput.Name}" />`.
 - Identity preservation: keeps stable bindable nodes without hand-authored projection trees.
 - Refresh propagation: notifications move from the root to child nodes.
 
-## Source
+## Implementation
 
 - [ElmViewHosts.fs](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Avalonia.Glue.ElmView/ElmViewHosts.fs)

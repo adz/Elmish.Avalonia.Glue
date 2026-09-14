@@ -1,7 +1,3 @@
----
-sidebar_position: 3
----
-
 # Keyed collections
 
 `KeyedSnapshotCollection<'T, 'Key>` in the Projection package specializes the
@@ -17,7 +13,7 @@ preserving stable UI identity.
 | `Items` | Returns the underlying `ObservableCollection<'T>`. Binds in XAML to `Items`. |
 | `Update(next)` | Synchronizes the collection with the provided list of snapshots. |
 
-## How it works
+## Patch sequence
 
 1. **Inheritance**: It inherits from `Elmish.Glue.Core.KeyedSnapshotCollection`.
 2. **Keying**: You provide a key selector function in the constructor. This key is used to determine which items in the collection correspond to which items in the new snapshot list.
@@ -27,7 +23,7 @@ preserving stable UI identity.
     - **Move** existing snapshots to their new positions.
     - **Update** items in place if they are already present (by reference or value).
 
-## Why use it in a Projection?
+## Selection and container stability
 
 For Projection-style viewmodels that display lists, `KeyedSnapshotCollection`
 keeps row identity stable:
@@ -36,7 +32,7 @@ keeps row identity stable:
 - Selection preservation: selected rows remain selected while their data changes.
 - Smoother updates: retained rows are patched instead of replacing the whole collection.
 
-## Source
+## Implementations
 
 - [SnapshotHosts.fs](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Avalonia.Glue.Projection/SnapshotHosts.fs)
 - [KeyedCollectionPatching.fs](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Glue.Core/KeyedCollectionPatching.fs)

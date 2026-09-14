@@ -1,34 +1,16 @@
----
-sidebar_position: 3
----
+# Elmish.Avalonia.Glue.Projection
 
-# `Elmish.Avalonia.Glue.Projection`
+Projection supports explicit CLR-facing viewmodels over immutable Elmish
+state.
 
-Projection is the explicit CLR-facing family.
+## Choose the smallest projection surface
 
-## Scope
+Use `SnapshotHost<T>` when AXAML can read most values directly through
+`Current`. Add named properties or commands only where they clarify the view
+contract.
 
-This package keeps named host types small while exposing a stable projection
-surface.
+Use `KeyedSnapshotCollection<T,TKey>` when a bound collection must remain
+stable while its immutable contents change.
 
-## Core shape
-
-- `SnapshotHost<'T>` for a single immutable snapshot
-- `KeyedSnapshotCollection<'T,'Key>` for identity-aware list updates
-- the shared core contracts for direct projection and dispatch composition
-
-## What you can do
-
-- keep explicit viewmodels around immutable data
-- preserve collection identity where Avalonia benefits from it
-- compose projection hosts into larger screens
-
-## Member map
-
-- [Snapshot host](https://adz.github.io/Elmish.Avalonia.Glue/docs/api/projection/snapshot-host)
-- [Keyed collections](https://adz.github.io/Elmish.Avalonia.Glue/docs/api/projection/keyed-collections)
-
-## Read next
-
-- [Core package hub](https://adz.github.io/Elmish.Avalonia.Glue/docs/api/core)
-- [Projection package source](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Avalonia.Glue.Projection/SnapshotHosts.fs)
+Use Core's projection interfaces and `SyncWith` overloads for mutable row
+viewmodels that update in place and dispatch child messages.

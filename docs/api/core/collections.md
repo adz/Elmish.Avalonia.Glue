@@ -1,7 +1,3 @@
----
-sidebar_position: 4
----
-
 # Collections
 
 The collections substrate provides utilities for syncing mutable `ObservableCollection`s with immutable lists while preserving the identity of the items.
@@ -41,14 +37,14 @@ Projection and ElmView use it for lists of snapshots.
 | `Items` | Returns the underlying `ObservableCollection<'T>`. |
 | `Update(next: IReadOnlyList<'T>)` | Patches the collection to match the new list of snapshots. |
 
-## Why use keyed patching?
+## Identity preserved by patching
 
 By patching the collection instead of replacing it:
 1. **Container Reuse**: Avalonia can reuse the existing `ListBoxItem` or `DataGridRow` containers.
 2. **Selection Stability**: Selected items remain selected if they are still present in the list.
 3. **Smooth Transitions**: List animations and layout transitions work correctly.
 
-## Source
+## Implementations
 
 - [ObservableCollectionExtensions.fs](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Glue.Core/ObservableCollectionExtensions.fs)
 - [KeyedCollectionPatching.fs](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Glue.Core/KeyedCollectionPatching.fs)

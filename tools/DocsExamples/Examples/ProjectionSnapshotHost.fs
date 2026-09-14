@@ -17,6 +17,8 @@ let run outputDir =
 
     let source =
         """
+open Elmish.Avalonia.Glue.Projection
+
 type Snapshot =
     { Name: string
       Count: int }
@@ -34,25 +36,19 @@ printfn "Current.Count = %d" host.Current.Count
         |> String.concat Environment.NewLine
 
     File.WriteAllText(Path.Combine(outputDir, "projection-snapshot-host.md"), $"""---
-sidebar_position: 2
 title: Projection snapshot-host example
+project: src/Elmish.Avalonia.Glue.Projection/Elmish.Avalonia.Glue.Projection.fsproj
 ---
 
 # Projection snapshot-host example
 
 This example shows a single immutable snapshot flowing through `SnapshotHost<'T>`.
 
-## Source
+## Run the snapshot transition
 
 [Source file]({sourceUrl})
 
-```text
+```fsharp run
 {source.Trim()}
-```
-
-## Observed output
-
-```text
-{output}
 ```
 """)

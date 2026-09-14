@@ -1,50 +1,70 @@
----
-title: Elmish.Avalonia.Glue
-weight: 1
----
-
 # Elmish.Avalonia.Glue
 
-Build ordinary Avalonia applications with immutable F# state. Keep AXAML,
-standard bindings, design-time preview, and DevTools. Move application state
-and UI-shaped data into Elmish-style F#.
+Avalonia gives you AXAML, compiled bindings, design-time preview, and DevTools.
+Elmish gives you immutable state, explicit messages, and one update loop.
 
-## Why use this library
+Elmish.Avalonia.Glue lets you keep both.
 
-Avalonia bindings want stable CLR objects that raise `PropertyChanged`.
-Elmish wants each state transition to create a new immutable value. This
-library supplies the small, explicit bridge between those two useful models.
+## The problem it solves
 
-It does not introduce a UI DSL, a new binding language, or special controls.
-Your views remain normal `.axaml` files. The question is only how their
-`DataContext` is shaped.
+Elmish replaces an immutable model after each message. Avalonia expects a
+stable `DataContext` that raises `PropertyChanged` and accepts `TwoWay` writes.
 
-## Choose your first path
+The library puts a small adapter between them:
 
-Start with [the quickstart](guides/start.html). It walks through one small form
-and helps you choose a family:
-
-- **Projection** when you want named, explicit CLR viewmodels.
-- **ElmView** when immutable F# view records should be the screen schema.
-
-Both paths use the same Elmish loop and ordinary Avalonia binding syntax.
-
-## Learn in order
-
-1. [Get started](guides/start.html) with one screen and one editable field.
-2. [Understand the architecture](guides/understand.html) before scaling out.
-3. Follow the focused guides for [Projection](guides/understand/projection-family.html), [ElmView](guides/understand/elmview-family.html), and [design-time data](guides/start/preview-and-design.html).
-4. Use the [runnable examples](examples/index.html) as working patterns.
-5. Use the [package reference](api.html) when you need a specific type.
-
-## Build the documentation
-
-The repository uses the local FsLiveDocs tool. It compiles F# documentation
-blocks and renders the authored guides together with generated API reference.
-
-```bash
-dotnet tool restore
-dotnet build Elmish.Avalonia.Glue.sln
-bash scripts/build-docs.sh
-dotnet livedocs watch --host 127.0.0.1 --port 5000
+```text
+user edit → Avalonia binding → stable host → Elmish message
+                                              ↓
+AXAML binding ← PropertyChanged ← new immutable snapshot
 ```
+
+The adapter is the glue. It does not replace AXAML, invent a UI DSL, or move
+application behaviour out of F#.
+
+## A concrete example
+
+Imagine a profile form. The application state stays immutable:
+
+```fsharp isolated
+type Model = { Name: string; Newsletter: bool }
+type Msg = NameChanged of string | NewsletterChanged of bool
+
+let update msg model =
+    match msg with
+    | NameChanged name -> { model with Name = name }
+    | NewsletterChanged value -> { model with Newsletter = value }
+```
+
+The view remains ordinary AXAML:
+
+```xml
+<TextBox Text="{Binding Profile.Name, Mode=TwoWay}" />
+<CheckBox IsChecked="{Binding Profile.Newsletter, Mode=TwoWay}" />
+```
+
+The host exposes `Profile.Name` and `Profile.Newsletter`. Reads come from the
+latest snapshot. Writes dispatch `NameChanged` or `NewsletterChanged`.
+
+## Choose an authoring style
+
+Use **Projection** when a named CLR viewmodel is useful application code. It
+is a good fit for command-heavy screens and controls that need mutable row
+identity.
+
+Use **ElmView** when an immutable F# view record should define the screen
+shape. The CLR host then stays shallow and mechanical.
+
+You can use both styles in one application. The choice belongs to a screen,
+not the whole codebase.
+
+## Learn from a working path
+
+1. [Build the smallest useful screen](guides/get-started.html).
+2. [Learn how snapshots, hosts, and dispatch fit together](guides/architecture.html).
+3. Build the screen with [Projection](guides/projection.html) or [ElmView](guides/elmview.html).
+4. [Connect the host to the application lifetime](guides/connect-runtime.html).
+5. [Add trustworthy design-time data](guides/design-time-preview.html).
+6. [Preserve identity in changing lists](guides/keyed-collections.html).
+7. [Explore the complete sample applications](guides/sample-applications.html).
+
+When you know the concepts, use the generated [API reference](api.html).

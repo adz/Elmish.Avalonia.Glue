@@ -1,7 +1,3 @@
----
-sidebar_position: 3
----
-
 # Snapshots
 
 The snapshot substrate provides the base classes for creating stable, bindable shells around immutable data snapshots.
@@ -51,6 +47,6 @@ An interface that allows parent and child nodes to communicate during a refresh 
 | :--- | :--- |
 | `RefreshSubtree()` | Propagates a refresh signal down the node tree. |
 
-## Source
+## Implementation
 
 - [SnapshotSubstrate.fs](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Glue.Core/SnapshotSubstrate.fs)

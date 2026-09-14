@@ -5,5 +5,5 @@ hosts that also work at design time, so there is little or no C#.
 
 Pre-1.0: the API may still change between minor versions.
 
-- Guide: https://adz.github.io/Elmish.Avalonia.Glue/docs/guides/understand/elmview-family
+- Guide: https://adz.github.io/Elmish.Avalonia.Glue/guides/elmview.html
 - Source: https://github.com/adz/Elmish.Avalonia.Glue

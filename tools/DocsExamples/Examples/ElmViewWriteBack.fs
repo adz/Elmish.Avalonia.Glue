@@ -36,6 +36,9 @@ let run outputDir =
 
     let source =
         """
+open System
+open Elmish.Avalonia.Glue.ElmView
+
 type View =
     { UserInput: UserInput }
 
@@ -50,6 +53,20 @@ type Host(initialView: View) =
         initialView,
         Action<WriteBackBindings<View, Msg>>(fun bindings ->
             bindings.For(fun (x: View) -> x.UserInput.Name).Dispatch(Func<string, Msg>(SetName)) |> ignore))
+
+    member this.Name
+        with get () = this.View.UserInput.Name
+        and set value = this.TryDispatchWriteBack("UserInput.Name", value) |> ignore
+
+let host = Host({ UserInput = { Name = "Avery" } })
+host.SetDispatch(Action<Msg>(fun msg ->
+    match msg with
+    | SetName name ->
+        host.Update({ host.View with UserInput = { Name = name } })))
+
+host.Name <- "Morgan"
+printfn "View.UserInput.Name = %s" host.View.UserInput.Name
+printfn "Host.Name = %s" host.Name
 """
 
     let output =
@@ -58,25 +75,19 @@ type Host(initialView: View) =
         |> String.concat Environment.NewLine
 
     File.WriteAllText(Path.Combine(outputDir, "elmview-write-back.md"), $"""---
-sidebar_position: 3
 title: ElmView write-back example
+project: src/Elmish.Avalonia.Glue.ElmView/Elmish.Avalonia.Glue.ElmView.fsproj
 ---
 
 # ElmView write-back example
 
 This example shows `WriteBackBindings<'View,'Msg>` routing an edit through a generated host.
 
-## Source
+## Run one edit
 
 [Source file]({sourceUrl})
 
-```text
+```fsharp run
 {source.Trim()}
-```
-
-## Observed output
-
-```text
-{output}
 ```
 """)

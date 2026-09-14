@@ -1,7 +1,3 @@
----
-sidebar_position: 3
----
-
 # Write-back bindings
 
 `WriteBackBindings<'View, 'Msg>` is a registry for editable properties.
@@ -29,7 +25,7 @@ Elmish message. The Elmish `update` function produces the next snapshot.
 | :--- | :--- |
 | `Dispatch(map)` | Completes the registration by providing a function that takes the new property value and returns a message to dispatch. |
 
-## Usage Example
+## Register editable paths
 
 Configure these bindings in the host constructor or in a static configuration
 block:
@@ -56,7 +52,7 @@ The AXAML path and the write-back selector name the same property. The
 AXAML line controls Avalonia binding behavior. The registry line controls
 Elmish message routing.
 
-## How it works
+## Dispatch sequence
 
 1. `For` reads the expression tree and stores a path such as
    `"UserInput.Name"`.
@@ -78,7 +74,7 @@ public string Name
 
 The Elmish update function applies the state change.
 
-## What Can Use Write-Back
+## Editable and display-only values
 
 Use write-back for generated properties that Avalonia writes to:
 
@@ -106,7 +102,7 @@ Commands and events can stay as small explicit host methods:
 public void RefreshHttp() => Dispatch(Msg.RefreshHttp);
 ```
 
-## Why Use This Registry
+## Centralized routing contract
 
 - One place lists the editable UI paths.
 - The selector is type-checked against the F# view record.
@@ -117,6 +113,6 @@ public void RefreshHttp() => Dispatch(Msg.RefreshHttp);
 ElmView keeps the F# record plain, AXAML standard, and the bridge code in the
 host.
 
-## Source
+## Implementation
 
 - [ElmViewHosts.fs](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Avalonia.Glue.ElmView/ElmViewHosts.fs)

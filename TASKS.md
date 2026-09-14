@@ -52,3 +52,4 @@ After each task is completed, create a separate git commit before starting the n
 28. [x] Replace the Docusaurus documentation site with the repository-local FsLiveDocs .NET tool and GitHub Pages build workflow.
 29. [x] Reorganize the documentation around a newcomer journey and verify every F# documentation example with FsLiveDocs.
 30. [x] Restore filename-derived FsLiveDocs sidebar labels and prevent blank sidebar items from being published.
+31. [x] Replace planning-oriented documentation with a progressive newcomer guide and runnable, package-backed examples.

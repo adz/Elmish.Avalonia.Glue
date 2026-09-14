@@ -4,9 +4,9 @@ title: Runnable examples
 
 # Runnable examples
 
-Each example page is generated from code in `tools/DocsExamples`. The example
-project is built before the documentation site, so its linked source is the
-authoritative, compilable version—not a copy that can drift.
+Each example page is generated from code in `tools/DocsExamples`. The docs
+build compiles and runs every displayed F# block against the package it
+demonstrates.
 
 ## Choose an example
 
@@ -17,10 +17,11 @@ authoritative, compilable version—not a copy that can drift.
 - [Patch a keyed collection](keyed-collection-sync.html) to see retained rows
   keep identity while order and values change.
 
-Run all examples and regenerate their observed output with:
+Regenerate the pages and run all documentation tests with:
 
 ```bash
 dotnet run --project tools/DocsExamples/DocsExamples.fsproj
+dotnet livedocs test
 ```
 
 Use an example as a narrow proof of one mechanism. Use the sample suites when

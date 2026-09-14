@@ -15,15 +15,15 @@ The project does not replace AXAML with an F# UI DSL or change how Elmish works 
 
 It's just the glue between them.
 
-## Read next
+## Start with the guide
 
 - [Docs site](https://adz.github.io/Elmish.Avalonia.Glue/): start here if you want the intent before the APIs.
 
 ## Packages
 
-- [Elmish.Avalonia.Glue](https://adz.github.io/Elmish.Avalonia.Glue/guides/understand/shared-substrate.html) - the shared substrate glue between immutable snapshots and bindable objects.
-- [Elmish.Avalonia.Glue.Projection](https://adz.github.io/Elmish.Avalonia.Glue/guides/understand/projection-family.html)
-- [Elmish.Avalonia.Glue.ElmView](https://adz.github.io/Elmish.Avalonia.Glue/guides/understand/elmview-family.html)
+- [Architecture](https://adz.github.io/Elmish.Avalonia.Glue/guides/architecture.html) explains the shared substrate.
+- [Projection](https://adz.github.io/Elmish.Avalonia.Glue/guides/projection.html) covers explicit CLR viewmodels.
+- [ElmView](https://adz.github.io/Elmish.Avalonia.Glue/guides/elmview.html) covers immutable F# view records.
 
 ## Samples
 

@@ -1,34 +1,28 @@
----
-title: API reference guide
----
+# API reference
 
-# API reference guide
+The generated reference combines XML documentation from the assemblies with
+the longer explanations under `docs/api`.
 
-FsLiveDocs generates the member-level reference from the public assemblies.
-The pages in this directory are the map: read them first to understand why a
-type exists, then follow their links into the generated API for signatures.
+## Find the layer first
 
-## Read the reference by responsibility
+| If you need to… | Start with… |
+| --- | --- |
+| host immutable snapshots without a UI framework | `Elmish.Glue.Core` |
+| marshal Elmish updates onto Avalonia's UI thread | `Elmish.Avalonia.Glue` |
+| expose an explicit CLR viewmodel | `Elmish.Avalonia.Glue.Projection` |
+| bind through immutable F# view records | `Elmish.Avalonia.Glue.ElmView` |
 
-| Package | Start here when you need | Main types |
-| --- | --- | --- |
-| `Elmish.Glue.Core` | framework-neutral notification, dispatch, or patching | `BindableSnapshotHost`, `BindableSnapshotNode`, `ElmishHost`, `KeyedSnapshotCollection` |
-| `Elmish.Avalonia.Glue` | UI-thread binding to an Avalonia application | `ElmishHost` and compatibility aliases |
-| `Elmish.Avalonia.Glue.Projection` | explicit CLR hosts or identity-aware lists | `SnapshotHost`, `KeyedSnapshotCollection` |
-| `Elmish.Avalonia.Glue.ElmView` | F# record-backed hosts and editable paths | `GeneratedViewHost`, `GeneratedViewNode`, `WriteBackBindings` |
+The types are deliberately layered. Application code normally starts in an
+Avalonia authoring package. Use Core directly when you are building an adapter
+or need its collection and notification primitives.
 
-## Follow the lifecycle
+## Follow a snapshot through the API
 
-1. Start an Elmish program through the Avalonia host bridge.
-2. Keep one stable host as the view `DataContext`.
-3. Send every new snapshot to `Update`.
-4. Let the host notify the bound properties and nested nodes.
-5. For editable ElmView paths, map a setter value to one message.
-6. For collections that must retain UI identity, patch by key.
+1. `ElmishHost` starts the program and supplies dispatch.
+2. A root host receives each immutable snapshot.
+3. `BindableSnapshotHost` raises root notifications.
+4. Nested nodes refresh their exposed properties.
+5. `WriteBackBindings` maps an editable value to a message.
+6. Keyed collection helpers preserve identity where required.
 
-## Use the generated member reference
-
-The generated [API member index](../api.html) is exhaustive. Its package and
-namespace pages carry the narrative from the authored `docs/api` Markdown,
-then link to every public member. Start there when a type name alone does not
-explain where it belongs.
+Open a package or type below for exact signatures and member documentation.

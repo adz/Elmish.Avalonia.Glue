@@ -12,7 +12,7 @@
   ],
   "navigation": [
     { "label": "Home", "href": "index.html" },
-    { "label": "Start", "href": "guides/start.html" },
+    { "label": "Start", "href": "guides/get-started.html" },
     { "label": "API", "href": "api.html" },
     { "label": "Examples", "href": "examples/index.html" },
     { "label": "Source", "href": "https://github.com/adz/Elmish.Avalonia.Glue" }

@@ -1,7 +1,3 @@
----
-sidebar_position: 2
----
-
 # Host lifetime
 
 The `ElmishHost` module in the core package provides the fundamental mechanics for running an Elmish program and connecting it to an external update loop.
@@ -27,13 +23,13 @@ This class represents a running instance of an Elmish program. It implements `ID
 | `Dispatch(message)` | Dispatches a message to the running Elmish program. |
 | `Dispose()` | Stops the Elmish program and cleans up any subscriptions. |
 
-## Why is it in Core?
+## Framework-neutral posting
 
 By keeping the host mechanics in the core package, we can:
 1. **Testability**: Run Elmish programs in headless unit tests without needing a full UI framework.
 2. **Framework Neutrality**: The core host doesn't know about Avalonia. It only knows about a generic `post` function, allowing it to be adapted to other frameworks (like WPF or even console apps) in the future.
 3. **Stable Dispatch**: The host ensures that the `dispatch` function provided to the UI remains stable even if the underlying program is restarted or modified.
 
-## Source
+## Implementation
 
 - [ElmishHost.fs](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/src/Elmish.Glue.Core/ElmishHost.fs)
