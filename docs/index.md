@@ -63,8 +63,9 @@ not the whole codebase.
 2. [Learn how snapshots, hosts, and dispatch fit together](guides/architecture.html).
 3. Build the screen with [Projection](guides/projection.html) or [ElmView](guides/elmview.html).
 4. [Connect the host to the application lifetime](guides/connect-runtime.html).
-5. [Add trustworthy design-time data](guides/design-time-preview.html).
-6. [Preserve identity in changing lists](guides/keyed-collections.html).
-7. [Explore the complete sample applications](guides/sample-applications.html).
+5. [Surface background work through messages](guides/background-work.html).
+6. [Add trustworthy design-time data](guides/design-time-preview.html).
+7. [Preserve identity in changing lists](guides/keyed-collections.html).
+8. [Explore the complete sample applications](guides/sample-applications.html).
 
 When you know the concepts, use the generated [API reference](api.html).
