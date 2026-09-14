@@ -1,7 +1,3 @@
----
-sidebar_position: 5
----
-
 # Projection: Explicit Viewmodels Over Elmish State
 
 Projection is the explicit CLR-facing path. Use it when the Avalonia-facing

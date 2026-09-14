@@ -1,7 +1,3 @@
----
-sidebar_position: 2
----
-
 # Integrate
 
 This repo fits into an Avalonia app with an existing XAML and Elmish workflow.

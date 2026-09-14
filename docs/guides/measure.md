@@ -1,7 +1,3 @@
----
-sidebar_position: 5
----
-
 # Measure
 
 This section keeps the comparison explicit without turning the docs into a benchmark sheet.

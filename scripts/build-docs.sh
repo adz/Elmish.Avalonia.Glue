@@ -6,3 +6,8 @@ cd "$root_dir"
 
 dotnet run --project tools/DocsExamples/DocsExamples.fsproj
 dotnet livedocs build --interactive false --banner false
+
+if rg -U '<li data-sidebar-item="true"><a [^>]*>\s*</a></li>' output; then
+  echo "FsLiveDocs generated a sidebar item without a label." >&2
+  exit 1
+fi

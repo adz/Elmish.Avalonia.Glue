@@ -51,3 +51,4 @@ After each task is completed, create a separate git commit before starting the n
 27. [x] Re-evaluate the architecture comparison after ElmView V2 lands by measuring boilerplate, reviewability, runtime behavior, design-time quality, and LLM editing ergonomics against `Projection`.
 28. [x] Replace the Docusaurus documentation site with the repository-local FsLiveDocs .NET tool and GitHub Pages build workflow.
 29. [x] Reorganize the documentation around a newcomer journey and verify every F# documentation example with FsLiveDocs.
+30. [x] Restore filename-derived FsLiveDocs sidebar labels and prevent blank sidebar items from being published.

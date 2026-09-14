@@ -1,7 +1,3 @@
----
-sidebar_position: 1
----
-
 # Integrations
 
 These pages show where the glue sits beside Avalonia and Elmish.

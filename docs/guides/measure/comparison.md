@@ -1,7 +1,3 @@
----
-sidebar_position: 6
----
-
 # Post-V2 comparison
 
 ElmView V2 gives the repository two comparable authoring families. Both are

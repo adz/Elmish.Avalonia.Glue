@@ -1,7 +1,3 @@
----
-sidebar_position: 4
----
-
 # Model
 
 The sample matrix is the repository's proving ground.

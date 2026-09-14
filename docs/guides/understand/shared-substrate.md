@@ -1,7 +1,3 @@
----
-sidebar_position: 4
----
-
 # Shared substrate
 
 `Elmish.Glue.Core` holds the concepts that do not belong specifically to

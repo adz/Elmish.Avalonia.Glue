@@ -1,7 +1,3 @@
----
-sidebar_position: 6
----
-
 # ElmView: F# Records With An Avalonia Binding Surface
 
 ElmView is the F#-first path. Screen-shaped data is a plain immutable F#

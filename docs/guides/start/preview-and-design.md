@@ -1,7 +1,3 @@
----
-sidebar_position: 2
----
-
 # Preview and design data
 
 The docs and samples keep design-time preview in the Avalonia workflow.

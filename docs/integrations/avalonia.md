@@ -1,7 +1,3 @@
----
-sidebar_position: 2
----
-
 # Avalonia
 
 This repo sits behind Avalonia windows, views, compiled bindings, and preview
