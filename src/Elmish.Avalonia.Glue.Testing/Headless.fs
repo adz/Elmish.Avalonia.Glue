@@ -1,31 +1,21 @@
-namespace Elmish.Avalonia.Glue.Tests
+namespace Elmish.Avalonia.Glue.Testing
 
 open System
 open System.Diagnostics
 open Avalonia
 open Avalonia.Controls
 open Avalonia.Headless
-open Avalonia.Headless.XUnit
 open Avalonia.Threading
-open Elmish
 open Elmish.Avalonia.Glue
-open Xunit
 
-// AvaloniaFact creates the application on the dispatcher thread.
-type TestAppBuilder =
+/// Helpers for running a real Avalonia drawing surface without a display.
+type Headless =
     static member BuildAvaloniaApp() =
         AppBuilder.Configure<Application>().UseHeadless(AvaloniaHeadlessPlatformOptions(UseHeadlessDrawing = false)).UseSkia()
 
-[<assembly: AvaloniaTestApplication(typeof<TestAppBuilder>)>]
-do ()
+    static member start program onUpdate = ElmishHost.startAndBind program onUpdate
 
-[<CollectionDefinition("Avalonia headless", DisableParallelization = true)>]
-type HeadlessCollection() = class end
-
-module Headless =
-    let start program onUpdate = ElmishHost.startAndBind program onUpdate
-
-    let waitUntil (predicate: unit -> bool) (timeout: TimeSpan) =
+    static member waitUntil (predicate: unit -> bool) (timeout: TimeSpan) =
         let clock = Stopwatch.StartNew()
         while not (predicate()) && clock.Elapsed < timeout do
             Dispatcher.UIThread.RunJobs()
@@ -33,4 +23,4 @@ module Headless =
         if not (predicate()) then
             failwithf "Timed out after %O waiting for headless Avalonia state" timeout
 
-    let captureFrame (window: Window) = window.CaptureRenderedFrame()
+    static member captureFrame (window: Window) = window.CaptureRenderedFrame()

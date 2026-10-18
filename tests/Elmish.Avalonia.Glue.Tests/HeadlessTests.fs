@@ -4,6 +4,9 @@ open System
 open System.Collections.Generic
 open System.Threading.Tasks
 open Avalonia.Controls
+open Avalonia.Media
+open Elmish.Avalonia.Glue.Testing
+open Avalonia.Headless
 open Avalonia.Headless.XUnit
 open Avalonia.Threading
 open Elmish
@@ -12,6 +15,16 @@ open Xunit
 
 type FrameViewModel() =
     member val Count = "0" with get, set
+
+// AvaloniaFact creates the application on the dispatcher thread.
+type TestAppBuilder =
+    static member BuildAvaloniaApp() = Headless.BuildAvaloniaApp()
+
+[<assembly: AvaloniaTestApplication(typeof<TestAppBuilder>)>]
+do ()
+
+[<CollectionDefinition("Avalonia headless", DisableParallelization = true)>]
+type HeadlessCollection() = class end
 
 [<Collection("Avalonia headless")>]
 module HeadlessTests =
@@ -56,7 +69,7 @@ module HeadlessTests =
         let vm = FrameViewModel()
         use host = Headless.start (program ignore) (Action<int list>(fun next -> vm.Count <- string next.Length)) (Action<Action<int>>(ignore))
         host.Dispatch.Invoke(1)
-        let window = new Window(Width = 160., Height = 80.)
+        let window = new Window(Width = 160., Height = 80., Background = Brushes.Red)
         let text = TextBlock()
         text.Bind(TextBlock.TextProperty, Avalonia.Data.Binding("Count")) |> ignore
         window.DataContext <- vm
@@ -66,4 +79,10 @@ module HeadlessTests =
         use bitmap = Headless.captureFrame window
         Assert.NotNull(bitmap)
         Assert.True(bitmap.PixelSize.Width > 0 && bitmap.PixelSize.Height > 0)
+        use framebuffer = bitmap.Lock()
+        let offset = (bitmap.PixelSize.Height - 2) * framebuffer.RowBytes + (bitmap.PixelSize.Width - 2) * 4
+        let blue = System.Runtime.InteropServices.Marshal.ReadByte(framebuffer.Address, offset)
+        let green = System.Runtime.InteropServices.Marshal.ReadByte(framebuffer.Address, offset + 1)
+        let red = System.Runtime.InteropServices.Marshal.ReadByte(framebuffer.Address, offset + 2)
+        Assert.Equal((255uy, 0uy, 0uy), (blue, green, red))
         window.Close()

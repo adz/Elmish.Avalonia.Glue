@@ -70,6 +70,52 @@ module ElmishHostTests =
         Assert.All(seen, Action<int>(fun count -> Assert.Equal(1, count)))
 
     [<Fact>]
+    let ``failed update releases drain for later messages`` () =
+        let seen = ResizeArray<int>()
+        let errors = ResizeArray<exn>()
+        let program =
+            Program.mkProgram (fun () -> 0, Cmd.none)
+                (fun msg model ->
+                    if msg = 1 then failwith "failed A"
+                    seen.Add(msg)
+                    model, Cmd.none) (fun _ _ -> ())
+            |> Program.withErrorHandler (fun (_, error) -> errors.Add(error))
+        use host = ElmishHost.start program (Action<int>(ignore))
+        host.Dispatch.Invoke(1)
+        host.Dispatch.Invoke(2)
+        host.Dispatch.Invoke(3)
+        Assert.Single(errors) |> ignore
+        Assert.Equal<int>([| 2; 3 |], seen)
+
+    [<Fact>]
+    let ``first producer returns despite continuing arrivals`` () =
+        use entered = new ManualResetEventSlim(false)
+        use release = new ManualResetEventSlim(false)
+        use returned = new ManualResetEventSlim(false)
+        let mutable seen = 0
+        let program =
+            Program.mkProgram (fun () -> 0, Cmd.none)
+                (fun msg model ->
+                    if msg = 0 then
+                        entered.Set()
+                        release.Wait()
+                    Interlocked.Increment(&seen) |> ignore
+                    model, Cmd.none) (fun _ _ -> ())
+        use host = ElmishHost.start program (Action<int>(ignore))
+        let first = Thread(fun () -> host.Dispatch.Invoke(0); returned.Set())
+        first.Start()
+        try
+            Assert.True(entered.Wait(TimeSpan.FromSeconds(5.0)))
+            for n in 1 .. 10000 do host.Dispatch.Invoke(n)
+            release.Set()
+            Assert.True(returned.Wait(TimeSpan.FromSeconds(5.0)), "First producer was held by later arrivals")
+        finally
+            release.Set()
+            first.Join()
+        SpinWait.SpinUntil((fun () -> Volatile.Read(&seen) = 10001), TimeSpan.FromSeconds(10.0)) |> ignore
+        Assert.Equal(10001, seen)
+
+    [<Fact>]
     let ``core startAndBind delivers on dispatching thread`` () =
         let mutable send = Action<int>(ignore)
         let mutable deliveredThread = -1

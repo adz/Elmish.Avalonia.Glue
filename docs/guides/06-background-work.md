@@ -122,7 +122,11 @@ An idle UI-thread dispatch runs inline; if worker messages are waiting, it joins
 that queue rather than overtaking them. A dispatch during a drain never re-enters
 Elmish. The framework-neutral core host instead drains on the dispatching thread
 that finds the queue idle: it guarantees serialization and FIFO order, not thread
-affinity. Core `startAndBind` delivers models on that dispatching thread.
+affinity. Each drain handles only the queue snapshot it found at entry; later
+arrivals are handed off asynchronously (or picked up by another dispatcher), so
+one producer does not have to drain an indefinitely growing queue. Update
+exceptions propagate to the draining caller; the next dispatch can resume any
+queued messages. Core `startAndBind` delivers models on the draining thread.
 
 The Avalonia host publishes the next model on the UI thread before raising
 notifications or patching a bound collection.

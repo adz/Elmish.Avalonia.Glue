@@ -72,18 +72,29 @@ module ElmishHost =
         let mutable draining = false
 
         let rec drain (send : HostMsg<'Msg> -> unit) () =
-            let next =
-                lock dispatchGate (fun () ->
-                    if pending.Count = 0 then
+            let budget = lock dispatchGate (fun () -> pending.Count)
+            let mutable completed = false
+            try
+                for _ in 1 .. budget do
+                    let msg = lock dispatchGate (fun () -> pending.Dequeue())
+                    send msg
+                completed <- true
+            finally
+                let remaining =
+                    lock dispatchGate (fun () ->
                         draining <- false
-                        None
-                    else
-                        Some(pending.Dequeue()))
-            match next with
-            | Some msg ->
-                send msg
-                drain send ()
-            | None -> ()
+                        completed && pending.Count > 0)
+                // An inline post must not turn a bounded batch into an unbounded
+                // recursive drain. A later producer may win the gate instead.
+                if remaining then
+                    ThreadPool.QueueUserWorkItem(fun _ ->
+                        let schedule =
+                            lock dispatchGate (fun () ->
+                                if draining || pending.Count = 0 then false
+                                else
+                                    draining <- true
+                                    true)
+                        if schedule then post.Invoke(Action(drain send))) |> ignore
 
         let enqueue send msg =
             let schedule =
@@ -115,8 +126,11 @@ module ElmishHost =
 
         new ElmishHostConnection<'Msg>(dispatchUser, dispose)
 
-    /// Serializes dispatch in FIFO order. The idle dispatching thread drains
-    /// messages; no thread affinity is guaranteed. Model delivery runs on that thread.
+    /// Serializes dispatch in FIFO order. The idle dispatching thread handles
+    /// at most the queued batch it finds; later arrivals are handed off without
+    /// delaying its return indefinitely. No thread affinity is guaranteed.
+    /// Update exceptions propagate to the draining caller; queued messages remain
+    /// available to the next dispatch. Model delivery runs on the draining thread.
     let start
         (program : Program<unit, 'Model, 'Msg, unit>)
         (onUpdate : Action<'Model>)
@@ -134,8 +148,9 @@ module ElmishHost =
         setDispatch.Invoke(host.Dispatch)
         host
 
-    /// Dispatch and model delivery run on the dispatching thread, with FIFO
-    /// serialization but no thread affinity.
+    /// Dispatch and model delivery run on a draining thread, with FIFO
+    /// serialization but no thread affinity. Each drain handles a bounded
+    /// snapshot; update exceptions propagate and later dispatches resume the queue.
     let startAndBind
         (program : Program<unit, 'Model, 'Msg, unit>)
         (onUpdate : Action<'Model>)
