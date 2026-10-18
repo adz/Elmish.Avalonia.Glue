@@ -19,7 +19,7 @@ can discard control state.
 2. the host's snapshot update function;
 3. the host's dispatch setter.
 
-For a concrete C# application startup using a bound host, see [the dispatcher bridge](../reference/avalonia/dispatcher.html); derive the view snapshot from the model inside the update callback (for example `model => host.Update(View.fromModel(model))`). Bind the host once and use the Avalonia wrapper for interactive views; see [interactive delivery](../reference/avalonia/dispatcher.html#interactive-delivery) for threading and failure semantics.
+For a concrete C# application startup using a bound host, see [the dispatcher bridge](../api/Elmish.Avalonia.Glue.ElmishHost.html); derive the view snapshot from the model inside the update callback (for example `model => host.Update(View.fromModel(model))`). Bind the host once and use the Avalonia wrapper for interactive views; see [interactive delivery](../api/Elmish.Avalonia.Glue.ElmishHost.html#interactive-delivery) for threading and failure semantics.
 
 ## Keep the connection alive
 
@@ -27,7 +27,7 @@ The returned `ElmishHostConnection<TMsg>` owns the running loop. Store it on
 the application or window. Dispose it during shutdown.
 
 Its `Dispatch` member is a stable way to send a message into the running
-program. See the [connection disposal contract](../reference/core/host-lifetime.html#disposal-contract).
+program. See the <a href="../api/Elmish.Glue.Core.ElmishHostConnection`1.html#disposal-contract">connection disposal contract</a>.
 
 ## Keep platform effects at the edge
 

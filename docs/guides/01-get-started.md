@@ -44,7 +44,7 @@ Do not replace the window's `DataContext` after every message. Keep one host
 instance and update the immutable value behind it.
 
 The host getter returns the current snapshot value. Its setter dispatches
-`NameChanged`. When Elmish returns the next snapshot, `host.Update` raises `PropertyChanged` for the snapshot property (`Current` for `SnapshotHost`, `View` for ElmView). A handwritten `Name` facade must also notify `Name` when its value changes; a generated-shaped host lists `Name` in `GeneratedPropertyNames`. Updates compare snapshot references, not field values. See [snapshot notifications](../reference/core/snapshots.html) and the [write-back example](../examples/elmview-write-back.html).
+`NameChanged`. When Elmish returns the next snapshot, `host.Update` raises `PropertyChanged` for the snapshot property (`Current` for `SnapshotHost`, `View` for ElmView). A handwritten `Name` facade must also notify `Name` when its value changes; a generated-shaped host lists `Name` in `GeneratedPropertyNames`. Updates compare snapshot references, not field values. See <a href="../api/Elmish.Glue.Core.BindableSnapshotHost`1.html">snapshot notifications</a> and the [write-back example](../examples/elmview-write-back.html).
 
 ## Choose the host shape
 

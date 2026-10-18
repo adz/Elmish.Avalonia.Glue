@@ -2,14 +2,9 @@
 
 `SnapshotHost<'T>` is a bindable shell for one immutable snapshot. It underpins **Snapshot-Host Projection**.
 
-## `SnapshotHost<'T>`
+## API contracts
 
-### Members
-
-| Member | Description |
-| :--- | :--- |
-| `Current` | Returns the current immutable snapshot. Binds in XAML to `Current`. |
-| `Update(nextSnapshot)` | Inherited from `BindableSnapshotHost`. Updates the snapshot and raises `PropertyChanged` for `Current`. |
+- <a href="/api/Elmish.Avalonia.Glue.Projection.SnapshotHost`1.html">`Elmish.Avalonia.Glue.Projection.SnapshotHost`1`</a>
 
 ## Define a shallow host
 
@@ -44,11 +39,13 @@ In AXAML, bind to read-only snapshot values. Wire button clicks in code-behind t
 
 `Update` notifies `Current`, not `FullName`. A binding to `FullName` needs an additional `PropertyChanged(nameof(FullName))` when the snapshot changes (override `OnSnapshotUpdated`). `Current.Email` is read-only for immutable records; expose a separate writable dispatching host property for `TwoWay` editing.
 
+
 ## Appropriate uses
 
 - **Simplicity**: Much easier to write and maintain than a deep tree of manual projection classes.
 - **Stability**: Provides a stable `DataContext` that Avalonia loves, while the data itself remains pure and immutable.
 - **Named Contract**: Unlike raw ElmView, you have a named class where you can explicitly define the properties and commands exposed to the UI.
+
 
 ## Implementation
 

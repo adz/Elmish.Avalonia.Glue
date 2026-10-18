@@ -2,36 +2,10 @@
 
 Core projection contracts connect named viewmodels to Elmish state and dispatch.
 
-## Update and dispatch contracts
+## API contracts
 
-### `IProjection<'Model>`
-Defines the contract for an object that can be updated with a new model snapshot.
-
-| Member | Description |
-| :--- | :--- |
-| `Update(model)` | Updates the object with the latest model data. |
-
-### `IDispatchTarget<'Msg>`
-Defines the contract for an object that can dispatch messages back to the Elmish loop.
-
-| Member | Description |
-| :--- | :--- |
-| `SetDispatch(dispatch)` | Provides the object with a dispatch function. |
-
-## Composition helpers
-
-The `ProjectionExtensions` module provides helpers for wiring up projection trees.
-
-### `ForwardTo`
-Composes a child dispatcher into a parent dispatcher using a message mapping function.
-
-### `SyncWith`
-Synchronizes a collection of viewmodels with a list of models.
-
-| Overload | Description |
-| :--- | :--- |
-| `SyncWith(collection, models, modelKey, vmKey, create)` | Simple synchronization where viewmodels only need an `Update` call. |
-| `SyncWith(collection, models, modelKey, vmKey, create, parentDispatch, map)` | Synchronization that also wires up dispatching for new viewmodels. |
+- <a href="/api/Elmish.Glue.Core.IProjection`1.html">`Elmish.Glue.Core.IProjection`1`</a>
+- [`Elmish.Glue.Core.ProjectionExtensions`](/api/Elmish.Glue.Core.ProjectionExtensions.html)
 
 ## Appropriate uses
 
@@ -40,6 +14,7 @@ Use explicit projections when:
 - Complex UI logic: model data needs significant transformation before binding.
 - Interoperability: a mixed C#/F# codebase needs a C# viewmodel surface.
 - Fine-grained control: specific UI components need explicit lifecycle or identity handling.
+
 
 ## Implementation
 

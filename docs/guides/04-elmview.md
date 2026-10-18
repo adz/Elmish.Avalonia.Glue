@@ -51,7 +51,7 @@ AXAML remains standard:
 <Button IsEnabled="{Binding Profile.CanSave}" Content="Save" />
 ```
 
-Here `Profile` is a root CLR property returning a stable node for the `ProfileView` record; it is not declared by the snippet above. The node exposes the four fields from the latest snapshot. See the [node contract](../reference/elmview/nodes.html) for the constructor and root property.
+Here `Profile` is a root CLR property returning a stable node for the `ProfileView` record; it is not declared by the snippet above. The node exposes the four fields from the latest snapshot. See the <a href="../api/Elmish.Avalonia.Glue.ElmView.GeneratedViewNode`3.html">node contract</a> for the constructor and root property.
 
 ## Register editable paths once
 
@@ -70,7 +70,7 @@ The package supplies `GeneratedViewHost` and `GeneratedViewNode` base classes.
 The current sample writes the mechanical host explicitly; the package does not
 yet emit it from the record automatically.
 
-A node getter reads `Snapshot.Name`. Its setter calls the root host's `TryDispatchWriteBack("Profile.Name", value)` (the node base does not expose this method). The setter never mutates the snapshot. An unmatched path returns `false` and dispatches nothing; duplicate routes throw at registration. See [write-back routing](../reference/elmview/write-back.html).
+A node getter reads `Snapshot.Name`. Its setter calls the root host's `TryDispatchWriteBack("Profile.Name", value)` (the node base does not expose this method). The setter never mutates the snapshot. An unmatched path returns `false` and dispatches nothing; duplicate routes throw at registration. See <a href="../api/Elmish.Avalonia.Glue.ElmView.WriteBackBindings`2.html">write-back routing</a>.
 
 See the compiled [ElmView write-back example](../examples/elmview-write-back.html)
 and the complete sample host linked from [sample applications](sample-applications.html).
