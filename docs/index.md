@@ -61,7 +61,7 @@ You can use both styles in one application: each screen owns its own stable host
 2. [Learn how snapshots, hosts, and dispatch fit together](guides/architecture.html).
 3. Build the screen with [Projection](guides/projection.html) or [ElmView](guides/elmview.html).
 4. [Connect the host to the application lifetime](guides/connect-runtime.html).
-5. [Surface background work through messages](guides/background-work.html).
+5. [Surface background work through messages](guides/background-commands.html).
 6. [Add trustworthy design-time data](guides/design-time-preview.html).
 7. [Preserve identity in changing lists](guides/keyed-collections.html).
 8. [Explore the complete sample applications](guides/sample-applications.html).

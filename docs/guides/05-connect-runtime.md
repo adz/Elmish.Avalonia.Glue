@@ -45,5 +45,5 @@ a service locator.
 Use the generated [API reference](../api.html) for exact overloads and the
 [sample applications](sample-applications.html) for startup code.
 
-Continue with [background work](background-work.html) to connect commands,
+Continue with [background work](background-commands.html) to connect commands,
 subscriptions, and worker-thread callbacks without touching the host directly.
