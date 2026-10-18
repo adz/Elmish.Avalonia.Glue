@@ -54,3 +54,19 @@ After each task is completed, create a separate git commit before starting the n
 30. [x] Restore filename-derived FsLiveDocs sidebar labels and prevent blank sidebar items from being published.
 31. [x] Replace planning-oriented documentation with a progressive newcomer guide and runnable, package-backed examples.
 32. [x] Document commands, subscriptions, background callbacks, UI-thread publication, and lifetime cleanup as one verified workflow.
+
+## Next Phase: Logs Digger and gitkay feedback (2026-10)
+
+From building Logs Digger (all-F# Avalonia app) and comparing with gitkay. Axial-side work is Axial `TASKS.md` T16
+(`Axial.Elmish`); its spec lists these as Glue's responsibility.
+
+33. [ ] Make Elmish dispatch thread-safe: start programs with `Program.runWithDispatch` and a `syncDispatch` that runs inline when already on the UI thread and posts to `Dispatcher.UIThread` otherwise, so every `dispatch` (commands, subscriptions, viewmodel setters) is safe from any thread. Verified race: two threads dispatching 200,000 messages each into Elmish 5's unlocked `RingBuffer` processed messages more than once and once crashed with `NullReferenceException`. Commit that repro as a test.
+34. [ ] Correct the background-work guide, which says dispatching from a background callback is safe because it does not touch Avalonia objects.
+35. [ ] Make `startAndBind` deliver model updates inline when already on the UI thread (post only from other threads). Always-queued delivery lets an older model reach a `TwoWay` `TextBox` after a newer keystroke and pushes stale text back. Cover the two-way case in "Connect the runtime".
+36. [ ] Expose the inline-on-UI-thread `Post` as a public function so `Axial.Elmish`'s runtime can take it as `ElmishRuntimeOptions.Post`.
+37. [ ] Add a notifying F# projection base, `ProjectionNode<'Model,'Msg>`: `INotifyPropertyChanged`, a `Dispatch` member, and `Change(&field, value, name)` that notifies only on real changes. `FSharpProjectionBase` lacks notifications today.
+38. [ ] Add `ObservableCollection.SyncWith` overloads for `seq<'T>` / F# `list` (F# lists do not implement `IReadOnlyList`).
+39. [ ] Make duplicate keys in `SyncWith` fail with an error naming the duplicate key in the incoming snapshot, and tell the guide to key by identity (path, id), never display text.
+40. [ ] Add an "all-F# UI" page: F# cannot declare Avalonia styled/attached properties (XAML needs public static fields; AVLN3000), with the working alternatives (a control subclass rendering from `DataContext`; `Classes.name="{Binding Flag}"`), and an F# story for ElmView write-back registration (currently C#-only `bindings.For(...)`).
+41. [ ] Add a headless test helper: start a program, drive it, wait on viewmodel state with timeouts, capture frames (gitkay's `Render` harness and Logs Digger's screenshot scenario both reinvent it).
+
