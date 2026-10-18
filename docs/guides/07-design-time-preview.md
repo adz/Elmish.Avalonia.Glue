@@ -39,7 +39,7 @@ rows. A single happy-path record rarely tests the layout you care about.
 ## Keep dispatch inactive
 
 The designer should render without starting the full program. Commands may be
-inert. Writable setters should not fail simply because no runtime dispatcher
+inert. Writable setters should not fail because no runtime dispatcher
 has been attached.
 
 The two sample suites link their design snapshots and hosts from

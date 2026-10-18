@@ -15,7 +15,7 @@ Both suites include:
 - Avalonia file picking;
 - vector-like composition with Avalonia shapes.
 
-This range matters. A counter proves dispatch, but it does not prove forms,
+A counter proves dispatch, but it does not prove forms,
 asynchronous work, design-time data, or identity-sensitive lists.
 
 ## Read the Projection suite

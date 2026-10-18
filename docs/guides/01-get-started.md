@@ -1,6 +1,6 @@
 # Get started
 
-This tutorial builds the mental model for one editable field. It does not ask
+Start with one editable field. You do not need
 you to design a whole application first.
 
 ## Start with an immutable transition
@@ -22,7 +22,7 @@ assert (changed.Name = "Grace")
 assert (initial.Name = "Ada")
 ```
 
-FsLiveDocs compiles this block. The assertions make the important property
+FsLiveDocs compiles this block. The assertions show
 visible: an edit creates a new value; it does not mutate `initial`.
 
 ## Define the binding contract

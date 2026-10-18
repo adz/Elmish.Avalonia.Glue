@@ -37,7 +37,7 @@ let view profile =
       CanSave = valid }
 ```
 
-This block is compiled by FsLiveDocs. The view function is pure, so runtime
+FsLiveDocs compiles this block. The view function is pure, so runtime
 and preview can use the same shape.
 
 ## Bind to ordinary properties
