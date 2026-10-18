@@ -10,6 +10,8 @@
     <Compile Include="Examples\ProjectionSnapshotHost.fs" />
     <Compile Include="Examples\ElmViewWriteBack.fs" />
     <Compile Include="Examples\KeyedCollectionSync.fs" />
+    <Compile Include="Examples\MinimalProjectionScreen.fs" />
+    <Compile Include="Examples\MinimalElmViewScreen.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

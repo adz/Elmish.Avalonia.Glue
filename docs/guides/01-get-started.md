@@ -51,7 +51,9 @@ The host getter returns the current snapshot value. Its setter dispatches
 With **Projection**, you write a named viewmodel with `Name`, `Update`, and a
 dispatch connection. This is explicit and familiar to XAML tooling.
 
-With **ElmView**, the F# view record contains `Name`. A handwritten generated-shaped host exposes a CLR `Name` getter/setter and registers its writable path to `NameChanged`; no code generator is included. For a complete startup, host, and AXAML contract, follow the [sample applications](sample-applications.html) and [runtime connection](connect-runtime.html).
+With **ElmView**, the F# view record contains `Name`. A handwritten generated-shaped host exposes a CLR `Name` getter/setter and registers its writable path to `NameChanged`; no code generator is included.
+
+For a complete, copyable screen through model, host, AXAML, and application lifetime, follow the [minimal Projection screen](minimal-projection-screen.html) or the [minimal ElmView screen](minimal-elmview-screen.html). The [sample applications](sample-applications.html) and [runtime connection](connect-runtime.html) expand the same wiring to a full application.
 
 Continue with [the architecture](architecture.html), then choose the guide
 for the style you want to try first.

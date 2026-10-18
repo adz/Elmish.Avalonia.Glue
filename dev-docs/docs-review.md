@@ -64,10 +64,10 @@ Scope: README.md and every Markdown page under docs/, read without opening imple
 ## Missing
 
 - [done] Installation prerequisites: NuGet IDs/versions, supported .NET/Avalonia/Elmish/F# versions, required project references, and a minimal run command (`README.md`, `docs/guides/01-get-started.md`).
-- One complete copyable minimal Projection and ElmView screen from model through host, AXAML and app lifetime, including a genuine TwoWay edit and notification (`docs/guides/01-get-started.md:28-61`).
+- [done] One complete copyable minimal Projection and ElmView screen from model through host, AXAML and app lifetime, including a genuine TwoWay edit and notification (`docs/guides/13-minimal-projection-screen.md`, `docs/guides/14-minimal-elmview-screen.md`, `docs/examples/minimal-projection-screen.md`, `docs/examples/minimal-elmview-screen.md`).
 - [done] Task index covering startup, write-back, nested node, list, design preview, background work, headless testing and all-F# UI; homepage path omits testing and all-F# (`docs/index.md:59-70`).
 - [done] Decision table for Projection vs snapshot host vs ElmView vs core keyed collection/row projection, especially editable paths and identity (`docs/index.md:47-57`, `docs/api/index.md:6-17`).
-- Error-handling recipes: duplicate key before/after partial patch, missing/duplicate write-back route, binding errors, dispatcher not set/disposed, exceptions in update/subscription/post and stale async results.
+- [done] Error-handling recipes: duplicate key before/after partial patch, missing/duplicate write-back route, binding errors, dispatcher not set/disposed, exceptions in update/subscription/post and stale async results (`docs/guides/15-error-handling.md`).
 - [done] Migration notes for compatibility aliases and packages: exact namespace/reference changes and what is or is not source-compatible (`docs/api/avalonia/aliases.md:20-23`).
 - [done] Glossary for model, view snapshot, host, node, projection, generated-shaped, route, subscription and keyed identity (`docs/guides/02-architecture.md`).
 - [done] How to set up actual design-time DataContext in AXAML, and how to run preview without runtime (`docs/guides/07-design-time-preview.md:25-46`).

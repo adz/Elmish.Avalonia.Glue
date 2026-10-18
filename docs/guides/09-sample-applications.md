@@ -38,5 +38,8 @@ mechanical infrastructure.
 ## Run the focused documentation examples
 
 The smaller [runnable examples](../examples/index.html) isolate snapshot
-hosting, write-back, and keyed patching. Their source project is built before
-FsLiveDocs renders the observed output.
+hosting, write-back, keyed patching, and the two-way round trip for both
+styles. For a trimmed single-screen version of each suite, follow the
+[minimal Projection screen](minimal-projection-screen.html) and
+[minimal ElmView screen](minimal-elmview-screen.html). Their source project is
+built before FsLiveDocs renders the observed output.

@@ -16,6 +16,11 @@ demonstrates.
   setter dispatch one message.
 - [Patch a keyed collection](keyed-collection-sync.html) to see retained rows
   keep identity while order and values change.
+- [Run a minimal Projection screen](minimal-projection-screen.html) to see a
+  writable `Name` dispatch, apply an update, and raise `PropertyChanged`.
+- [Run a minimal ElmView screen](minimal-elmview-screen.html) to see a
+  write-back route dispatch, apply a new view record, and notify `View`,
+  `Name`, and `Greeting`.
 
 Regenerate the pages and run all documentation tests with:
 

@@ -17,4 +17,6 @@ let main args =
     DocsExamples.Examples.ProjectionSnapshotHost.run outputDir
     DocsExamples.Examples.ElmViewWriteBack.run outputDir
     DocsExamples.Examples.KeyedCollectionSync.run outputDir
+    DocsExamples.Examples.MinimalProjectionScreen.run outputDir
+    DocsExamples.Examples.MinimalElmViewScreen.run outputDir
     0

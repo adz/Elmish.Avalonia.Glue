@@ -67,17 +67,18 @@ You can use both styles in one application: each screen owns its own stable host
 ## Tasks
 
 - [Install and run](guides/install.html); [connect startup and lifetime](guides/connect-runtime.html).
+- [Copy a minimal Projection screen](guides/minimal-projection-screen.html); [copy a minimal ElmView screen](guides/minimal-elmview-screen.html).
 - [Route a TwoWay edit](guides/route-editable-elmview-properties.html); [bind nested nodes](guides/nested-elmview-paths.html).
 - [Patch lists](guides/keyed-collections.html); [render design preview](guides/design-time-preview.html).
 - [Publish background work](guides/background-commands.html); [test headlessly](guides/testing-headlessly.html).
-- [Build an all-F# UI](guides/all-fsharp-ui.html); [troubleshoot symptoms](guides/troubleshooting.html); [glossary](guides/glossary.html).
+- [Build an all-F# UI](guides/all-fsharp-ui.html); [handle errors](guides/error-handling.html); [troubleshoot symptoms](guides/troubleshooting.html); [glossary](guides/glossary.html).
 
 ## Follow a working path
 
 1. [Build the smallest useful screen](guides/get-started.html).
 2. [Learn how snapshots, hosts, and dispatch fit together](guides/architecture.html).
-3. Build the screen with [Projection](guides/projection.html) or [ElmView](guides/elmview.html).
-4. [Connect the host to the application lifetime](guides/connect-runtime.html).
+3. Build the screen with [Projection](guides/projection.html) or [ElmView](guides/elmview.html); copy the full [Projection](guides/minimal-projection-screen.html) or [ElmView](guides/minimal-elmview-screen.html) screen.
+4. [Connect the host to the application lifetime](guides/connect-runtime.html); [handle errors](guides/error-handling.html).
 5. [Surface background work through messages](guides/background-commands.html).
 6. [Add trustworthy design-time data](guides/design-time-preview.html).
 7. [Preserve identity in changing lists](guides/keyed-collections.html).

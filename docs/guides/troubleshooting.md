@@ -10,3 +10,5 @@
 | Duplicate key or write-back path | Check incoming key uniqueness and registered paths before publishing. | Duplicate routes fail at registration; inspect the exception and ensure each path is registered once. See [collections](../api/Elmish.Glue.Core.ObservableCollectionExtensions.html) and [write-back](route-editable-elmview-properties.html). |
 | Dispatch after shutdown | Is the connection disposed or the UI dispatcher already stopped? | Stop producers, dispose the connection with the view and keep the UI loop alive through teardown. See [lifetime](connect-runtime.html). |
 | Async result overwrites newer state | Did work finish after a later request or disposal? | Include a request identity in messages and ignore results for obsolete requests in `update`. See [background work](background-commands.html). |
+
+Each row above has a longer, verified recipe in [error handling](error-handling.html).
