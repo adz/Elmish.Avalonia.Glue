@@ -110,6 +110,9 @@ type ProjectionNode<'Model, 'Msg>() =
     inherit FSharpProjectionBase<'Model, 'Msg>()
     let changed = Event<PropertyChangedEventHandler, PropertyChangedEventArgs>()
 
+    /// Updates a field and raises PropertyChanged only when F# structural
+    /// equality detects a difference. Call on the UI thread for bound views.
+    /// Pass the CLR property name using nameof this.Property.
     member this.Change<'T when 'T : equality>(field: byref<'T>, value: 'T, name: string) =
         if field <> value then
             field <- value

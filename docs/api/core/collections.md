@@ -9,6 +9,9 @@ These extensions provide the primary way to sync collections in a Projection-sty
 ### `SyncWith`
 
 Synchronizes an `ObservableCollection<'ViewModel>` with an `IReadOnlyList<'Model>`.
+F# `list<'Model>` and `seq<'Model>` overloads copy the input into an array
+(O(n) time and space) before patching; arrays and `ResizeArray` can use the
+`IReadOnlyList` overload without that copy.
 
 | Parameter | Description |
 | :--- | :--- |

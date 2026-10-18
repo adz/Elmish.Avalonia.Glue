@@ -113,12 +113,18 @@ subscription key so Elmish can identify the producer across model changes.
 ## Publish only through the Avalonia host
 
 The subscription callback may run on a worker thread. Dispatch through the
-Avalonia host: it marshals Elmish dispatch to `Dispatcher.UIThread`, running
+Avalonia host: it queues messages in FIFO order and drains them on `Dispatcher.UIThread`, running
 inline if already there and posting otherwise. This serializes the Elmish
 message queue as well as the bound viewmodel updates. Dispatching directly
 into an unprotected Elmish queue from multiple threads is not safe.
 
-The host publishes the next model on the UI thread before raising
+An idle UI-thread dispatch runs inline; if worker messages are waiting, it joins
+that queue rather than overtaking them. A dispatch during a drain never re-enters
+Elmish. The framework-neutral core host instead drains on the dispatching thread
+that finds the queue idle: it guarantees serialization and FIFO order, not thread
+affinity. Core `startAndBind` delivers models on that dispatching thread.
+
+The Avalonia host publishes the next model on the UI thread before raising
 notifications or patching a bound collection.
 
 Do not call `Dispatcher.UIThread.Post` inside every background callback. The

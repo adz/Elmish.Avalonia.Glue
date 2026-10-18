@@ -16,7 +16,7 @@ module ElmishHostTests =
         inherit ProjectionNode<int, int>()
         let mutable count = 0
         member this.Count = count
-        override this.Update(value) = this.Change(&count, value, "Count") |> ignore
+        override this.Update(value) = this.Change(&count, value, nameof this.Count) |> ignore
 
     [<Fact>]
     let ``projection node notifies only on changed values`` () =
@@ -38,12 +38,18 @@ module ElmishHostTests =
         let mutable active = 0
         let mutable overlap = 0
         let seen = Array.zeroCreate<int> 400000
+        let last = [| -1; 199999 |]
+        let mutable outOfOrder = 0
         let program =
             Program.mkProgram
                 (fun () -> 0, Cmd.none)
                 (fun index model ->
                     if Interlocked.Increment(&active) <> 1 then
                         Interlocked.Increment(&overlap) |> ignore
+                    let producer = index / 200000
+                    if index <> last[producer] + 1 then
+                        Interlocked.Increment(&outOfOrder) |> ignore
+                    last[producer] <- index
                     Interlocked.Increment(&seen[index]) |> ignore
                     Interlocked.Decrement(&active) |> ignore
                     model + 1, Cmd.none)
@@ -60,7 +66,25 @@ module ElmishHostTests =
         first.Join()
         second.Join()
         Assert.Equal(0, overlap)
+        Assert.Equal(0, outOfOrder)
         Assert.All(seen, Action<int>(fun count -> Assert.Equal(1, count)))
+
+    [<Fact>]
+    let ``core startAndBind delivers on dispatching thread`` () =
+        let mutable send = Action<int>(ignore)
+        let mutable deliveredThread = -1
+        let program =
+            Program.mkProgram (fun () -> 0, Cmd.none)
+                (fun msg _ -> msg, Cmd.none) (fun _ _ -> ())
+        use host =
+            ElmishHost.startAndBind program
+                (Action<int>(fun _ -> deliveredThread <- Environment.CurrentManagedThreadId))
+                (Action<Action<int>>(fun dispatch -> send <- dispatch))
+        let worker = Thread(fun () ->
+            send.Invoke(42)
+            Assert.Equal(Environment.CurrentManagedThreadId, deliveredThread))
+        worker.Start()
+        worker.Join()
 
     [<Fact>]
     let ``disposing host terminates Elmish subscriptions`` () =

@@ -2,6 +2,7 @@ namespace Elmish.Glue.Core
 
 open System
 open System.Threading
+open System.Collections.Generic
 open Elmish
 
 /// Owns a running Elmish program and exposes a stable dispatch surface.
@@ -67,6 +68,32 @@ module ElmishHost =
         let mutable dispatch = Action<HostMsg<'Msg>>(ignore)
         let mutable disposed = 0
         let dispatchGate = obj ()
+        let pending = Queue<HostMsg<'Msg>>()
+        let mutable draining = false
+
+        let rec drain (send : HostMsg<'Msg> -> unit) () =
+            let next =
+                lock dispatchGate (fun () ->
+                    if pending.Count = 0 then
+                        draining <- false
+                        None
+                    else
+                        Some(pending.Dequeue()))
+            match next with
+            | Some msg ->
+                send msg
+                drain send ()
+            | None -> ()
+
+        let enqueue send msg =
+            let schedule =
+                lock dispatchGate (fun () ->
+                    pending.Enqueue(msg)
+                    if draining then false
+                    else
+                        draining <- true
+                        true)
+            if schedule then post.Invoke(Action(drain send))
 
         let dispatchUser =
             Action<'Msg>(fun msg ->
@@ -84,11 +111,12 @@ module ElmishHost =
             dispatch <- Action<HostMsg<'Msg>>(fun msg -> d msg)
             if Volatile.Read(&disposed) = 0 then
                 post.Invoke(Action(fun () -> onUpdate.Invoke(model))))
-        |> Program.runWithDispatch (fun dispatch msg ->
-            post.Invoke(Action(fun () -> lock dispatchGate (fun () -> dispatch msg)))) ()
+        |> Program.runWithDispatch (fun dispatch msg -> enqueue dispatch msg) ()
 
         new ElmishHostConnection<'Msg>(dispatchUser, dispose)
 
+    /// Serializes dispatch in FIFO order. The idle dispatching thread drains
+    /// messages; no thread affinity is guaranteed. Model delivery runs on that thread.
     let start
         (program : Program<unit, 'Model, 'Msg, unit>)
         (onUpdate : Action<'Model>)
@@ -106,6 +134,8 @@ module ElmishHost =
         setDispatch.Invoke(host.Dispatch)
         host
 
+    /// Dispatch and model delivery run on the dispatching thread, with FIFO
+    /// serialization but no thread affinity.
     let startAndBind
         (program : Program<unit, 'Model, 'Msg, unit>)
         (onUpdate : Action<'Model>)

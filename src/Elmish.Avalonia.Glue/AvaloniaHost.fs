@@ -17,6 +17,8 @@ module ElmishHost =
     let private postToUiThread =
         Action<Action>(fun action -> post action.Invoke)
 
+    /// Dispatches in FIFO order on the UI thread. An idle UI-thread dispatch
+    /// runs inline; queued worker messages always run first.
     let start
         (program : Program<unit, 'Model, 'Msg, unit>)
         (onUpdate : Action<'Model>)
@@ -24,6 +26,8 @@ module ElmishHost =
 
         Elmish.Glue.Core.ElmishHost.startWithPost postToUiThread program onUpdate
 
+    /// Delivers models inline on the UI thread; worker dispatch is queued
+    /// and drained on the UI thread in FIFO order.
     let startAndBind
         (program : Program<unit, 'Model, 'Msg, unit>)
         (onUpdate : Action<'Model>)
