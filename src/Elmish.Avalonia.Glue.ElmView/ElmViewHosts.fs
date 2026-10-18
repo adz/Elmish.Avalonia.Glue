@@ -76,6 +76,12 @@ type WriteBackBindings<'View, 'Msg>() as this =
             propertyPath,
             registerDispatcher propertyPath)
 
+    /// Registers a CLR property path for F# callers without an expression-tree selector.
+    /// Use the exact path exposed by the generated bindable facade.
+    member _.ForPath<'Value>(propertyPath: string) =
+        WriteBackBindingRegistration<WriteBackBindings<'View, 'Msg>, 'Msg, 'Value>(
+            this, propertyPath, registerDispatcher propertyPath)
+
     member _.Paths = routes.Keys :> seq<string>
 
     member internal _.TryDispatch(propertyPath: string, value: obj | null, dispatch: 'Msg -> unit) =

@@ -28,7 +28,7 @@ type Host(initialView: View) =
     inherit RuntimeGeneratedViewHost<View, Msg>(
         initialView,
         Action<WriteBackBindings<View, Msg>>(fun bindings ->
-            bindings.For(fun (x: View) -> x.UserInput.Name).Dispatch(Func<string, Msg>(SetName)) |> ignore))
+            bindings.ForPath<string>("UserInput.Name").Dispatch(Func<string, Msg>(SetName)) |> ignore))
 
     member this.Name
         with get () = this.View.UserInput.Name
