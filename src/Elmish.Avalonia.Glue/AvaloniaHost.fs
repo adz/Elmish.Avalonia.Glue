@@ -5,12 +5,17 @@ open Avalonia.Threading
 open Elmish
 
 module ElmishHost =
+    /// Executes an action immediately on the Avalonia UI thread, or posts it
+    /// to that thread when called from another thread. Suitable for runtime
+    /// options that accept a Post callback.
+    let post (action : unit -> unit) : unit =
+        if Dispatcher.UIThread.CheckAccess() then
+            action ()
+        else
+            Dispatcher.UIThread.Post(action) |> ignore
+
     let private postToUiThread =
-        Action<Action>(fun action ->
-            if Dispatcher.UIThread.CheckAccess() then
-                action.Invoke()
-            else
-                Dispatcher.UIThread.Post(fun () -> action.Invoke()) |> ignore)
+        Action<Action>(fun action -> post action.Invoke)
 
     let start
         (program : Program<unit, 'Model, 'Msg, unit>)
