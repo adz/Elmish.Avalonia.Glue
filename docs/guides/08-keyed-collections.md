@@ -16,8 +16,9 @@ mutable adapter only when the control benefits from it.
 A key must identify the same logical item across snapshots. Database IDs and
 domain identifiers work well. List positions and display names usually do not.
 
-Duplicate keys are invalid because the patcher cannot decide which item to
-retain.
+Key by identity (for example a path or persistent ID), never by display text.
+Duplicate keys in an incoming `SyncWith` snapshot fail with an error naming
+the duplicate key: the patcher cannot decide which item to retain.
 
 ## Understand the patch
 
