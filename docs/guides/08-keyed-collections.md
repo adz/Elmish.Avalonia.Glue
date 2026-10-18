@@ -17,8 +17,7 @@ A key must identify the same logical item across snapshots. Database IDs and
 domain identifiers work well. List positions and display names usually do not.
 
 Key by identity (for example a path or persistent ID), never by display text.
-Duplicate keys in an incoming `SyncWith` snapshot fail with an error naming
-the duplicate key: the patcher cannot decide which item to retain.
+Duplicate keys in an incoming `SyncWith` snapshot throw `ArgumentException` (parameter `targets`) naming the key, before any collection changes. Duplicate keys already in the target collection throw `InvalidOperationException`; unlike incoming-key validation, this can happen after obsolete items have been removed.
 
 ## Understand the patch
 
@@ -30,8 +29,7 @@ Given the next immutable list, the adapter:
 4. moves retained items into the requested order;
 5. removes keys that disappeared.
 
-The result has the same keys and order as the snapshot while retained items
-keep their CLR identity.
+The result has the same keys and order as the snapshot. `SyncWith` retains matching row viewmodel references; `KeyedSnapshotCollection` replaces a matching item's reference when its incoming snapshot differs. Selection by object is therefore not guaranteed for snapshot rows.
 
 ## Choose the collection API
 

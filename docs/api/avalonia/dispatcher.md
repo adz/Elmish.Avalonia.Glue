@@ -13,8 +13,8 @@
 
 ## Threading and lifetime
 
-1. **Threading**: The `start` methods use `Avalonia.Threading.Dispatcher.UIThread.Post` to ensure that the `onUpdate` callback is always executed on the UI thread, which is a requirement for updating Avalonia controls.
-2. **Lifetime**: It returns an `IDisposable` (the `ElmishHostConnection`). Disposing of this object will stop the Elmish loop and clean up any resources.
+1. **Threading**: The `start` methods run callbacks inline when `Dispatcher.UIThread.CheckAccess()` succeeds and otherwise schedule them with `Dispatcher.UIThread.Post` to run on the UI thread, which is a requirement for updating Avalonia controls.
+2. **Lifetime**: Both methods return `ElmishHostConnection<'Msg>` implementing `IDisposable`. Disposing sends a termination message through the queue; subscriptions are cleaned up when that message drains. Subsequent user `Dispatch` calls are ignored.
 3. **Binding**: By calling `setDispatch`, it allows your view host (whether it's an ElmView host or a Projection host) to receive the `dispatch` function and start sending messages back to Elmish.
 
 ## Connect an application

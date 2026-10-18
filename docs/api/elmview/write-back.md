@@ -17,7 +17,8 @@ Elmish message. The Elmish `update` function produces the next snapshot.
 
 | Member | Description |
 | :--- | :--- |
-| `For<'Value>(selector)` | Starts a registration for the property identified by the expression selector (e.g., `x => x.UserInput.Name`). Returns a registration object. |
+| `For<'Value>(selector)` | Accepts an expression-tree chain of member accesses rooted at the view parameter (e.g., `x => x.UserInput.Name`), optionally with conversions; rejects method calls, indexers and other expressions with `ArgumentException`, or null with `ArgumentNullException`. Returns a registration object. |
+| `ForPath<'Value>(path)` | Takes the exact CLR facade path as a string for F# callers; does not validate that members exist or that the value type matches. An empty/whitespace path fails when `Dispatch` registers it. |
 
 ### `WriteBackBindingRegistration`
 
@@ -62,7 +63,7 @@ Elmish message routing.
 4. The route maps the new value to a message.
 5. The host dispatches that message into Elmish.
 
-The generated setter does not mutate the snapshot.
+The handwritten generated-shaped setter does not mutate the snapshot. `Host` in this sketch means a stored reference to the root host; see the [node example](nodes.html).
 
 ```csharp
 public string Name
@@ -105,7 +106,7 @@ public void RefreshHttp() => Dispatch(Msg.RefreshHttp);
 ## Centralized routing contract
 
 - One place lists the editable UI paths.
-- The selector is type-checked against the F# view record.
+- A C# `For` selector's member accesses are type-checked against the view type at compile time; only simple member-access expression trees are accepted at runtime. `ForPath` strings are not type-checked. Duplicate paths throw `InvalidOperationException` at registration; `TryDispatchWriteBack` returns `false` for an unmatched path and otherwise invokes the mapper and dispatcher (mapper/type errors propagate).
 - AXAML stays standard.
 - F# view records do not need binding attributes or metadata.
 - Common form controls avoid handwritten event-forwarding code.

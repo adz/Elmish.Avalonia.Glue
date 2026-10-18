@@ -38,7 +38,7 @@ snapshot so the designer can render the same bindable shape used at runtime.
 1. **Initialization**: The host is constructed with an initial snapshot and an optional configuration action for `WriteBackBindings`.
 2. **Binding**: In AXAML, the host is set as the `DataContext`.
 3. **Update**: When the Elmish program produces a new view snapshot, `host.Update(newSnapshot)` is called.
-4. **Refresh**: The host raises `PropertyChanged` for its `View` property and all names in `GeneratedPropertyNames`, then calls `RefreshSubtree()` on all nested nodes.
+4. **Refresh**: Only when the new view is a different reference: it stores the new view, raises `PropertyChanged("View")`, then raises each name in `GeneratedPropertyNames` in enumeration order, then refreshes registered child subtrees (each node notifies its listed properties before its children). Notifications are unconditional per changed reference, not per changed field; same-reference updates do nothing. Exceptions from handlers interrupt the sequence.
 
 ## Implementation
 

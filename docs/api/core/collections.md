@@ -11,7 +11,7 @@ These extensions provide the primary way to sync collections in a Projection-sty
 Synchronizes an `ObservableCollection<'ViewModel>` with an `IReadOnlyList<'Model>`.
 F# `list<'Model>` and `seq<'Model>` overloads copy the input into an array
 (O(n) time and space) before patching; arrays and `ResizeArray` can use the
-`IReadOnlyList` overload without that copy.
+`IReadOnlyList` overload without that input copy (cast to `IReadOnlyList` if overload resolution is ambiguous). The patch itself allocates key/index tables and may shift indexes repeatedly on moves/inserts; O(n) describes only the input conversion, not the total patch.
 
 | Parameter | Description |
 | :--- | :--- |
@@ -42,10 +42,7 @@ Projection and ElmView use it for lists of snapshots.
 
 ## Identity preserved by patching
 
-By patching the collection instead of replacing it:
-1. **Container Reuse**: Avalonia can reuse the existing `ListBoxItem` or `DataGridRow` containers.
-2. **Selection Stability**: Selected items remain selected if they are still present in the list.
-3. **Smooth Transitions**: List animations and layout transitions work correctly.
+Patching keeps the `ObservableCollection` instance. `SyncWith` retains the same row viewmodel for matching keys and calls `update` on it. `KeyedSnapshotCollection` instead replaces a retained key's item when the incoming snapshot is a different reference; it does **not** preserve row object identity. Avalonia container reuse, selection, and animations depend on the control and its selection model; they are not guaranteed by a matching key. For selection across replaced snapshots, track the selected key and resolve it against the new items.
 
 ## Implementations
 

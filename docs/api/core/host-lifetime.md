@@ -28,7 +28,7 @@ A running Elmish program with `IDisposable` and a stable dispatch surface.
 By keeping the host mechanics in the core package, we can:
 1. **Testability**: Run Elmish programs in headless unit tests without needing a full UI framework.
 2. **Framework Neutrality**: The core host doesn't know about Avalonia. It only knows about a generic `post` function, allowing it to be adapted to other frameworks (like WPF or even console apps) in the future.
-3. **Stable Dispatch**: The host ensures that the `dispatch` function provided to the UI remains stable even if the underlying program is restarted or modified.
+3. **Stable Dispatch**: The connection's `Dispatch` action remains the same object during one run. This API does not restart or replace a program; create a new connection for a new run. After disposal, user dispatches are silently ignored.
 
 ## Implementation
 

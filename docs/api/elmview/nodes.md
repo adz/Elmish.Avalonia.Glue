@@ -35,6 +35,8 @@ Generated-shaped hosts define nested node classes in this shape:
 ```csharp
 public sealed class UserInputNode : GeneratedViewNode<AppView, FormView, Msg>
 {
+    private readonly AppHost _host;
+
     public UserInputNode(AppHost host)
         : base(
             () => host.View,           // Get root snapshot
@@ -43,17 +45,18 @@ public sealed class UserInputNode : GeneratedViewNode<AppView, FormView, Msg>
             view => view.UserInput,    // Pluck nested view
             new[] { nameof(Name) })    // Properties to notify
     {
+        _host = host;
     }
 
     public string Name
     {
         get => Snapshot.Name;
-        set => Host.TryDispatchWriteBack("UserInput.Name", value);
+        set => _host.TryDispatchWriteBack("UserInput.Name", value);
     }
 }
 ```
 
-The binding segment before `.Name` comes from the root host property:
+`AppHost` must derive from `GeneratedViewHost<AppView, Msg>` (or its runtime variant); its public `RegisterChildNode` method registers this node during construction. `FormView` is the type of the `UserInput` field, not a second property name. The binding segment before `.Name` comes from the root host property:
 
 ```csharp
 public UserInputNode UserInput => _userInput;

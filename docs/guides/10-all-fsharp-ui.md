@@ -5,9 +5,7 @@ control. Keep ordinary AXAML for the visual tree and ordinary Avalonia bindings.
 
 ## Styled properties and attached properties
 
-Do not declare Avalonia styled or attached properties in F# when they must be
-resolved from AXAML. Avalonia's XAML compiler expects public static fields;
-F# exposes compiled values as properties instead, causing `AVLN3000`.
+With the Avalonia 12.0.0 XAML compiler used by this repository, F# compiled values for styled/attached property registrations can appear as properties rather than the public static fields the compiler looks up, producing `AVLN3000` when referenced from AXAML. This is an observed interoperability constraint, not a blanket prohibition on all F# custom controls or future Avalonia versions. Use a C# declaration when AXAML needs the property registration field.
 
 Instead, subclass a control and render directly from its `DataContext` when a
 custom rendering surface is needed. For simple appearance changes, bind an
@@ -33,8 +31,7 @@ let host = RuntimeGeneratedViewHost<View, Msg>({ Name = "" }, configure)
 ```
 
 Use the exact generated facade property path (for nested fields, for example
-`"Profile.Name"`). The generated setter dispatches a message rather than
-mutating the immutable snapshot. Design-time hosts can use the same view shape
+`"Profile.Name"`). The snippet registers a route but does **not** expose a bindable `Name` facade: `RuntimeGeneratedViewHost` does not generate CLR properties. To bind `{Binding Name, Mode=TwoWay}`, subclass it and add a public `Name` getter reading `View.Name` and setter calling `TryDispatchWriteBack("Name", value)`, and override `GeneratedPropertyNames` to include `Name`. The handwritten setter dispatches rather than mutating the snapshot. Design-time hosts can use the same view shape
 without starting Elmish.
 
 Continue with the [ElmView guide](elmview.html) and the

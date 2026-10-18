@@ -27,20 +27,22 @@ public class UserProfileHost : SnapshotHost<UserProfile>
     // Derived property
     public string FullName => $"{Current.FirstName} {Current.LastName}";
 
-    // Command
+    // Called by the view's click handler; for Command binding expose an ICommand instead.
     public void Save() => _dispatch(Msg.SaveProfile);
 }
 ```
 
-In AXAML, bind to the snapshot or the host's properties:
+In AXAML, bind to read-only snapshot values. Wire button clicks in code-behind to `host.Save()`, or expose an `ICommand` property for `Command` binding:
 
 ```xml
 <StackPanel>
-    <TextBlock Text="{Binding FullName}" />
+    <TextBlock Text="{Binding Current.FirstName}" />
     <TextBlock Text="{Binding Current.Email}" />
-    <Button Content="Save" Command="{Binding Save}" />
+    <Button Content="Save" Click="OnSaveClick" />
 </StackPanel>
 ```
+
+`Update` notifies `Current`, not `FullName`. A binding to `FullName` needs an additional `PropertyChanged(nameof(FullName))` when the snapshot changes (override `OnSnapshotUpdated`). `Current.Email` is read-only for immutable records; expose a separate writable dispatching host property for `TwoWay` editing.
 
 ## Appropriate uses
 

@@ -21,16 +21,11 @@ preserving stable UI identity.
     - **Add** new snapshots to the collection.
     - **Remove** snapshots that are no longer present.
     - **Move** existing snapshots to their new positions.
-    - **Update** items in place if they are already present (by reference or value).
+    - **Retain** an item only when the incoming snapshot is the same reference; otherwise replace the collection item for that key.
 
 ## Selection and container stability
 
-For Projection-style viewmodels that display lists, `KeyedSnapshotCollection`
-keeps row identity stable:
-
-- Stable rows: Avalonia can keep the same UI containers for retained items.
-- Selection preservation: selected rows remain selected while their data changes.
-- Smoother updates: retained rows are patched instead of replacing the whole collection.
+`KeyedSnapshotCollection` keeps the collection instance stable, **not** each row object. For stable mutable row identity with changing data, use `ObservableCollectionExtensions.SyncWith` (or `ProjectionExtensions.SyncWith`) with a row projection and update it in place. Selection and container reuse depend on Avalonia's control and item identity; matching keys alone do not guarantee either. See [collection identity](../core/collections.html).
 
 ## Implementations
 

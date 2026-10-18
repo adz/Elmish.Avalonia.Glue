@@ -5,7 +5,7 @@ project: src/Elmish.Avalonia.Glue.ElmView/Elmish.Avalonia.Glue.ElmView.fsproj
 
 # ElmView write-back example
 
-This example shows `WriteBackBindings<'View,'Msg>` routing an edit through a generated host.
+This example shows `WriteBackBindings<'View,'Msg>` routing an edit through a handwritten generated-shaped host. Its flat CLR `Host.Name` facade uses the nested record route `UserInput.Name`; an AXAML binding to this host would be `{Binding Name, Mode=TwoWay}`, not `{Binding UserInput.Name}`. For a nested AXAML path, expose a stable `UserInput` node with its own `Name` property as in the [nodes reference](../api/elmview/nodes.html).
 
 ## Run one edit
 
