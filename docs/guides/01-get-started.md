@@ -1,6 +1,6 @@
 # Get started
 
-Start with one editable field. You do not need to design a whole application first.
+Start with one editable field. First [install the prerequisites and run a sample](install.html): .NET 10 SDK with F#, Avalonia 12.0.0 and Elmish 5.0.2. Choose `Elmish.Avalonia.Glue` plus `Elmish.Avalonia.Glue.Projection` or `Elmish.Avalonia.Glue.ElmView` for your UI project. You do not need to design a whole application first.
 
 ## Start with an immutable transition
 

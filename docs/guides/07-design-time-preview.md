@@ -31,6 +31,18 @@ the same projection properties runtime updates.
 The preview must not use different binding paths, special controls, or a
 second viewmodel hierarchy.
 
+## Wire the designer DataContext
+
+The [ElmView matrix AXAML](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/sample/Samples.ElmView/ExampleMatrixSample/src/ExampleMatrixSample.UI/Views/AppView.axaml) uses the following window child to instantiate the preview host without starting Elmish:
+
+```xml
+<Design.DataContext>
+    <local:UserInputPreviewHost />
+</Design.DataContext>
+```
+
+Declare `xmlns:local` for the UI views namespace and provide a public parameterless preview host whose constructor loads the design snapshot. Open `AppView.axaml` in the Avalonia previewer; the runtime `DataContext` is assigned separately at startup. Preview bindings must match runtime bindings.
+
 ## Preview states that expose layout problems
 
 Include long text, validation messages, loading states, empty lists, and a few

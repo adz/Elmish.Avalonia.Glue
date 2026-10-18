@@ -19,8 +19,7 @@ This keeps the public API stable while the framework-neutral types live in `Elmi
 
 ## Migration guidance
 
-- keep older call sites readable
-- move new docs toward the core package without breaking the existing package shape
+Existing `Elmish.Avalonia.Glue` names above forward to `Elmish.Glue.Core` counterparts; for new code reference `Elmish.Glue.Core`, change the namespace in `open`/`using` directives, and add the `Elmish.Glue.Core` project/package reference if it is not already transitive. `Elmish.Avalonia.Glue.ElmishHost` is **not** the core host: keep it for Avalonia UI-thread delivery; `Elmish.Glue.Core.ElmishHost` requires caller-provided posting when needed. Source compatibility of namespace changes, overload resolution and F# type inference is not guaranteed: compile each caller after migration. Do not remove the Avalonia bridge from an interactive app.
 
 ## Implementation
 

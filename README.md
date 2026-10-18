@@ -14,6 +14,20 @@ It supports two approaches:
 The project does not replace AXAML with an F# UI DSL or change how Elmish works in either case.
 
 
+## Install and run
+
+Use the .NET 10 SDK (bundled F#), Avalonia 12.0.0 and Elmish 5.0.2. Package IDs: `Elmish.Glue.Core`, `Elmish.Avalonia.Glue`, `Elmish.Avalonia.Glue.Projection`, `Elmish.Avalonia.Glue.ElmView`, and `Elmish.Avalonia.Glue.Testing`. Install the Avalonia bridge and the style package for your screen (Core is a transitive reference); use `Avalonia.Desktop` for a desktop UI. See [installation and compatibility](https://adz.github.io/Elmish.Avalonia.Glue/guides/install.html).
+
+```bash
+dotnet run --project sample/Samples.ElmView/ExampleMatrixSample/src/ExampleMatrixSample.UI/ExampleMatrixSample.UI.csproj
+```
+
+## Tasks
+
+- [Startup](https://adz.github.io/Elmish.Avalonia.Glue/guides/connect-runtime.html) · [Write-back](https://adz.github.io/Elmish.Avalonia.Glue/guides/route-editable-elmview-properties.html) · [Nested nodes](https://adz.github.io/Elmish.Avalonia.Glue/guides/nested-elmview-paths.html) · [Lists](https://adz.github.io/Elmish.Avalonia.Glue/guides/keyed-collections.html)
+- [Design preview](https://adz.github.io/Elmish.Avalonia.Glue/guides/design-time-preview.html) · [Background work](https://adz.github.io/Elmish.Avalonia.Glue/guides/background-commands.html) · [Headless tests](https://adz.github.io/Elmish.Avalonia.Glue/guides/testing-headlessly.html) · [All-F# UI](https://adz.github.io/Elmish.Avalonia.Glue/guides/all-fsharp-ui.html)
+- [Choose an adapter](https://adz.github.io/Elmish.Avalonia.Glue/index.html#choose-the-adapter) · [Glossary](https://adz.github.io/Elmish.Avalonia.Glue/guides/glossary.html) · [Troubleshooting](https://adz.github.io/Elmish.Avalonia.Glue/guides/troubleshooting.html)
+
 ## Start with the guide
 
 - [Docs site](https://adz.github.io/Elmish.Avalonia.Glue/): start here if you want the intent before the APIs.

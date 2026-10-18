@@ -1,0 +1,13 @@
+# Elmish.Avalonia.Glue
+
+Avalonia-first Elmish adapters: immutable F# state, ordinary AXAML bindings and stable CLR hosts. Projection uses explicit viewmodels; ElmView uses immutable F# view records with handwritten generated-shaped hosts. Core supplies framework-neutral notifications and keyed collections.
+
+## Task router
+
+- Install and start: https://adz.github.io/Elmish.Avalonia.Glue/guides/install.html and /guides/connect-runtime.html
+- Choose Projection, snapshot host, ElmView or collections: https://adz.github.io/Elmish.Avalonia.Glue/index.html#choose-the-adapter
+- TwoWay edits and nested nodes: /guides/route-editable-elmview-properties.html and /guides/nested-elmview-paths.html
+- Lists, preview, background work: /guides/keyed-collections.html, /guides/design-time-preview.html, /guides/background-commands.html
+- Headless testing and all-F# UI: /guides/testing-headlessly.html and /guides/all-fsharp-ui.html
+- Symptoms and vocabulary: /guides/troubleshooting.html and /guides/glossary.html
+- Generated entity API: https://adz.github.io/Elmish.Avalonia.Glue/api.html

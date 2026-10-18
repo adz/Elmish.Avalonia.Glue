@@ -1,0 +1,15 @@
+# Elmish.Avalonia.Glue documentation
+
+Immutable Elmish models flow to stable Avalonia DataContexts; AXAML TwoWay setters dispatch messages instead of mutating snapshots. Projection uses explicit CLR viewmodels, ElmView uses immutable F# view records and handwritten generated-shaped hosts. No custom AXAML binding model or generator is shipped.
+
+## Task router
+
+- Install and start: /guides/install.html, /guides/get-started.html, /guides/connect-runtime.html
+- Pick an adapter: /index.html#choose-the-adapter, /guides/projection.html, /guides/elmview.html
+- Edit and nest: /guides/route-editable-elmview-properties.html, /guides/nested-elmview-paths.html
+- Lists and identity: /guides/keyed-collections.html, /api/Elmish.Glue.Core.ObservableCollectionExtensions.html
+- Preview and tests: /guides/design-time-preview.html, /guides/testing-headlessly.html
+- Background work and thread guarantees: /guides/background-commands.html, /guides/threading-dispatch.html, /api/Elmish.Avalonia.Glue.ElmishHost.html
+- All-F# UI: /guides/all-fsharp-ui.html
+- Definitions and symptoms: /guides/glossary.html, /guides/troubleshooting.html
+- Generated entity reference: /api.html; example source: /examples/index.html

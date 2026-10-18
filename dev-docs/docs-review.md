@@ -63,16 +63,16 @@ Scope: README.md and every Markdown page under docs/, read without opening imple
 
 ## Missing
 
-- Installation prerequisites: NuGet IDs/versions, supported .NET/Avalonia/Elmish/F# versions, required project references, and a minimal run command (`README.md`, `docs/guides/01-get-started.md`).
+- [done] Installation prerequisites: NuGet IDs/versions, supported .NET/Avalonia/Elmish/F# versions, required project references, and a minimal run command (`README.md`, `docs/guides/01-get-started.md`).
 - One complete copyable minimal Projection and ElmView screen from model through host, AXAML and app lifetime, including a genuine TwoWay edit and notification (`docs/guides/01-get-started.md:28-61`).
-- Task index covering startup, write-back, nested node, list, design preview, background work, headless testing and all-F# UI; homepage path omits testing and all-F# (`docs/index.md:59-70`).
-- Decision table for Projection vs snapshot host vs ElmView vs core keyed collection/row projection, especially editable paths and identity (`docs/index.md:47-57`, `docs/api/index.md:6-17`).
+- [done] Task index covering startup, write-back, nested node, list, design preview, background work, headless testing and all-F# UI; homepage path omits testing and all-F# (`docs/index.md:59-70`).
+- [done] Decision table for Projection vs snapshot host vs ElmView vs core keyed collection/row projection, especially editable paths and identity (`docs/index.md:47-57`, `docs/api/index.md:6-17`).
 - Error-handling recipes: duplicate key before/after partial patch, missing/duplicate write-back route, binding errors, dispatcher not set/disposed, exceptions in update/subscription/post and stale async results.
-- Migration notes for compatibility aliases and packages: exact namespace/reference changes and what is or is not source-compatible (`docs/api/avalonia/aliases.md:20-23`).
-- Glossary for model, view snapshot, host, node, projection, generated-shaped, route, subscription and keyed identity (`docs/guides/02-architecture.md`).
-- How to set up actual design-time DataContext in AXAML, and how to run preview without runtime (`docs/guides/07-design-time-preview.md:25-46`).
-- A working, linked headless test and package install/test commands (`docs/guides/07-testing-headlessly.md:1-27`).
-- `llms.txt` absent: no compact navigation map, API disambiguation or links to task-specific canonical pages.
+- [done] Migration notes for compatibility aliases and packages: exact namespace/reference changes and what is or is not source-compatible (`docs/api/avalonia/aliases.md:20-23`).
+- [done] Glossary for model, view snapshot, host, node, projection, generated-shaped, route, subscription and keyed identity (`docs/guides/02-architecture.md`).
+- [done] How to set up actual design-time DataContext in AXAML, and how to run preview without runtime (`docs/guides/07-design-time-preview.md:25-46`).
+- [done] A working, linked headless test and package install/test commands (`docs/guides/07-testing-headlessly.md:1-27`).
+- [done] `llms.txt` absent: no compact navigation map, API disambiguation or links to task-specific canonical pages.
 
 ## Suggestions for humans and LLMs
 
@@ -81,4 +81,4 @@ Scope: README.md and every Markdown page under docs/, read without opening imple
 - Make API enrichment pages entity-focused with stable entity IDs, canonical overload/exception/thread/lifetime notes and a single link back to each guide; avoid duplicated guarantees that drift.
 - Add front matter for package, audience, prerequisites, API entities, task, and status (compiled/runnable/illustrative), plus a small example manifest for LLM retrieval.
 - Cross-link conceptual claims directly to reference contracts and testable examples; explicitly distinguish collection identity, row identity, item value replacement, and Avalonia container/selection behavior.
-- Provide a compact troubleshooting matrix keyed by symptom (stale TextBox, missing PropertyChanged, preview crash, lost selection, cross-thread exception) and concrete verification steps.
+- [done] Provide a compact troubleshooting matrix keyed by symptom (stale TextBox, missing PropertyChanged, preview crash, lost selection, cross-thread exception) and concrete verification steps.

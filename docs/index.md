@@ -55,6 +55,23 @@ shape. The CLR host then stays shallow and mechanical.
 
 You can use both styles in one application: each screen owns its own stable host/DataContext and dispatch connection to an Elmish program. Share a program by routing its model and messages to the respective screens, or start separate programs and dispose each connection with its owning view. There is no automatic mixed-screen composition API.
 
+## Choose the adapter
+
+| Need | Choose | Editable path and identity |
+| :--- | :--- | :--- |
+| Explicit named CLR viewmodels | [Projection](guides/projection.html) | Write setters that dispatch; use row projections for stable row object identity. |
+| Mostly read-only immutable values | <a href="api/Elmish.Avalonia.Glue.Projection.SnapshotHost`1.html">Snapshot host</a> | Bind `Current` for reads; add an explicit writable facade for edits. |
+| F# records define screen shape | [ElmView](guides/elmview.html) | Register writable routes; keep nested node identity stable. |
+| Framework-neutral keyed lists | [Core collections](reference/core/collections.html) | `SyncWith` retains row projections; keyed snapshots retain the collection, not row objects. |
+
+## Tasks
+
+- [Install and run](guides/install.html); [connect startup and lifetime](guides/connect-runtime.html).
+- [Route a TwoWay edit](guides/route-editable-elmview-properties.html); [bind nested nodes](guides/nested-elmview-paths.html).
+- [Patch lists](guides/keyed-collections.html); [render design preview](guides/design-time-preview.html).
+- [Publish background work](guides/background-commands.html); [test headlessly](guides/testing-headlessly.html).
+- [Build an all-F# UI](guides/all-fsharp-ui.html); [troubleshoot symptoms](guides/troubleshooting.html); [glossary](guides/glossary.html).
+
 ## Follow a working path
 
 1. [Build the smallest useful screen](guides/get-started.html).
