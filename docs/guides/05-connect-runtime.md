@@ -19,8 +19,12 @@ can discard control state.
 2. the host's snapshot update function;
 3. the host's dispatch setter.
 
-The Avalonia wrapper posts updates to `Dispatcher.UIThread`. The core host has
-no Avalonia dependency; it accepts a generic post function instead.
+The Avalonia wrapper delivers updates inline when already on the UI thread;
+from other threads it posts to `Dispatcher.UIThread`. The core host has no
+Avalonia dependency; it accepts a generic post function instead. Inline
+delivery matters for `TwoWay` controls such as `TextBox`: queuing an older
+model after a newer keystroke can write stale text back into the control.
+Bind the host once and use the Avalonia wrapper for interactive views.
 
 ## Keep the connection alive
 
