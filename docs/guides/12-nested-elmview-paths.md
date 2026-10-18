@@ -1,6 +1,6 @@
 # Bind nested ElmView paths
 
-Expose a stable node for each nested record so AXAML can bind through ordinary CLR properties while Elmish replaces immutable snapshots. The [node contract](../api/elmview/nodes.html) describes notification and identity.
+Expose a stable node for each nested record so AXAML can bind through ordinary CLR properties while Elmish replaces immutable snapshots. The [node contract](../reference/elmview/nodes.html) describes notification and identity.
 
 ## Define a node
 

@@ -33,7 +33,7 @@ one producer does not have to drain an indefinitely growing queue. Update except
 
 ## Disposal contract
 
-After disposal, `Dispatch` silently ignores new user messages; already queued messages may still drain before the queued termination message. Disposal can post asynchronously from a worker thread; keep the UI dispatcher running until shutdown completes. See [host lifetime](../api/core/host-lifetime.html).
+After disposal, `Dispatch` silently ignores new user messages; already queued messages may still drain before the queued termination message. Disposal can post asynchronously from a worker thread; keep the UI dispatcher running until shutdown completes. See [host lifetime](host-lifetime.html).
 
 ## Framework-neutral posting
 

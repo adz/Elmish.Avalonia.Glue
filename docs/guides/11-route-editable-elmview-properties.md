@@ -1,6 +1,6 @@
 # Route editable ElmView properties
 
-Register each writable facade path so a standard AXAML TwoWay edit sends an Elmish message instead of mutating an immutable snapshot. The [write-back API](../api/elmview/write-back.html) documents members and route failures.
+Register each writable facade path so a standard AXAML TwoWay edit sends an Elmish message instead of mutating an immutable snapshot. The [write-back API](../reference/elmview/write-back.html) documents members and route failures.
 
 ## Register editable paths
 

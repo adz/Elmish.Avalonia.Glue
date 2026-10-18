@@ -1,7 +1,7 @@
 # API reference
 
 The generated reference combines XML documentation from the assemblies with
-the longer explanations under `docs/api`.
+the longer explanations under `docs/reference`.
 
 ## Find the layer first
 

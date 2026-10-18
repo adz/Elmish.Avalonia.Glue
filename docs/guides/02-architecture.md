@@ -47,7 +47,7 @@ Profile.Name = "Grace"
 → PropertyChanged("Name")
 ```
 
-The generated-shaped host's `Update` only raises notifications and never calls the write-back setter; `TryDispatchWriteBack` dispatches once per setter call when a route exists, otherwise returns `false`. Avalonia may invoke a `TwoWay` setter on initialization or on a control-originated change; this library does not deduplicate those writes. Avoid model-driven setters in handwritten projections. See [write-back](../api/elmview/write-back.html) and [snapshot notifications](../api/core/snapshots.html).
+The generated-shaped host's `Update` only raises notifications and never calls the write-back setter; `TryDispatchWriteBack` dispatches once per setter call when a route exists, otherwise returns `false`. Avalonia may invoke a `TwoWay` setter on initialization or on a control-originated change; this library does not deduplicate those writes. Avoid model-driven setters in handwritten projections. See [write-back](../reference/elmview/write-back.html) and [snapshot notifications](../reference/core/snapshots.html).
 
 ## Keyed collection
 

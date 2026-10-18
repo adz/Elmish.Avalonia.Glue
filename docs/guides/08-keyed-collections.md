@@ -33,7 +33,7 @@ The result has the same keys and order as the snapshot. `SyncWith` retains match
 
 ## Choose the collection API
 
-Choose the adapter by whether rows need stable viewmodel identity or only collection identity; see [collection API selection](../api/core/collections.html#choose-the-collection-api).
+Choose the adapter by whether rows need stable viewmodel identity or only collection identity; see [collection API selection](../reference/core/collections.html#choose-the-collection-api).
 
 See the runnable [keyed patching example](../examples/keyed-collection-sync.html)
 and the generated [API reference](../api.html).

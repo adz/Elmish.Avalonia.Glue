@@ -24,7 +24,7 @@ regardless of which thread produced the message.
 
 ## Publish only through the Avalonia host
 
-Dispatch through the Avalonia host so bound state is published on the UI thread. See the [Avalonia queue guarantees](../api/avalonia/dispatcher.html#dispatch-queue-guarantees) and [core queue guarantees](../api/core/host-lifetime.html#core-queue-guarantees) for ordering, drain and failure semantics.
+Dispatch through the Avalonia host so bound state is published on the UI thread. See the [Avalonia queue guarantees](../reference/avalonia/dispatcher.html#dispatch-queue-guarantees) and [core queue guarantees](../reference/core/host-lifetime.html#core-queue-guarantees) for ordering, drain and failure semantics.
 
 The Avalonia host publishes the next model on the UI thread before raising
 notifications or patching a bound collection.

@@ -5,7 +5,7 @@ control. Keep ordinary AXAML for the visual tree and ordinary Avalonia bindings.
 
 ## Styled properties and attached properties
 
-For AXAML property registration limitations with Avalonia 12.0.0, see [F# compatibility](../api/avalonia/index.html#f-styled-and-attached-property-compatibility).
+For AXAML property registration limitations with Avalonia 12.0.0, see [F# compatibility](../reference/avalonia/index.html#f-styled-and-attached-property-compatibility).
 
 Instead, subclass a control and render directly from its `DataContext` when a
 custom rendering surface is needed. For simple appearance changes, bind an
