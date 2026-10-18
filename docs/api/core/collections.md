@@ -1,6 +1,6 @@
 # Collections
 
-The collections substrate provides utilities for syncing mutable `ObservableCollection`s with immutable lists while preserving the identity of the items.
+Collection utilities sync mutable `ObservableCollection`s with immutable lists while preserving item identity.
 
 ## `ObservableCollectionExtensions`
 

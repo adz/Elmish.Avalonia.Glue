@@ -1,10 +1,10 @@
 # Snapshots
 
-The snapshot substrate provides the base classes for creating stable, bindable shells around immutable data snapshots.
+Snapshot base classes provide stable, bindable shells around immutable data.
 
 ## `BindableNode`
 
-The foundation for all bindable objects in the system. It provides a standard implementation of `INotifyPropertyChanged`.
+Base class for bindable objects with an `INotifyPropertyChanged` implementation.
 
 ### Members
 

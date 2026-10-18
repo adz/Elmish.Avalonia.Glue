@@ -1,6 +1,6 @@
 # Dispatcher bridge
 
-The `ElmishHost` class in the `Elmish.Avalonia.Glue` package provides the primary entry points for starting an Elmish program and binding it to an Avalonia view. It ensures that all UI updates are correctly marshaled to Avalonia's UI thread.
+`Elmish.Avalonia.Glue.ElmishHost` starts an Elmish program, binds it to an Avalonia view, and marshals UI updates to Avalonia's UI thread.
 
 ## `ElmishHost`
 

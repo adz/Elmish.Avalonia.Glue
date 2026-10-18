@@ -1,6 +1,6 @@
 # Projection contracts
 
-The core projection contracts define how explicit, named viewmodels interact with the Elmish state and dispatch loop.
+Core projection contracts connect named viewmodels to Elmish state and dispatch.
 
 ## Update and dispatch contracts
 

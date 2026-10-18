@@ -1,6 +1,6 @@
 # Snapshot host
 
-The `SnapshotHost<'T>` is a lightweight, bindable shell for a single immutable snapshot. It's the primary building block for the **Snapshot-Host Projection** style.
+`SnapshotHost<'T>` is a bindable shell for one immutable snapshot. It underpins **Snapshot-Host Projection**.
 
 ## `SnapshotHost<'T>`
 
@@ -32,7 +32,7 @@ public class UserProfileHost : SnapshotHost<UserProfile>
 }
 ```
 
-In your AXAML, you can then bind directly to the snapshot or the host's properties:
+In AXAML, bind to the snapshot or the host's properties:
 
 ```xml
 <StackPanel>

@@ -1,6 +1,6 @@
 # Host lifetime
 
-The `ElmishHost` module in the core package provides the fundamental mechanics for running an Elmish program and connecting it to an external update loop.
+The core `ElmishHost` module runs an Elmish program and connects it to an external update loop.
 
 ## `ElmishHost`
 
@@ -14,7 +14,7 @@ The `ElmishHost` module in the core package provides the fundamental mechanics f
 
 ## `ElmishHostConnection<'Msg>`
 
-This class represents a running instance of an Elmish program. It implements `IDisposable` and provides a stable dispatch surface.
+A running Elmish program with `IDisposable` and a stable dispatch surface.
 
 ### Members
 
