@@ -3,6 +3,7 @@ namespace Elmish.Glue.Core
 open System
 open System.Collections.Generic
 open System.Collections.ObjectModel
+open System.ComponentModel
 open System.Runtime.CompilerServices
 
 type IProjection<'Model> =
@@ -102,6 +103,24 @@ type FSharpProjectionBase<'Model, 'Msg>() =
     interface IDispatchTarget<'Msg> with
         member _.SetDispatch(dispatch) = _dispatch <- dispatch
     interface IProjection<'Model, 'Msg>
+
+/// Base for F# projections with change notifications for CLR bindings.
+[<AbstractClass>]
+type ProjectionNode<'Model, 'Msg>() =
+    inherit FSharpProjectionBase<'Model, 'Msg>()
+    let changed = Event<PropertyChangedEventHandler, PropertyChangedEventArgs>()
+
+    member this.Change<'T when 'T : equality>(field: byref<'T>, value: 'T, name: string) =
+        if field <> value then
+            field <- value
+            changed.Trigger(this, PropertyChangedEventArgs(name))
+            true
+        else
+            false
+
+    interface INotifyPropertyChanged with
+        [<CLIEvent>]
+        member _.PropertyChanged = changed.Publish
 
 type Dispatcher<'Msg>() =
     let mutable _dispatch : Action<'Msg> = Action<_>(ignore)

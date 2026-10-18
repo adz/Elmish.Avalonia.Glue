@@ -1,6 +1,7 @@
 namespace Elmish.Avalonia.Glue.Tests
 
 open System
+open System.ComponentModel
 open System.Threading
 open Elmish
 open Elmish.Glue.Core
@@ -10,6 +11,27 @@ module ElmishHostTests =
 
     type private Msg =
         | NoOp
+
+    type private CounterNode() =
+        inherit ProjectionNode<int, int>()
+        let mutable count = 0
+        member this.Count = count
+        override this.Update(value) = this.Change(&count, value, "Count") |> ignore
+
+    [<Fact>]
+    let ``projection node notifies only on changed values`` () =
+        let node = CounterNode()
+        let names = ResizeArray<string>()
+        (node :> INotifyPropertyChanged).PropertyChanged.Add(fun args -> names.Add(args.PropertyName))
+        node.Update(1)
+        node.Update(1)
+        node.Update(2)
+        Assert.Equal(2, node.Count)
+        Assert.Equal<string>([| "Count"; "Count" |], names)
+        let mutable dispatched = 0
+        (node :> IDispatchTarget<int>).SetDispatch(Action<int>(fun value -> dispatched <- value))
+        node.Dispatch.Invoke(42)
+        Assert.Equal(42, dispatched)
 
     [<Fact>]
     let ``concurrent dispatch processes each message once without overlapping updates`` () =
