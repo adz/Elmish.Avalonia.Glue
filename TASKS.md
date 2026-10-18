@@ -65,7 +65,7 @@ From building Logs Digger (all-F# Avalonia app) and comparing with gitkay. Axial
 35. [x] Make `startAndBind` deliver model updates inline when already on the UI thread (post only from other threads). Always-queued delivery lets an older model reach a `TwoWay` `TextBox` after a newer keystroke and pushes stale text back. Cover the two-way case in "Connect the runtime".
 36. [x] Expose the inline-on-UI-thread `Post` as a public function so `Axial.Elmish`'s runtime can take it as `ElmishRuntimeOptions.Post`.
 37. [x] Add a notifying F# projection base, `ProjectionNode<'Model,'Msg>`: `INotifyPropertyChanged`, a `Dispatch` member, and `Change(&field, value, name)` that notifies only on real changes. `FSharpProjectionBase` lacks notifications today.
-38. [ ] Add `ObservableCollection.SyncWith` overloads for `seq<'T>` / F# `list` (F# lists do not implement `IReadOnlyList`).
+38. [x] Add `ObservableCollection.SyncWith` overloads for `seq<'T>` / F# `list` (F# lists do not implement `IReadOnlyList`).
 39. [ ] Make duplicate keys in `SyncWith` fail with an error naming the duplicate key in the incoming snapshot, and tell the guide to key by identity (path, id), never display text.
 40. [ ] Add an "all-F# UI" page: F# cannot declare Avalonia styled/attached properties (XAML needs public static fields; AVLN3000), with the working alternatives (a control subclass rendering from `DataContext`; `Classes.name="{Binding Flag}"`), and an F# story for ElmView write-back registration (currently C#-only `bindings.For(...)`).
 41. [ ] Add a headless test helper: start a program, drive it, wait on viewmodel state with timeouts, capture frames (gitkay's `Render` harness and Logs Digger's screenshot scenario both reinvent it).

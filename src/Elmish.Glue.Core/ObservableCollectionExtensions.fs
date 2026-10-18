@@ -9,6 +9,18 @@ open System.Runtime.CompilerServices
 type ObservableCollectionExtensions =
     [<Extension>]
     static member SyncWith<'ViewModel, 'Model, 'Key when 'Key: equality and 'Key: not null>
+        (collection: ObservableCollection<'ViewModel>, models: seq<'Model>, modelKey: Func<'Model, 'Key>,
+         vmKey: Func<'ViewModel, 'Key>, create: Func<'Model, 'ViewModel>, update: Action<'ViewModel, 'Model>) : unit =
+        ObservableCollectionExtensions.SyncWith(collection, models |> Seq.toArray :> IReadOnlyList<'Model>, modelKey, vmKey, create, update)
+
+    [<Extension>]
+    static member SyncWith<'ViewModel, 'Model, 'Key when 'Key: equality and 'Key: not null>
+        (collection: ObservableCollection<'ViewModel>, models: 'Model list, modelKey: Func<'Model, 'Key>,
+         vmKey: Func<'ViewModel, 'Key>, create: Func<'Model, 'ViewModel>, update: Action<'ViewModel, 'Model>) : unit =
+        ObservableCollectionExtensions.SyncWith(collection, models |> List.toArray :> IReadOnlyList<'Model>, modelKey, vmKey, create, update)
+
+    [<Extension>]
+    static member SyncWith<'ViewModel, 'Model, 'Key when 'Key: equality and 'Key: not null>
         (
             collection: ObservableCollection<'ViewModel>,
             models: IReadOnlyList<'Model>,
