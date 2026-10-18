@@ -24,9 +24,9 @@ type ElmishHostConnection<'Msg> internal (dispatch : Action<'Msg>, dispose : Act
 
 /// Starts an Elmish program and connects it to a host-controlled update sink.
 ///
-/// After every model update the provided callback is invoked through the
-/// supplied posting function. Higher-level UI packages can use this to route
-/// updates through a framework-specific UI thread or synchronization context.
+/// After each model update, invokes the callback through the posting function.
+/// UI packages can route updates through a framework-specific UI thread or
+/// synchronization context.
 module ElmishHost =
 
     type private HostMsg<'Msg> =
