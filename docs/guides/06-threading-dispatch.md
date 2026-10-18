@@ -24,18 +24,7 @@ regardless of which thread produced the message.
 
 ## Publish only through the Avalonia host
 
-The subscription callback may run on a worker thread. Dispatch through the
-Avalonia host: it queues messages in FIFO order and drains them on `Dispatcher.UIThread`, running
-inline if already there and posting otherwise. This serializes the Elmish
-message queue as well as the bound viewmodel updates. Dispatching directly
-into an unprotected Elmish queue from multiple threads is not safe.
-
-An idle UI-thread dispatch runs inline; if worker messages are waiting, it joins
-that queue rather than overtaking them. A dispatch during a drain never re-enters
-Elmish. The framework-neutral core host instead drains on the dispatching thread
-that finds the queue idle: it guarantees serialization and FIFO order, not thread
-affinity. Each drain handles only the queue snapshot it found at entry; later arrivals are scheduled on the thread pool (which calls the supplied `post`), unless another dispatcher takes the idle queue first, so
-one producer does not have to drain an indefinitely growing queue. Update exceptions propagate to the draining caller and stop that batch; the next dispatch can resume remaining queued messages. A failure from `post` is not recovered here and can leave the queue waiting. Disposal queues a stop message, so messages already queued may run first. Core `startAndBind` delivers models on the draining thread.
+Dispatch through the Avalonia host so bound state is published on the UI thread. See the [Avalonia queue guarantees](../api/avalonia/dispatcher.html#dispatch-queue-guarantees) and [core queue guarantees](../api/core/host-lifetime.html#core-queue-guarantees) for ordering, drain and failure semantics.
 
 The Avalonia host publishes the next model on the UI thread before raising
 notifications or patching a bound collection.

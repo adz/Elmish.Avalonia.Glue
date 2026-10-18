@@ -13,3 +13,8 @@ it during shutdown.
 
 The package also retains compatibility aliases for the shared Core types.
 New lower-level code can name `Elmish.Glue.Core` directly.
+
+## F# styled and attached property compatibility
+
+With the Avalonia 12.0.0 XAML compiler used by this repository, F# compiled values for styled/attached property registrations can appear as properties rather than the public static fields the compiler looks up, producing `AVLN3000` when referenced from AXAML. This is an observed interoperability constraint, not a blanket prohibition on all F# custom controls or future Avalonia versions. Use a C# declaration when AXAML needs the property registration field.
+

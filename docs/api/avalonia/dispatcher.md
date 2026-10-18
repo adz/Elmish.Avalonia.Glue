@@ -17,6 +17,27 @@
 2. **Lifetime**: Both methods return `ElmishHostConnection<'Msg>` implementing `IDisposable`. Disposing sends a termination message through the queue; subscriptions are cleaned up when that message drains. Subsequent user `Dispatch` calls are ignored.
 3. **Binding**: By calling `setDispatch`, it allows your view host (whether it's an ElmView host or a Projection host) to receive the `dispatch` function and start sending messages back to Elmish.
 
+## Dispatch queue guarantees
+
+The subscription callback may run on a worker thread. Dispatch through the
+Avalonia host: it queues messages in FIFO order and drains them on `Dispatcher.UIThread`, running
+inline if already there and posting otherwise. This serializes the Elmish
+message queue as well as the bound viewmodel updates. Dispatching directly
+into an unprotected Elmish queue from multiple threads is not safe.
+
+An idle UI-thread dispatch runs inline; if worker messages are waiting, it joins
+that queue rather than overtaking them. A dispatch during a drain never re-enters
+Elmish. 
+## Interactive delivery
+
+The Avalonia wrapper delivers updates inline when already on the UI thread;
+from other threads it posts to `Dispatcher.UIThread`. The core host has no
+Avalonia dependency; it accepts a generic post function instead. Inline
+delivery matters for `TwoWay` controls such as `TextBox`: queuing an older
+model after a newer keystroke can write stale text back into the control.
+Bind the host once and use the Avalonia wrapper for interactive views. Queued worker messages precede a later UI dispatch; the bridge does not cancel pending posts or catch exceptions from `Post` or `onUpdate`.
+
+
 ## Connect an application
 
 ```csharp

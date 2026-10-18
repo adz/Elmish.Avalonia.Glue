@@ -26,3 +26,13 @@ or need its collection and notification primitives.
 6. Keyed collection helpers preserve identity where required.
 
 Open a package or type below for exact signatures and member documentation.
+
+## Package boundaries
+
+| Package | Responsibility |
+| --- | --- |
+| `Elmish.Glue.Core` | framework-neutral hosts, notifications, dispatch, and keyed patching |
+| `Elmish.Avalonia.Glue` | Avalonia UI-thread delivery and compatibility surface |
+| `Elmish.Avalonia.Glue.Projection` | explicit projection and snapshot-host helpers |
+| `Elmish.Avalonia.Glue.ElmView` | view-record hosts, nodes, and write-back routing |
+

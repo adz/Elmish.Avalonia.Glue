@@ -59,12 +59,7 @@ Use it only when stable item identity materially helps the control.
 
 ## Package boundaries
 
-| Package | Responsibility |
-| --- | --- |
-| `Elmish.Glue.Core` | framework-neutral hosts, notifications, dispatch, and keyed patching |
-| `Elmish.Avalonia.Glue` | Avalonia UI-thread delivery and compatibility surface |
-| `Elmish.Avalonia.Glue.Projection` | explicit projection and snapshot-host helpers |
-| `Elmish.Avalonia.Glue.ElmView` | view-record hosts, nodes, and write-back routing |
+See the [package responsibilities](../api.html#package-boundaries) in the API reference.
 
 The next decision is the authoring surface. Read [Projection](projection.html)
 or [ElmView](elmview.html).

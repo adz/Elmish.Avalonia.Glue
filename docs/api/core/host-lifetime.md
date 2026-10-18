@@ -23,6 +23,18 @@ A running Elmish program with `IDisposable` and a stable dispatch surface.
 | `Dispatch(message)` | Dispatches a message to the running Elmish program. |
 | `Dispose()` | Stops the Elmish program and cleans up any subscriptions. |
 
+## Core queue guarantees
+
+The framework-neutral core host instead drains on the dispatching thread
+that finds the queue idle: it guarantees serialization and FIFO order, not thread
+affinity. Each drain handles only the queue snapshot it found at entry; later arrivals are scheduled on the thread pool (which calls the supplied `post`), unless another dispatcher takes the idle queue first, so
+one producer does not have to drain an indefinitely growing queue. Update exceptions propagate to the draining caller and stop that batch; the next dispatch can resume remaining queued messages. A failure from `post` is not recovered here and can leave the queue waiting. Disposal queues a stop message, so messages already queued may run first. Core `startAndBind` delivers models on the draining thread.
+
+
+## Disposal contract
+
+After disposal, `Dispatch` silently ignores new user messages; already queued messages may still drain before the queued termination message. Disposal can post asynchronously from a worker thread; keep the UI dispatcher running until shutdown completes. See [host lifetime](../api/core/host-lifetime.html).
+
 ## Framework-neutral posting
 
 By keeping the host mechanics in the core package, we can:

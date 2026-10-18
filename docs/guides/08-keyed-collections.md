@@ -33,11 +33,7 @@ The result has the same keys and order as the snapshot. `SyncWith` retains match
 
 ## Choose the collection API
 
-Use `ObservableCollectionExtensions.SyncWith` when each row is a projection
-that must update in place.
-
-Use `KeyedSnapshotCollection<T,TKey>` when the collection can expose snapshot
-items directly and only the collection identity needs to remain stable.
+Choose the adapter by whether rows need stable viewmodel identity or only collection identity; see [collection API selection](../api/core/collections.html#choose-the-collection-api).
 
 See the runnable [keyed patching example](../examples/keyed-collection-sync.html)
 and the generated [API reference](../api.html).

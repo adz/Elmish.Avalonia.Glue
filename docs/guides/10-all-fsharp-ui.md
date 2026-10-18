@@ -5,7 +5,7 @@ control. Keep ordinary AXAML for the visual tree and ordinary Avalonia bindings.
 
 ## Styled properties and attached properties
 
-With the Avalonia 12.0.0 XAML compiler used by this repository, F# compiled values for styled/attached property registrations can appear as properties rather than the public static fields the compiler looks up, producing `AVLN3000` when referenced from AXAML. This is an observed interoperability constraint, not a blanket prohibition on all F# custom controls or future Avalonia versions. Use a C# declaration when AXAML needs the property registration field.
+For AXAML property registration limitations with Avalonia 12.0.0, see [F# compatibility](../api/avalonia/index.html#f-styled-and-attached-property-compatibility).
 
 Instead, subclass a control and render directly from its `DataContext` when a
 custom rendering surface is needed. For simple appearance changes, bind an
