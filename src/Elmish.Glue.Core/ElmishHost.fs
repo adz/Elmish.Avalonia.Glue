@@ -66,6 +66,7 @@ module ElmishHost =
 
         let mutable dispatch = Action<HostMsg<'Msg>>(ignore)
         let mutable disposed = 0
+        let dispatchGate = obj ()
 
         let dispatchUser =
             Action<'Msg>(fun msg ->
@@ -83,7 +84,8 @@ module ElmishHost =
             dispatch <- Action<HostMsg<'Msg>>(fun msg -> d msg)
             if Volatile.Read(&disposed) = 0 then
                 post.Invoke(Action(fun () -> onUpdate.Invoke(model))))
-        |> Program.run
+        |> Program.runWithDispatch (fun dispatch msg ->
+            post.Invoke(Action(fun () -> lock dispatchGate (fun () -> dispatch msg)))) ()
 
         new ElmishHostConnection<'Msg>(dispatchUser, dispose)
 

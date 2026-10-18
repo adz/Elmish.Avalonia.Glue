@@ -7,7 +7,10 @@ open Elmish
 module ElmishHost =
     let private postToUiThread =
         Action<Action>(fun action ->
-            Dispatcher.UIThread.Post(fun () -> action.Invoke()) |> ignore)
+            if Dispatcher.UIThread.CheckAccess() then
+                action.Invoke()
+            else
+                Dispatcher.UIThread.Post(fun () -> action.Invoke()) |> ignore)
 
     let start
         (program : Program<unit, 'Model, 'Msg, unit>)
