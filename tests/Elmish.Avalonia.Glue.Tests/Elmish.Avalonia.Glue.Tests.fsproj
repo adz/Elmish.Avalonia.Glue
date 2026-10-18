@@ -4,20 +4,22 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Headless.fs" />
+    <Compile Include="HeadlessTests.fs" />
     <Compile Include="ObservableCollectionExtensionsTests.fs" />
     <Compile Include="ElmishHostTests.fs" />
     <Compile Include="SnapshotSubstrateTests.fs" />
     <Compile Include="ElmViewGeneratedHostTests.fs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Avalonia.Headless.XUnit" Version="12.0.0" />
+    <PackageReference Include="Avalonia.Skia" Version="12.0.0" />
+    <PackageReference Include="xunit.v3" Version="3.2.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
     <ProjectReference Include="..\..\src\Elmish.Glue.Core\Elmish.Glue.Core.fsproj" />
     <ProjectReference Include="..\..\src\Elmish.Avalonia.Glue\Elmish.Avalonia.Glue.fsproj" />
     <ProjectReference Include="..\..\src\Elmish.Avalonia.Glue.ElmView\Elmish.Avalonia.Glue.ElmView.fsproj" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
+
   </ItemGroup>
 </Project>

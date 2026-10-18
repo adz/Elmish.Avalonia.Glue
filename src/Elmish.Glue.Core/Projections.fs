@@ -7,10 +7,10 @@ open System.ComponentModel
 open System.Runtime.CompilerServices
 
 type IProjection<'Model> =
-    abstract member Update : 'Model -> unit
+    abstract member Update : model: 'Model -> unit
 
 type IDispatchTarget<'Msg> =
-    abstract member SetDispatch : Action<'Msg> -> unit
+    abstract member SetDispatch : dispatch: Action<'Msg> -> unit
 
 type IProjection<'Model, 'Msg> =
     inherit IProjection<'Model>
@@ -97,7 +97,7 @@ type ProjectionExtensions =
 type FSharpProjectionBase<'Model, 'Msg>() =
     let mutable _dispatch : Action<'Msg> = Action<_>(ignore)
     member _.Dispatch = _dispatch
-    abstract member Update : 'Model -> unit
+    abstract member Update : model: 'Model -> unit
     interface IProjection<'Model> with
         member this.Update(model) = this.Update(model)
     interface IDispatchTarget<'Msg> with

@@ -68,5 +68,5 @@ From building Logs Digger (all-F# Avalonia app) and comparing with gitkay. Axial
 38. [x] Add `ObservableCollection.SyncWith` overloads for `seq<'T>` / F# `list` (F# lists do not implement `IReadOnlyList`).
 39. [x] Make duplicate keys in `SyncWith` fail with an error naming the duplicate key in the incoming snapshot, and tell the guide to key by identity (path, id), never display text.
 40. [x] Add an "all-F# UI" page: F# cannot declare Avalonia styled/attached properties (XAML needs public static fields; AVLN3000), with the working alternatives (a control subclass rendering from `DataContext`; `Classes.name="{Binding Flag}"`), and an F# story for ElmView write-back registration (currently C#-only `bindings.For(...)`).
-41. [ ] Add a headless test helper: start a program, drive it, wait on viewmodel state with timeouts, capture frames (gitkay's `Render` harness and Logs Digger's screenshot scenario both reinvent it).
+41. [x] Add a headless test helper: start a program, drive it, wait on viewmodel state with timeouts, capture frames (gitkay's `Render` harness and Logs Digger's screenshot scenario both reinvent it).
 

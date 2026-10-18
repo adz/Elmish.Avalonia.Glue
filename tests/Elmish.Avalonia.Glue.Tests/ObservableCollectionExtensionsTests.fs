@@ -18,6 +18,20 @@ type private TestModel =
 module ObservableCollectionExtensionsTests =
 
     [<Fact>]
+    let ``F# SyncWith resolves list array seq and ResizeArray`` () =
+        let collection = ObservableCollection<TestVm>()
+        let models = [ { Id = 1; Value = "one" } ]
+        let modelKey = Func<TestModel, int>(fun model -> model.Id)
+        let vmKey = Func<TestVm, int>(fun vm -> vm.Id)
+        let create = Func<TestModel, TestVm>(fun model -> TestVm(model.Id, model.Value))
+        let update = Action<TestVm, TestModel>(fun vm model -> vm.Value <- model.Value)
+        ObservableCollectionExtensions.SyncWith(collection, models, modelKey, vmKey, create, update)
+        ObservableCollectionExtensions.SyncWith(collection, List.toArray models, modelKey, vmKey, create, update)
+        ObservableCollectionExtensions.SyncWith(collection, (models :> seq<TestModel>), modelKey, vmKey, create, update)
+        ObservableCollectionExtensions.SyncWith(collection, ResizeArray<TestModel>(models), modelKey, vmKey, create, update)
+        Assert.Equal(1, collection.Count)
+
+    [<Fact>]
     let ``SyncWith rejects duplicate model keys`` () =
         let collection = ObservableCollection<TestVm>()
         let models =
