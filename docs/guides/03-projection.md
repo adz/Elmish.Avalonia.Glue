@@ -37,8 +37,7 @@ public sealed class ProfileProjection : IProjection<ProfileModel>
 }
 ```
 
-The complete sample projections use the repository's observable base classes
-and are compiled as part of the sample solution.
+This snippet illustrates the read-only update side only: `private set` cannot accept a `TwoWay` write. For editing, add a public setter that dispatches `NameChanged` without changing the model, and connect dispatch at startup. See [sample projections](sample-applications.html) for the complete binding surface.
 
 ## Send user intent back to Elmish
 
@@ -58,7 +57,7 @@ like another user edit and create a feedback loop.
 ## Prefer a snapshot host for shallow screens
 
 `SnapshotHost<T>` exposes one immutable value through `Current`. Bind directly
-to `Current.Name` when most values need no adaptation.
+to `Current.Name` for read-only values when most values need no adaptation. An immutable record field under `Current` cannot accept a `TwoWay` write: expose a separate writable host property that dispatches instead.
 
 Add named commands or derived CLR properties only where they improve the
 screen contract. This avoids a deep mutable projection tree.

@@ -26,5 +26,7 @@ The project does not replace AXAML with an F# UI DSL or change how Elmish works 
 
 ## Samples
 
-- [Projection samples](sample/Samples.Projection): explicit CLR viewmodel path.
-- [ElmView samples](sample/Samples.ElmView): F# view-record path.
+- [Projection samples](https://github.com/adz/Elmish.Avalonia.Glue/tree/main/sample/Samples.Projection): explicit CLR viewmodel path.
+- [ElmView samples](https://github.com/adz/Elmish.Avalonia.Glue/tree/main/sample/Samples.ElmView): F# view-record path.
+
+Clone the repository and follow the [sample applications guide](https://adz.github.io/Elmish.Avalonia.Glue/guides/sample-applications.html) for setup and run commands; the links above are source directories, not install instructions.

@@ -13,18 +13,18 @@ can discard control state.
 
 ## Start Elmish through the Avalonia bridge
 
-`Elmish.Avalonia.Glue.ElmishHost.startAndBind` connects three pieces:
+`Elmish.Avalonia.Glue.ElmishHost.startAndBind` connects three pieces (this is an F# module function; from F# pass an Elmish `Program<unit, Model, Msg, unit>` plus `Action<Model>` and `Action<Action<Msg>>` callbacks):
 
 1. the Elmish program;
 2. the host's snapshot update function;
 3. the host's dispatch setter.
 
-The Avalonia wrapper delivers updates inline when already on the UI thread;
+For a concrete C# application startup using a bound host, see [the dispatcher bridge](../api/avalonia/dispatcher.html); derive the view snapshot from the model inside the update callback (for example `model => host.Update(View.fromModel(model))`). The Avalonia wrapper delivers updates inline when already on the UI thread;
 from other threads it posts to `Dispatcher.UIThread`. The core host has no
 Avalonia dependency; it accepts a generic post function instead. Inline
 delivery matters for `TwoWay` controls such as `TextBox`: queuing an older
 model after a newer keystroke can write stale text back into the control.
-Bind the host once and use the Avalonia wrapper for interactive views.
+Bind the host once and use the Avalonia wrapper for interactive views. Queued worker messages precede a later UI dispatch; the bridge does not cancel pending posts or catch exceptions from `Post` or `onUpdate`.
 
 ## Keep the connection alive
 
@@ -32,7 +32,7 @@ The returned `ElmishHostConnection<TMsg>` owns the running loop. Store it on
 the application or window. Dispose it during shutdown.
 
 Its `Dispatch` member is a stable way to send a message into the running
-program. After disposal, the connection stops accepting useful work.
+program. After disposal, `Dispatch` silently ignores new user messages; already queued messages may still drain before the queued termination message. Disposal can post asynchronously from a worker thread; keep the UI dispatcher running until shutdown completes. See [host lifetime](../api/core/host-lifetime.html).
 
 ## Keep platform effects at the edge
 

@@ -1,6 +1,6 @@
 # Elmish.Avalonia.Glue
 
-Avalonia gives you AXAML, compiled bindings, design-time preview, and DevTools.
+Avalonia supports ordinary AXAML, compiled bindings (when configured in the app), design-time preview (with a design DataContext), and DevTools (when enabled). The library's stable CLR hosts and nodes expose standard properties to those tools; it does not enable or configure them automatically.
 Elmish gives you immutable state, explicit messages, and one update loop.
 
 Elmish.Avalonia.Glue connects them.
@@ -53,8 +53,7 @@ identity.
 Use **ElmView** when an immutable F# view record should define the screen
 shape. The CLR host then stays shallow and mechanical.
 
-You can use both styles in one application. The choice belongs to a screen,
-not the whole codebase.
+You can use both styles in one application: each screen owns its own stable host/DataContext and dispatch connection to an Elmish program. Share a program by routing its model and messages to the respective screens, or start separate programs and dispose each connection with its owning view. There is no automatic mixed-screen composition API.
 
 ## Follow a working path
 

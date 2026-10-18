@@ -1,7 +1,6 @@
 # Get started
 
-Start with one editable field. You do not need
-you to design a whole application first.
+Start with one editable field. You do not need to design a whole application first.
 
 ## Start with an immutable transition
 
@@ -22,8 +21,7 @@ assert (changed.Name = "Grace")
 assert (initial.Name = "Ada")
 ```
 
-FsLiveDocs compiles this block. The assertions show
-visible: an edit creates a new value; it does not mutate `initial`.
+FsLiveDocs compiles this block. The assertions show that an edit creates a new value; it does not mutate `initial`.
 
 ## Define the binding contract
 
@@ -46,16 +44,14 @@ Do not replace the window's `DataContext` after every message. Keep one host
 instance and update the immutable value behind it.
 
 The host getter returns the current snapshot value. Its setter dispatches
-`NameChanged`. When Elmish returns the next snapshot, `host.Update` raises
-`PropertyChanged` for `Name`.
+`NameChanged`. When Elmish returns the next snapshot, `host.Update` raises `PropertyChanged` for the snapshot property (`Current` for `SnapshotHost`, `View` for ElmView). A handwritten `Name` facade must also notify `Name` when its value changes; a generated-shaped host lists `Name` in `GeneratedPropertyNames`. Updates compare snapshot references, not field values. See [snapshot notifications](../api/core/snapshots.html) and the [write-back example](../examples/elmview-write-back.html).
 
 ## Choose the host shape
 
 With **Projection**, you write a named viewmodel with `Name`, `Update`, and a
 dispatch connection. This is explicit and familiar to XAML tooling.
 
-With **ElmView**, the F# view record contains `Name`. A generated-shaped host
-exposes that field and maps the writable path to `NameChanged`.
+With **ElmView**, the F# view record contains `Name`. A handwritten generated-shaped host exposes a CLR `Name` getter/setter and registers its writable path to `NameChanged`; no code generator is included. For a complete startup, host, and AXAML contract, follow the [sample applications](sample-applications.html) and [runtime connection](connect-runtime.html).
 
 Continue with [the architecture](architecture.html), then choose the guide
 for the style you want to try first.

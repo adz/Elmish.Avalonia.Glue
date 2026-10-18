@@ -89,7 +89,7 @@ let the next snapshot publish the loading state.
 ## Use a subscription for an ongoing source
 
 A subscription connects a long-lived producer such as a timer, device,
-WebSocket, or file watcher. It returns an `IDisposable` that stops the producer.
+WebSocket, or file watcher. In Elmish's keyed subscription API, each factory returns an `IDisposable` that stops its producer; `Program.withSubscription` takes the list of `(key segments, factory)` pairs. Elmish tracks the stable key across model updates: keep one key per logical producer, rather than generating a new key each update. Dispose stops future timer events but callbacks already in flight may still dispatch; handle stale results in `update`.
 
 ```fsharp
 let subscriptions _model =
@@ -122,11 +122,8 @@ An idle UI-thread dispatch runs inline; if worker messages are waiting, it joins
 that queue rather than overtaking them. A dispatch during a drain never re-enters
 Elmish. The framework-neutral core host instead drains on the dispatching thread
 that finds the queue idle: it guarantees serialization and FIFO order, not thread
-affinity. Each drain handles only the queue snapshot it found at entry; later
-arrivals are handed off asynchronously (or picked up by another dispatcher), so
-one producer does not have to drain an indefinitely growing queue. Update
-exceptions propagate to the draining caller; the next dispatch can resume any
-queued messages. Core `startAndBind` delivers models on the draining thread.
+affinity. Each drain handles only the queue snapshot it found at entry; later arrivals are scheduled on the thread pool (which calls the supplied `post`), unless another dispatcher takes the idle queue first, so
+one producer does not have to drain an indefinitely growing queue. Update exceptions propagate to the draining caller and stop that batch; the next dispatch can resume remaining queued messages. A failure from `post` is not recovered here and can leave the queue waiting. Disposal queues a stop message, so messages already queued may run first. Core `startAndBind` delivers models on the draining thread.
 
 The Avalonia host publishes the next model on the UI thread before raising
 notifications or patching a bound collection.
