@@ -24,5 +24,5 @@ dotnet run --project tools/DocsExamples/DocsExamples.fsproj
 dotnet livedocs test
 ```
 
-Use an example as a narrow proof of one mechanism. Use the sample suites when
+Use an example to check one mechanism. Use the sample suites when
 you need complete AXAML, design-time data, and application startup.
