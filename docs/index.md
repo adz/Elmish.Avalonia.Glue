@@ -3,9 +3,9 @@
 Avalonia gives you AXAML, compiled bindings, design-time preview, and DevTools.
 Elmish gives you immutable state, explicit messages, and one update loop.
 
-Elmish.Avalonia.Glue lets you keep both.
+Elmish.Avalonia.Glue connects them.
 
-## The problem it solves
+## Binding immutable state
 
 Elmish replaces an immutable model after each message. Avalonia expects a
 stable `DataContext` that raises `PropertyChanged` and accepts `TwoWay` writes.
@@ -18,8 +18,7 @@ user edit → Avalonia binding → stable host → Elmish message
 AXAML binding ← PropertyChanged ← new immutable snapshot
 ```
 
-The adapter is the glue. It does not replace AXAML, invent a UI DSL, or move
-application behaviour out of F#.
+The adapter leaves AXAML and application behaviour in F# intact.
 
 ## A concrete example
 
@@ -57,7 +56,7 @@ shape. The CLR host then stays shallow and mechanical.
 You can use both styles in one application. The choice belongs to a screen,
 not the whole codebase.
 
-## Learn from a working path
+## Follow a working path
 
 1. [Build the smallest useful screen](guides/get-started.html).
 2. [Learn how snapshots, hosts, and dispatch fit together](guides/architecture.html).
