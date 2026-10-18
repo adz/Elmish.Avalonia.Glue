@@ -112,12 +112,14 @@ subscription key so Elmish can identify the producer across model changes.
 
 ## Publish only through the Avalonia host
 
-The subscription callback may run on a worker thread. Dispatching is safe
-because it does not touch Avalonia objects.
+The subscription callback may run on a worker thread. Dispatch through the
+Avalonia host: it marshals Elmish dispatch to `Dispatcher.UIThread`, running
+inline if already there and posting otherwise. This serializes the Elmish
+message queue as well as the bound viewmodel updates. Dispatching directly
+into an unprotected Elmish queue from multiple threads is not safe.
 
-After Elmish produces the next model, `Elmish.Avalonia.Glue.ElmishHost` posts
-the host update to `Dispatcher.UIThread`. Only then does the host raise
-notifications or patch a bound collection.
+The host publishes the next model on the UI thread before raising
+notifications or patching a bound collection.
 
 Do not call `Dispatcher.UIThread.Post` inside every background callback. The
 host boundary already owns UI-thread publication.
