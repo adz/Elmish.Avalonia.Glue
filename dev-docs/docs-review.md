@@ -49,17 +49,17 @@ Scope: README.md and every Markdown page under docs/, read without opening imple
 
 ## Too long
 
-- `docs/guides/06-background-work.md` (154 lines): split into **Commands and subscriptions** (state transition, finite work, ongoing source, disposal/cancellation: lines 26-110, 137-145) and **Threading and dispatch guarantees** (message boundary, Avalonia/core queue behavior and failure semantics: lines 6-24, 113-135); leave a brief pointer to both styles (146-154).
-- `docs/api/elmview/write-back.md` (118 lines): split reference front matter for `WriteBackBindings`/`WriteBackBindingRegistration` (members and route failure semantics) from a **Route editable ElmView properties** recipe (registration, AXAML, dispatch walkthrough, display-only and commands).
-- `docs/api/elmview/nodes.md` (80 lines): keep node contract and notification guarantees in reference; move the extended C#/F#/AXAML sample to an ElmView nested-path recipe.
+- [done] `docs/guides/06-background-work.md` (154 lines): split into **Commands and subscriptions** (state transition, finite work, ongoing source, disposal/cancellation: lines 26-110, 137-145) and **Threading and dispatch guarantees** (message boundary, Avalonia/core queue behavior and failure semantics: lines 6-24, 113-135); leave a brief pointer to both styles (146-154).
+- [done] `docs/api/elmview/write-back.md` (118 lines): split reference front matter for `WriteBackBindings`/`WriteBackBindingRegistration` (members and route failure semantics) from a **Route editable ElmView properties** recipe (registration, AXAML, dispatch walkthrough, display-only and commands).
+- [done] `docs/api/elmview/nodes.md` (80 lines): keep node contract and notification guarantees in reference; move the extended C#/F#/AXAML sample to an ElmView nested-path recipe.
 
 ## Reference material in guides
 
-- `docs/guides/02-architecture.md`, **Package boundaries** (61-68): package responsibility table could be canonical on `docs/api/index.md` / package index front matter, with a link from the conceptual guide.
-- `docs/guides/05-connect-runtime.md`, **Start Elmish through the Avalonia bridge / Keep the connection alive** (14-35): inline-vs-post, queue/lifetime and disposal contract belongs with `Elmish.Avalonia.Glue.ElmishHost` and `ElmishHostConnection<'Msg>` (`docs/api/avalonia/dispatcher.md`, `docs/api/core/host-lifetime.md`); retain use-case guidance here.
-- `docs/guides/06-background-work.md`, **Publish only through the Avalonia host** (113-135): exhaustive FIFO, drain, threading and exception guarantees belong on `ElmishHost` reference (`docs/api/avalonia/dispatcher.md` and `docs/api/core/host-lifetime.md`).
-- `docs/guides/08-keyed-collections.md`, **Choose the collection API** (36-42): API selection belongs on `ObservableCollectionExtensions.SyncWith` and `KeyedSnapshotCollection<'T,'Key>` (`docs/api/core/collections.md`), linked from task guidance.
-- `docs/guides/10-all-fsharp-ui.md`, **Styled properties and attached properties** (6-15): Avalonia interop limitation is reference/compatibility material for the Avalonia package (`docs/api/avalonia/index.md`), with version scope.
+- [done] `docs/guides/02-architecture.md`, **Package boundaries** (61-68): package responsibility table could be canonical on `docs/api/index.md` / package index front matter, with a link from the conceptual guide.
+- [done] `docs/guides/05-connect-runtime.md`, **Start Elmish through the Avalonia bridge / Keep the connection alive** (14-35): inline-vs-post, queue/lifetime and disposal contract belongs with `Elmish.Avalonia.Glue.ElmishHost` and `ElmishHostConnection<'Msg>` (`docs/api/avalonia/dispatcher.md`, `docs/api/core/host-lifetime.md`); retain use-case guidance here.
+- [done] `docs/guides/06-background-work.md`, **Publish only through the Avalonia host** (113-135): exhaustive FIFO, drain, threading and exception guarantees belong on `ElmishHost` reference (`docs/api/avalonia/dispatcher.md` and `docs/api/core/host-lifetime.md`).
+- [done] `docs/guides/08-keyed-collections.md`, **Choose the collection API** (36-42): API selection belongs on `ObservableCollectionExtensions.SyncWith` and `KeyedSnapshotCollection<'T,'Key>` (`docs/api/core/collections.md`), linked from task guidance.
+- [done] `docs/guides/10-all-fsharp-ui.md`, **Styled properties and attached properties** (6-15): Avalonia interop limitation is reference/compatibility material for the Avalonia package (`docs/api/avalonia/index.md`), with version scope.
 
 ## Missing
 
