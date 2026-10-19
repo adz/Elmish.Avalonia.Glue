@@ -59,7 +59,7 @@ Use it only when stable item identity materially helps the control.
 
 ## Package boundaries
 
-See the [package responsibilities](../api.html#package-boundaries) in the API reference.
+See the [package responsibilities](../reference/index.html#package-boundaries) in the reference.
 
 The next decision is the authoring surface. Read [Projection](projection.html)
 or [ElmView](elmview.html).
