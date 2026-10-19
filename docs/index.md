@@ -9,6 +9,7 @@ Elmish.Avalonia.Glue connects them.
 
 Elmish replaces an immutable model after each message. Avalonia expects a
 stable `DataContext` that raises `PropertyChanged` and accepts `TwoWay` writes.
+The <a href="api/Elmish.Glue.Core.BindableSnapshotHost`1.html">snapshot host contract</a> defines that notification and update behavior.
 
 The library puts a small adapter between them:
 
@@ -42,7 +43,8 @@ The view remains ordinary AXAML:
 ```
 
 The host exposes `Profile.Name` and `Profile.Newsletter`. Reads come from the
-latest snapshot. Writes dispatch `NameChanged` or `NewsletterChanged`.
+latest snapshot. Writes dispatch `NameChanged` or `NewsletterChanged` through
+a [write-back route](guides/route-editable-elmview-properties.html).
 
 ## Choose an authoring style
 

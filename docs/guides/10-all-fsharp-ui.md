@@ -30,8 +30,8 @@ let configure =
 let host = RuntimeGeneratedViewHost<View, Msg>({ Name = "" }, configure)
 ```
 
-Use the exact generated facade property path (for nested fields, for example
-`"Profile.Name"`). The snippet registers a route but does **not** expose a bindable `Name` facade: `RuntimeGeneratedViewHost` does not generate CLR properties. To bind `{Binding Name, Mode=TwoWay}`, subclass it and add a public `Name` getter reading `View.Name` and setter calling `TryDispatchWriteBack("Name", value)`, and override `GeneratedPropertyNames` to include `Name`. The handwritten setter dispatches rather than mutating the snapshot. Design-time hosts can use the same view shape
+Use the exact generated-shaped facade property path (for nested fields, for example
+`"Profile.Name"`). The snippet registers a route but does **not** expose a bindable `Name` facade: <a href="../api/Elmish.Avalonia.Glue.ElmView.RuntimeGeneratedViewHost`2.html">`RuntimeGeneratedViewHost`</a> does not generate CLR properties. To bind `{Binding Name, Mode=TwoWay}`, subclass it and add a public `Name` getter reading `View.Name` and setter calling `TryDispatchWriteBack("Name", value)`, and override `GeneratedPropertyNames` to include `Name`. The handwritten setter dispatches rather than mutating the snapshot. Design-time hosts can use the same view shape
 without starting Elmish.
 
 Continue with the [ElmView guide](elmview.html) and the

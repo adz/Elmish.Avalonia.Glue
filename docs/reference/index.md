@@ -18,12 +18,12 @@ or need its collection and notification primitives.
 
 ## Follow a snapshot through the API
 
-1. `ElmishHost` starts the program and supplies dispatch.
+1. <a href="/api/Elmish.Avalonia.Glue.ElmishHost.html">`Elmish.Avalonia.Glue.ElmishHost`</a> starts the program and supplies dispatch.
 2. A root host receives each immutable snapshot.
-3. `BindableSnapshotHost` raises root notifications.
+3. <a href="/api/Elmish.Glue.Core.BindableSnapshotHost`1.html">`BindableSnapshotHost`</a> raises root notifications.
 4. Nested nodes refresh their exposed properties.
-5. `WriteBackBindings` maps an editable value to a message.
-6. Keyed collection helpers preserve identity where required.
+5. <a href="/api/Elmish.Avalonia.Glue.ElmView.WriteBackBindings`2.html">`WriteBackBindings`</a> maps an editable value to a message.
+6. Keyed collection helpers preserve identity where required; see [collection patching](core/collections.html).
 
 Open a package or type below for exact signatures and member documentation.
 

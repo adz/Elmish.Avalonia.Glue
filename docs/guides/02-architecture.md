@@ -24,7 +24,7 @@ snapshot, raises `PropertyChanged`, and holds the dispatch function supplied
 when the Elmish program starts.
 
 The host is mutable infrastructure around immutable application data. It must
-not become a second source of truth.
+not become a second source of truth. See the [snapshot host contract](../api/Elmish.Glue.Core.BindableSnapshotHost`1.html) for update and notification behavior.
 
 ## Node
 
@@ -32,7 +32,7 @@ A node is a stable bindable object for one nested record. If AXAML binds to
 `Profile.Name`, the root host exposes `Profile` and the profile node exposes
 `Name`.
 
-Nodes let Avalonia retain object identity while F# replaces nested records.
+Nodes let Avalonia retain object identity while F# replaces nested records. See the [nested node contract](../api/Elmish.Glue.Core.BindableSnapshotNode`2.html) for identity and refresh guarantees.
 
 ## Write-back route
 
@@ -55,7 +55,7 @@ Replacing a list can discard selection, virtualization state, or row identity.
 A keyed collection patches the mutable Avalonia-facing list to match the next
 immutable list.
 
-Use it only when stable item identity materially helps the control.
+Use it only when stable item identity materially helps the control. See [collection patching](../reference/core/collections.html) for row identity, item replacement, and selection trade-offs.
 
 ## Package boundaries
 

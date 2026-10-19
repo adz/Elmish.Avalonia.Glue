@@ -1,6 +1,6 @@
 # Host lifetime
 
-The core `ElmishHost` module runs an Elmish program and connects it to an external update loop.
+The `Elmish.Glue.Core.ElmishHost` module runs an Elmish program and connects it to an external update loop. The Avalonia bridge exposes a separate `Elmish.Avalonia.Glue.ElmishHost`.
 
 ## API contracts
 

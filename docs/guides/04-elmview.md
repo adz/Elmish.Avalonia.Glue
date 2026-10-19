@@ -66,7 +66,7 @@ bindings.For(x => x.Profile.Email).Dispatch(Msg.NewEmailChanged);
 
 ## Understand the generated-shaped host
 
-The package supplies `GeneratedViewHost` and `GeneratedViewNode` base classes.
+The package supplies <a href="../api/Elmish.Avalonia.Glue.ElmView.GeneratedViewHost`2.html">`GeneratedViewHost`</a> and <a href="../api/Elmish.Avalonia.Glue.ElmView.GeneratedViewNode`3.html">`GeneratedViewNode`</a> base classes (see [generated hosts](../reference/elmview/hosts.html) and [nodes](../reference/elmview/nodes.html)).
 The current sample writes the mechanical host explicitly; the package does not
 yet emit it from the record automatically.
 

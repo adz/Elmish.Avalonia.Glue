@@ -213,7 +213,7 @@ Typing `Grace` follows one loop:
 TextBox writes Name = "Grace"
 → MainViewModel.Name raises PropertyChanged("Name") and dispatches NameChanged
 → Elmish update returns { Name = "Grace"; Greeting = "Hello, Grace!" }
-→ ElmishHost posts vm.Update on the UI thread
+→ Elmish.Avalonia.Glue.ElmishHost posts vm.Update on the UI thread
 → Update publishes Name (unchanged) and Greeting (PropertyChanged)
 → the greeting TextBlock refreshes
 ```

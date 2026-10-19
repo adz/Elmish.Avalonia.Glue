@@ -199,7 +199,7 @@ TextBox writes Name = "Grace"
 → AppHost.Name calls TryDispatchWriteBack("Name", "Grace")
 → the registered route dispatches NameChanged "Grace"
 → Elmish update returns { Name = "Grace"; Greeting = "Hello, Grace!" }
-→ ElmishHost posts host.Update on the UI thread
+→ Elmish.Avalonia.Glue.ElmishHost posts host.Update on the UI thread
 → host raises PropertyChanged for View, then Name, then Greeting
 → the TextBox and greeting TextBlock refresh
 ```

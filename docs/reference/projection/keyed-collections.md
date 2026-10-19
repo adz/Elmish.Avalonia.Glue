@@ -1,6 +1,6 @@
 # Keyed collections
 
-`KeyedSnapshotCollection<'T, 'Key>` in the Projection package specializes the
+`Elmish.Avalonia.Glue.Projection.KeyedSnapshotCollection<'T, 'Key>` specializes the
 core collection patching logic. It manages immutable snapshot lists while
 preserving stable UI identity.
 

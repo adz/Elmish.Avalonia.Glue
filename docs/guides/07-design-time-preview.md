@@ -50,7 +50,7 @@ rows. A single happy-path record rarely tests the layout you care about.
 
 ## Keep dispatch inactive
 
-The designer should render without starting the full program. Commands may be inert. `GeneratedViewHost` starts with a no-op dispatch function, so registered write-back routes can be called without a running program; unmatched routes return `false`. `BindableViewHost` and `SnapshotHost` have no built-in setters or dispatcher: handwritten setters/commands must supply their own safe no-op design-time behaviour. Other projection dispatch helpers may require `SetDispatch` before use.
+The designer should render without starting the full program. Commands may be inert. <a href="../api/Elmish.Avalonia.Glue.ElmView.GeneratedViewHost`2.html">`GeneratedViewHost`</a> starts with a no-op dispatch function, so registered write-back routes can be called without a running program; unmatched routes return `false`. [`BindableViewHost`](../reference/elmview/hosts.html#bindable-root) and <a href="../api/Elmish.Avalonia.Glue.Projection.SnapshotHost`1.html">`SnapshotHost`</a> have no built-in setters or dispatcher: handwritten setters/commands must supply their own safe no-op design-time behaviour. Other projection dispatch helpers may require `SetDispatch` before use.
 
 The two sample suites link their design snapshots and hosts from
 [sample applications](sample-applications.html).

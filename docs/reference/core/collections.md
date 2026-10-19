@@ -12,13 +12,13 @@ Collection utilities sync mutable `ObservableCollection`s with immutable lists w
 Use `ObservableCollectionExtensions.SyncWith` when each row is a projection
 that must update in place.
 
-Use `KeyedSnapshotCollection<T,TKey>` when the collection can expose snapshot
+Use `Elmish.Glue.Core.KeyedSnapshotCollection<T,TKey>` when the collection can expose snapshot
 items directly and only the collection identity needs to remain stable.
 
 
 ## Identity preserved by patching
 
-Patching keeps the `ObservableCollection` instance. `SyncWith` retains the same row viewmodel for matching keys and calls `update` on it. `KeyedSnapshotCollection` instead replaces a retained key's item when the incoming snapshot is a different reference; it does **not** preserve row object identity. Avalonia container reuse, selection, and animations depend on the control and its selection model; they are not guaranteed by a matching key. For selection across replaced snapshots, track the selected key and resolve it against the new items.
+Patching keeps the `ObservableCollection` instance. `SyncWith` retains the same row viewmodel for matching keys and calls `update` on it. `Elmish.Glue.Core.KeyedSnapshotCollection` instead replaces a retained key's item when the incoming snapshot is a different reference; it does **not** preserve row object identity. Avalonia container reuse, selection, and animations depend on the control and its selection model; they are not guaranteed by a matching key. For selection across replaced snapshots, track the selected key and resolve it against the new items.
 
 
 ## Implementations

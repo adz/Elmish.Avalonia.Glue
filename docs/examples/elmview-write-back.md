@@ -5,7 +5,7 @@ project: src/Elmish.Avalonia.Glue.ElmView/Elmish.Avalonia.Glue.ElmView.fsproj
 
 # ElmView write-back example
 
-This example shows `WriteBackBindings<'View,'Msg>` routing an edit through a generated host.
+This example shows `WriteBackBindings<'View,'Msg>` routing an edit through a generated-shaped host. See the [write-back contract](../reference/elmview/write-back.html) for route registration and failure semantics.
 
 ## Run one edit
 

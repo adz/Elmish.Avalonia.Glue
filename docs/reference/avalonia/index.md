@@ -2,8 +2,9 @@
 
 > Maturity: **Incubating** · [package maturity](/guides/package-maturity.html)
 
-This package is the Avalonia runtime boundary. Its `ElmishHost` overloads use
-Avalonia's UI dispatcher before updating a host.
+This package is the Avalonia runtime boundary. Its `Elmish.Avalonia.Glue.ElmishHost` overloads use
+Avalonia's UI dispatcher before updating a host; the core host is a separate
+`Elmish.Glue.Core.ElmishHost` module.
 
 ## Start and own the application loop
 

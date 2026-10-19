@@ -91,7 +91,7 @@ subscription key so Elmish can identify the producer across model changes.
 
 ## Stop work with the owning view
 
-Keep the `ElmishHostConnection` returned by `start` or `startAndBind`. Dispose
+Keep the <a href="../api/Elmish.Glue.Core.ElmishHostConnection`1.html">`ElmishHostConnection`</a> returned by `start` or `startAndBind`. Dispose
 it when the window or application shuts down so Elmish disposes subscriptions.
 
 For finite operations, decide how to handle cancellation and stale responses.

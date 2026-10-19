@@ -1,6 +1,6 @@
 # Elmish.Avalonia.Glue
 
-- Avalonia has `.axaml`, bindings, design-time preview, and great DevTools.
+- Avalonia has AXAML (`.axaml` files), bindings, design-time preview, and great DevTools.
 - Elmish has immutable state, explicit messages, and one update loop.
 
 Elmish.Avalonia.Glue keeps normal AXAML and designer tooling while moving UI

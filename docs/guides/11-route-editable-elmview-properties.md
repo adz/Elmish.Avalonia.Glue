@@ -33,7 +33,7 @@ Elmish message routing.
 
 1. `For` reads the expression tree and stores a path such as
    `"UserInput.Name"`.
-2. A generated setter calls `host.TryDispatchWriteBack("UserInput.Name",
+2. A generated-shaped setter calls `host.TryDispatchWriteBack("UserInput.Name",
    value)`.
 3. The host finds the registered route.
 4. The route maps the new value to a message.
@@ -53,7 +53,7 @@ The Elmish update function applies the state change.
 
 ## Editable and display-only values
 
-Use write-back for generated properties that Avalonia writes to:
+Use write-back for generated-shaped properties that Avalonia writes to:
 
 - `TextBox.Text`
 - `CheckBox.IsChecked`

@@ -17,7 +17,7 @@ normal binding paths with less handwritten projection code.
 
 ## Project a model into properties
 
-A projection implements `IProjection<TModel>`. Its `Update` method receives the
+A projection implements <a href="../api/Elmish.Glue.Core.IProjection`1.html">`IProjection<TModel>`</a>. Its `Update` method receives the
 latest immutable model and changes only the CLR-facing properties.
 
 ```csharp
@@ -56,7 +56,7 @@ like another user edit and create a feedback loop.
 
 ## Prefer a snapshot host for shallow screens
 
-`SnapshotHost<T>` exposes one immutable value through `Current`. Bind directly
+<a href="../api/Elmish.Avalonia.Glue.Projection.SnapshotHost`1.html">`SnapshotHost<T>`</a> exposes one immutable value through `Current`. Bind directly
 to `Current.Name` for read-only values when most values need no adaptation. An immutable record field under `Current` cannot accept a `TwoWay` write: expose a separate writable host property that dispatches instead.
 
 Add named commands or derived CLR properties only where they improve the

@@ -3,7 +3,7 @@
 `WriteBackBindings<'View, 'Msg>` is a registry for editable properties.
 
 It does not replace Avalonia bindings. AXAML declares the binding. The
-registry says what message to dispatch when Avalonia writes to a generated
+registry says what message to dispatch when Avalonia writes to a generated-shaped
 property through a `TwoWay` binding.
 
 For registration, AXAML and dispatch in context, see [route editable ElmView properties](../../guides/route-editable-elmview-properties.html).

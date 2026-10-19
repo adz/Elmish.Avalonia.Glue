@@ -76,9 +76,9 @@ guard the dispatch. See the [lifetime reference](../reference/core/host-lifetime
 
 ## Exceptions in update, subscription, or post
 
-- **Update exceptions propagate** to the draining caller. With the core
-  `ElmishHost.start`, that is the dispatching thread; with the Avalonia
-  `ElmishHost.start`, that is the UI thread. The drain's `finally` releases the
+- **Update exceptions propagate** to the draining caller. With
+  `Elmish.Glue.Core.ElmishHost.start`, that is the dispatching thread; with
+  `Elmish.Avalonia.Glue.ElmishHost.start`, that is the UI thread. The drain's `finally` releases the
   gate, so queued messages remain and the next dispatch resumes them. Wrap the
   program with `Program.withErrorHandler` to record failures and keep the loop
   alive instead.
