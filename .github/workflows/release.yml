@@ -122,7 +122,18 @@ jobs:
           }
 
           # Dependencies first, so a consumer never sees a package whose dependency isn't published yet.
-          for id in Elmish.Glue.Core Elmish.Avalonia.Glue Elmish.Avalonia.Glue.Projection Elmish.Avalonia.Glue.ElmView; do
+          ids="Elmish.Glue.Core Elmish.Avalonia.Glue Elmish.Avalonia.Glue.Projection Elmish.Avalonia.Glue.ElmView Elmish.Avalonia.Glue.Testing"
+
+          # Every packed package must be in the publish order above, or it would silently never reach NuGet.
+          for package in artifacts/package/*.nupkg; do
+            name="$(basename "$package" .nupkg)"; name="${name%%.[0-9]*}"
+            case " $ids " in
+              *" $name "*) ;;
+              *) echo "::error::$name was packed but is not in the publish list"; exit 1 ;;
+            esac
+          done
+
+          for id in $ids; do
             package="$(ls artifacts/package/$id.[0-9]*.nupkg)"
             version="$(basename "$package" .nupkg)"; version="${version#"$id."}"
 
