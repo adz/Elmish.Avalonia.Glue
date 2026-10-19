@@ -1,0 +1,36 @@
+<Project>
+  <!--
+    Package maturity metadata.
+
+    Every packable library under src/ must set
+    <PackageMaturity>Experimental|Incubating|Stable</PackageMaturity> in its own project file.
+    The levels and promotion rules are documented in docs/guides/16-package-maturity.md;
+    scripts/check-package-maturity.sh keeps that page in sync with the values set here.
+
+    The directory gate (rather than IsPackable) matters because the sample projects carry their
+    own Directory.Build.props and therefore do not inherit IsPackable=false from this repository's
+    root Directory.Build.props. Only the libraries under src/ are actually packed.
+  -->
+  <PropertyGroup>
+    <_RequiresPackageMaturity Condition="$(MSBuildProjectDirectory.StartsWith('$(MSBuildThisFileDirectory)src'))">true</_RequiresPackageMaturity>
+  </PropertyGroup>
+
+  <Target Name="ValidatePackageMaturity"
+          Condition="'$(_RequiresPackageMaturity)' == 'true'"
+          BeforeTargets="CoreCompile">
+    <Error Condition="'$(PackageMaturity)' == ''"
+           Text="Packable project '$(MSBuildProjectFile)' must set &lt;PackageMaturity&gt; to Experimental, Incubating, or Stable." />
+    <Error Condition="'$(PackageMaturity)' != 'Experimental' and '$(PackageMaturity)' != 'Incubating' and '$(PackageMaturity)' != 'Stable'"
+           Text="Packable project '$(MSBuildProjectFile)' has invalid PackageMaturity '$(PackageMaturity)'. Allowed values are Experimental, Incubating, and Stable." />
+  </Target>
+
+  <Target Name="ApplyPackageMaturityMetadata"
+          Condition="'$(_RequiresPackageMaturity)' == 'true'"
+          BeforeTargets="GenerateNuspec">
+    <PropertyGroup Condition="'$(PackageMaturity)' == 'Experimental' or '$(PackageMaturity)' == 'Incubating' or '$(PackageMaturity)' == 'Stable'">
+      <PackageTags>$(PackageTags);maturity-$(PackageMaturity.ToLowerInvariant())</PackageTags>
+      <Description>[$(PackageMaturity)] $(Description.Trim())</Description>
+      <PackageDescription>[$(PackageMaturity)] $(PackageDescription.Trim())</PackageDescription>
+    </PropertyGroup>
+  </Target>
+</Project>

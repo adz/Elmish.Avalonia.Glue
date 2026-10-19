@@ -11,3 +11,4 @@ Avalonia-first Elmish adapters: immutable F# state, ordinary AXAML bindings and 
 - Headless testing and all-F# UI: /guides/testing-headlessly.html and /guides/all-fsharp-ui.html
 - Symptoms and vocabulary: /guides/troubleshooting.html and /guides/glossary.html
 - Generated entity API: https://adz.github.io/Elmish.Avalonia.Glue/api.html
+- Package maturity ratings: https://adz.github.io/Elmish.Avalonia.Glue/guides/package-maturity.html

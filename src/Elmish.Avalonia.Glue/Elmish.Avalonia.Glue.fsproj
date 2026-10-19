@@ -5,6 +5,7 @@
     <RootNamespace>Elmish.Avalonia.Glue</RootNamespace>
     <Nullable>enable</Nullable>
     <PackageId>Elmish.Avalonia.Glue</PackageId>
+    <PackageMaturity>Incubating</PackageMaturity>
     <Description>
       Minimal glue between an Elmish program and an Avalonia ViewModel.
       No Rx. No DynamicData. Just the wiring.

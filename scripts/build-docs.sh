@@ -8,6 +8,8 @@ dotnet run --project tools/DocsExamples/DocsExamples.fsproj
 dotnet livedocs test --interactive false --banner false
 dotnet livedocs build --interactive false --banner false
 
+bash scripts/check-package-maturity.sh
+
 if rg -U '<li data-sidebar-item="true"><a [^>]*>\s*</a></li>' output; then
   echo "FsLiveDocs generated a sidebar item without a label." >&2
   exit 1

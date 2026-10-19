@@ -1,5 +1,7 @@
 # Elmish.Avalonia.Glue.Projection
 
+> Maturity: **Incubating** · [package maturity](/guides/package-maturity.html)
+
 Projection supports explicit CLR-facing viewmodels over immutable Elmish
 state.
 

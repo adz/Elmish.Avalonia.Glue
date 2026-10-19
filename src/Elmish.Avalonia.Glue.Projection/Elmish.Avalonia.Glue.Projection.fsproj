@@ -5,6 +5,7 @@
     <RootNamespace>Elmish.Avalonia.Glue.Projection</RootNamespace>
     <Nullable>enable</Nullable>
     <PackageId>Elmish.Avalonia.Glue.Projection</PackageId>
+    <PackageMaturity>Incubating</PackageMaturity>
     <Description>
       Projection-oriented Elmish + Avalonia helpers, including classic projections
       via the shared core and snapshot-host building blocks for shallow viewmodels.

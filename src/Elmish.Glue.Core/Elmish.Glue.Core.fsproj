@@ -5,6 +5,7 @@
     <RootNamespace>Elmish.Glue.Core</RootNamespace>
     <Nullable>enable</Nullable>
     <PackageId>Elmish.Glue.Core</PackageId>
+    <PackageMaturity>Incubating</PackageMaturity>
     <Description>
       Framework-neutral Elmish host, projection, and keyed collection primitives
       that higher-level UI integrations can build on.

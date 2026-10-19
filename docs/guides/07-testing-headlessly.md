@@ -1,5 +1,7 @@
 # Testing headlessly
 
+> Maturity: **Experimental** · [package maturity](package-maturity.html)
+
 Reference `Elmish.Avalonia.Glue.Testing` and `Avalonia.Headless.XUnit` from your test project. Run the compiled repository test with `dotnet test tests/Elmish.Avalonia.Glue.Tests/Elmish.Avalonia.Glue.Tests.fsproj`; [HeadlessTests.fs](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/tests/Elmish.Avalonia.Glue.Tests/HeadlessTests.fs) contains the working bound-window test. The sketch below is illustrative, not a replacement for that test. It supplies a real headless Skia drawing surface without depending on a test framework. Configure your framework to create the app on the Avalonia dispatcher thread:
 
 The following is a sketch, **not** a runnable test (the assertion and window creation are omitted). For a compiled end-to-end example see [HeadlessTests.fs](https://github.com/adz/Elmish.Avalonia.Glue/blob/main/tests/Elmish.Avalonia.Glue.Tests/HeadlessTests.fs). Add `Avalonia.Headless.XUnit` to your test project; the testing helper does not reference it.

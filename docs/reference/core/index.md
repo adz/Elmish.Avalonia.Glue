@@ -1,5 +1,7 @@
 # Elmish.Glue.Core
 
+> Maturity: **Incubating** · [package maturity](/guides/package-maturity.html)
+
 Core contains the framework-neutral mechanics shared by Projection and
 ElmView. It depends on standard .NET notification, collection, and lifetime
 concepts rather than Avalonia controls.

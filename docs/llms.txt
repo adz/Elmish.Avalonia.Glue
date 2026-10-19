@@ -14,3 +14,4 @@ Immutable Elmish models flow to stable Avalonia DataContexts; AXAML TwoWay sette
 - All-F# UI: /guides/all-fsharp-ui.html
 - Definitions, errors, and symptoms: /guides/glossary.html, /guides/error-handling.html, /guides/troubleshooting.html
 - Generated entity reference: /api.html; example source: /examples/index.html
+- Package maturity ratings: /guides/package-maturity.html

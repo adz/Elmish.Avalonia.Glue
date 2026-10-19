@@ -5,6 +5,7 @@
     <RootNamespace>Elmish.Avalonia.Glue.ElmView</RootNamespace>
     <Nullable>enable</Nullable>
     <PackageId>Elmish.Avalonia.Glue.ElmView</PackageId>
+    <PackageMaturity>Experimental</PackageMaturity>
     <Description>
       F#-first Elm-style Avalonia binding helpers centered on immutable view snapshots
       and design-time-friendly bindable hosts.

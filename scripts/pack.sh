@@ -25,6 +25,7 @@ fi
 projects=(
   "src/Elmish.Glue.Core/Elmish.Glue.Core.fsproj"
   "src/Elmish.Avalonia.Glue/Elmish.Avalonia.Glue.fsproj"
+  "src/Elmish.Avalonia.Glue.Testing/Elmish.Avalonia.Glue.Testing.fsproj"
   "src/Elmish.Avalonia.Glue.Projection/Elmish.Avalonia.Glue.Projection.fsproj"
   "src/Elmish.Avalonia.Glue.ElmView/Elmish.Avalonia.Glue.ElmView.fsproj"
 )

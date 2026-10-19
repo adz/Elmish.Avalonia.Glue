@@ -1,5 +1,7 @@
 # Elmish.Avalonia.Glue.ElmView
 
+> Maturity: **Experimental** · [package maturity](/guides/package-maturity.html)
+
 ElmView exposes immutable F# view records through a stable bindable host.
 AXAML remains normal and editable properties dispatch messages.
 

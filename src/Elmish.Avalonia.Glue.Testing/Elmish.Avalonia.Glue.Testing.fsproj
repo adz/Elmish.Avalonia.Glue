@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <PackageId>Elmish.Avalonia.Glue.Testing</PackageId>
+    <PackageMaturity>Experimental</PackageMaturity>
     <Description>Headless Avalonia helpers for Elmish host tests.</Description>
     <PackageTags>fsharp elmish avalonia testing</PackageTags>
   </PropertyGroup>

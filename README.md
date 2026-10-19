@@ -37,6 +37,7 @@ dotnet run --project sample/Samples.ElmView/ExampleMatrixSample/src/ExampleMatri
 - [Architecture](https://adz.github.io/Elmish.Avalonia.Glue/guides/architecture.html) explains the shared substrate.
 - [Projection](https://adz.github.io/Elmish.Avalonia.Glue/guides/projection.html) covers explicit CLR viewmodels.
 - [ElmView](https://adz.github.io/Elmish.Avalonia.Glue/guides/elmview.html) covers immutable F# view records.
+- [Package maturity](https://adz.github.io/Elmish.Avalonia.Glue/guides/package-maturity.html) lists each package's maturity level and its evidence.
 
 ## Samples
 

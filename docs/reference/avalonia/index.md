@@ -1,5 +1,7 @@
 # Elmish.Avalonia.Glue
 
+> Maturity: **Incubating** · [package maturity](/guides/package-maturity.html)
+
 This package is the Avalonia runtime boundary. Its `ElmishHost` overloads use
 Avalonia's UI dispatcher before updating a host.
 
