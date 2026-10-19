@@ -1,8 +1,8 @@
 # Release process
 
-All four packages (`Elmish.Glue.Core`, `Elmish.Avalonia.Glue`, `Elmish.Avalonia.Glue.Projection`,
-`Elmish.Avalonia.Glue.ElmView`) share one version, taken from the `vX.Y.Z` tag. `VersionPrefix` in
-`Directory.Build.props` is only the local default.
+All five packages (`Elmish.Glue.Core`, `Elmish.Avalonia.Glue`, `Elmish.Avalonia.Glue.Projection`,
+`Elmish.Avalonia.Glue.ElmView`, `Elmish.Avalonia.Glue.Testing`) share one version, taken from the
+`vX.Y.Z` tag. `VersionPrefix` in `Directory.Build.props` is only the local default.
 
 ## Releasing
 
@@ -15,7 +15,7 @@ All four packages (`Elmish.Glue.Core`, `Elmish.Avalonia.Glue`, `Elmish.Avalonia.
    bash scripts/pack.sh
    ```
 
-3. Commit and push `main`, then tag: `git tag v0.1.0 && git push origin v0.1.0`.
+3. Commit and push `main`, then tag: `git tag v0.2.0 && git push origin v0.2.0`.
 
 The release workflow builds, tests and packs at the tag, creates the GitHub release with the packages attached,
 then publishes to NuGet.org from the protected `nuget` environment. It is safe to re-run: use **Run workflow**
