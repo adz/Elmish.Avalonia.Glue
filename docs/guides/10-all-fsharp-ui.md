@@ -12,27 +12,53 @@ custom rendering surface is needed. For simple appearance changes, bind an
 ordinary class: `Classes.highlight="{Binding Flag}"` and style `.highlight`
 in AXAML. Neither requires a custom attached property.
 
-## F# ElmView write-back
+## F# ElmView facade
 
-An F# host can register writable paths without C# expression-tree selectors:
+The host is a stable CLR facade over the immutable view record, and F# writes it the same way C# does: a subclass of
+`RuntimeGeneratedViewHost` with one property per bound field. A writable property's setter dispatches a message
+instead of changing the view; the next view comes back through `Update` and notifies every name in
+`GeneratedPropertyNames`.
+
+```fsharp
+open Elmish.Avalonia.Glue.ElmView
+
+type View = { Name: string; Greeting: string }
+type Msg = SetName of string
+
+type AppHost(initial: View) =
+    inherit RuntimeGeneratedViewHost<View, Msg>(initial)
+    member this.Name with get () = this.View.Name and set (value: string) = this.Dispatch(SetName value)
+    member this.Greeting = this.View.Greeting
+    override _.GeneratedPropertyNames = [ "Name"; "Greeting" ]
+```
+
+AXAML binds it as usual: `{Binding Name, Mode=TwoWay}` and `{Binding Greeting}`. Connect it with
+`ElmishHost.startAndBind program (Action<View>(host.Update)) (Action<Action<Msg>>(host.SetDispatch))`. The package's
+headless tests bind a `TextBox` this way and check that typing dispatches and the new view flows back.
+
+### Routes by path
+
+To keep the message mapping in one place, register routes and let each setter look its path up:
+
+With the `View` and `Msg` above:
 
 ```fsharp
 open System
 open Elmish.Avalonia.Glue.ElmView
 
-type View = { Name: string }
-type Msg = SetName of string
-
 let configure =
     Action<WriteBackBindings<View, Msg>>(fun bindings ->
         bindings.ForPath<string>("Name").Dispatch(Func<string, Msg>(SetName)) |> ignore)
 
-let host = RuntimeGeneratedViewHost<View, Msg>({ Name = "" }, configure)
+type RoutedHost(initial: View) =
+    inherit RuntimeGeneratedViewHost<View, Msg>(initial, configure)
+    member this.Name with get () = this.View.Name and set (value: string) = this.TryDispatchWriteBack("Name", value) |> ignore
+    member this.Greeting = this.View.Greeting
+    override _.GeneratedPropertyNames = [ "Name"; "Greeting" ]
 ```
 
-Use the exact generated-shaped facade property path (for nested fields, for example
-`"Profile.Name"`). The snippet registers a route but does **not** expose a bindable `Name` facade: <a href="../api/Elmish.Avalonia.Glue.ElmView.RuntimeGeneratedViewHost`2.html">`RuntimeGeneratedViewHost`</a> does not generate CLR properties. To bind `{Binding Name, Mode=TwoWay}`, subclass it and add a public `Name` getter reading `View.Name` and setter calling `TryDispatchWriteBack("Name", value)`, and override `GeneratedPropertyNames` to include `Name`. The handwritten setter dispatches rather than mutating the snapshot. Design-time hosts can use the same view shape
-without starting Elmish.
+Use the facade's property path for nested fields, for example `"Profile.Name"`. Design-time hosts can use the same
+view shape without starting Elmish.
 
 Continue with the [ElmView guide](elmview.html) and the
 [write-back example](../examples/elmview-write-back.html).

@@ -16,6 +16,17 @@ open Xunit
 type FrameViewModel() =
     member val Count = "0" with get, set
 
+type NameView = { Name: string; Greeting: string }
+
+type NameMsg = NameChanged of string
+
+/// An ElmView facade written in F#: each property reads the current view, and the writable one's setter dispatches.
+type NameHost(initial: NameView) =
+    inherit Elmish.Avalonia.Glue.ElmView.RuntimeGeneratedViewHost<NameView, NameMsg>(initial)
+    member this.Name with get () = this.View.Name and set (value: string) = this.Dispatch(NameChanged value)
+    member this.Greeting = this.View.Greeting
+    override _.GeneratedPropertyNames = [ "Name"; "Greeting" ]
+
 // AvaloniaFact creates the application on the dispatcher thread.
 type TestAppBuilder =
     static member BuildAvaloniaApp() = Headless.BuildAvaloniaApp()
@@ -63,6 +74,31 @@ module HeadlessTests =
         use host = Headless.start (program ignore) (Action<int list>(fun next -> model <- next)) (Action<Action<int>>(fun send -> dispatch <- send))
         dispatch.Invoke(42)
         Assert.Equal<int list>([42], model)
+
+    [<AvaloniaFact>]
+    let ``an F# ElmView facade binds two-way: typing dispatches and the new view flows back`` () =
+        let view name = { Name = name; Greeting = $"Hello, {name}" }
+        let host = NameHost(view "")
+        let program =
+            Program.mkProgram (fun () -> view "", Cmd.none) (fun (NameChanged name) _ -> view name, Cmd.none) (fun _ _ -> ())
+        use _connection =
+            Headless.start program (Action<NameView>(fun next -> host.Update next)) (Action<Action<NameMsg>>(fun send -> host.SetDispatch send))
+        let window = new Window(Width = 200., Height = 100.)
+        let input = TextBox()
+        input.Bind(TextBox.TextProperty, Avalonia.Data.Binding("Name", Mode = Avalonia.Data.BindingMode.TwoWay)) |> ignore
+        let greeting = TextBlock()
+        greeting.Bind(TextBlock.TextProperty, Avalonia.Data.Binding("Greeting")) |> ignore
+        let panel = StackPanel()
+        panel.Children.Add input
+        panel.Children.Add greeting
+        window.DataContext <- host
+        window.Content <- panel
+        window.Show()
+        input.Text <- "Ada"
+        Headless.waitUntil (fun () -> greeting.Text = "Hello, Ada") (TimeSpan.FromSeconds(5.0))
+        Assert.Equal("Ada", host.View.Name)
+        Assert.Equal("Ada", input.Text)
+        window.Close()
 
     [<AvaloniaFact>]
     let ``bound window captures a rendered frame`` () =
